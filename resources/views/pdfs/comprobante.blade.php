@@ -89,7 +89,7 @@
                         <tr>
                             <td style="text-align: left;" width="20%">
                                 <div>
-                                    <img  id="imagen" src="{{asset('img/logo2.jpg')}}"/>
+                                    <img  id="imagen" src="{{asset('img/logo.jpg')}}"/>
                                 </div>
                             </td>
                             <td style="text-align:center; font-size: 12px;" width="50%">

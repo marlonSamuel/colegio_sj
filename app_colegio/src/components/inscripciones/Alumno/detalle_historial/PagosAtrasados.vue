@@ -110,7 +110,6 @@ export default {
             var pagos = self.pagos.filter(x=>x.inscripcion_id == inscripcion.id)
             var pago = pagos.find(x=>x.cuota.concepto_pago.id === concepto.id)
             var meses_ciclo = self.monthsOfDate(inscripcion.ciclo.inicio, inscripcion.ciclo.fin)
-
             if(concepto.forma_pago === 'A'){
               if(_.isEmpty(pago)){
                 debe = 'debe por concepto de '+concepto.nombre + ' por ciclo escolar '+inscripcion.ciclo.ciclo
@@ -128,7 +127,7 @@ export default {
                 }
             }
         })
-        if(debe !== '' && cantidad > 0){
+        if(debe !== '' && cantidad !== 0){
             return {descripcion: debe, cantidad: cantidad }
         }
         return ''
@@ -141,7 +140,9 @@ export default {
           return ''
         }
         var meses = self.monthsOfDate(ciclo.inicio, ciclo.fin)
-        meses = meses.filter(x=>x.id <= moment().month())
+        if(ciclo.ciclo == moment().year()){
+          meses = meses.filter(x=>x.id <= moment().month())
+        }
         var meses_pagados = []
         pago_meses.forEach(pago => {
             meses_pagados = [...meses_pagados, ...pago.pagos_meses]

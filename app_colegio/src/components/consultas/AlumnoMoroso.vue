@@ -232,7 +232,9 @@ export default {
           return ''
         }
         var meses = self.monthsOfDate(ciclo.inicio, ciclo.fin)
-        meses = meses.filter(x=>x.id <= moment().month())
+        if(ciclo.ciclo == moment().year()){
+          meses = meses.filter(x=>x.id <= moment().month())
+        }
         var meses_pagados = []
         pago_meses.forEach(pago => {
             meses_pagados = [...meses_pagados, ...pago.pagos_meses]

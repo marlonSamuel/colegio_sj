@@ -46,7 +46,7 @@
                     </td>
                     <td style="text-align: left;">
                         <div>
-                            <img  id="imagen" src="{{asset('img/logo2.jpg')}}"/>
+                            <img  id="imagen" src="{{asset('img/logo.jpg')}}"/>
                         </div>
                     </td>
                 </tr>
