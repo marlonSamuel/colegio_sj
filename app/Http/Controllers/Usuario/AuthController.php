@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Institucion;
 
 class AuthController extends Controller
 {
@@ -29,7 +30,7 @@ class AuthController extends Controller
 
         $http = new Client();
 
-        $response = $http->post('http://www.colegio.com/oauth/token', [
+        $response = $http->post('http://www.san_pablo.com/oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
                 'client_id' => config('services.passport.client_id'),
@@ -42,28 +43,6 @@ class AuthController extends Controller
 
         return json_decode((string) $response->getBody(), true);
 
-       /* if (!Auth::attempt($credentials)) {
-            return response()->json([
-                'message' => 'Usuario o contraseña incorrectos'], 401);
-        }
-
-        $user = $request->user();
-
-        $tokenResult = $user->createToken('token_colegio');
-
-        $token = $tokenResult->token;
-
-        $token->save();
-
-
-        return response()->json([
-            'access_token' => $tokenResult->accessToken,
-            'usuario' => $request->user(),
-            'token_type'   => 'Bearer',
-            'expires_at'   => Carbon::parse(
-                $tokenResult->token->expires_at)
-                    ->toDateTimeString(),
-        ]);*/
     }
 
     //cerrar session
@@ -79,8 +58,11 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         $id = $request->user()->id;
-        
-
-        return response()->json(User::where('id',$id)->with('rol')->first());
+        $user = User::where('id',$id)->with('rol')->first();
+        $institucion = Institucion::with('municipio.departamento')->first();
+        return response()->json([
+            'user' => $user,
+            'institucion' => $institucion
+        ]);
     }
 }

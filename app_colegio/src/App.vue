@@ -11,9 +11,9 @@
           </v-container>
         </v-content>
 
-    <v-footer color="blue darken-3" class="white--text" v-if="isLogin" app>
+    <v-footer color="green darken-3" class="white--text" v-if="isLogin" app>
       <v-layout align-center justify-center>
-        <span class="px-3">colegio san jose &copy; {{ new Date().getFullYear() }}</span>
+        <span class="px-3">colegio {{getName}} &copy; {{ new Date().getFullYear() }}</span>
       </v-layout>
     </v-footer>
       
@@ -47,6 +47,12 @@ export default {
     isLogin(){
       let self = this
       return self.$store.state.is_login
+    },
+
+    getName(){
+      let self = this
+      var name = self.$store.state.institucion.nombre
+      return name !== undefined ? name.toLowerCase() : ''
     },
 
     getFondo(){

@@ -56,7 +56,7 @@
     </v-navigation-drawer>
     <v-toolbar
       :clipped-left="$vuetify.breakpoint.lgAndUp"
-      color="blue darken-3"
+      color="green darken-3"
       dark
       app
       fixed
@@ -76,7 +76,7 @@
         </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <h2 class="hidden-sm-and-down">COLEGIO SAN JOSE {{ciclo.ciclo ? 'CICLO ESCOLAR '+ciclo.ciclo : 'NO EXISTE CICLO ACTUAL'}}</h2>
+      <h2 class="hidden-sm-and-down">COLEGIO {{getName}} {{ciclo.ciclo ? 'CICLO ESCOLAR '+ciclo.ciclo : 'NO EXISTE CICLO ACTUAL'}}</h2>
       <v-spacer></v-spacer>
       
       {{userName}}
@@ -179,6 +179,10 @@ export default {
     },
     ciclo(){
       return this.$store.state.ciclo
+    },
+    getName(){
+      let self = this
+      return self.$store.state.usuario.nombre
     }
   }
 }

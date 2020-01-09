@@ -199,7 +199,8 @@ export default {
 
     getAvatar(foto){
       let self = this
-      return foto !== null ? self.$store.state.base_url+foto : self.$store.state.base_url+'img/user_empty.png'
+      var default_phono = self.$store.state.base_url+'img/user_empty.png'
+      return foto !== null && foto !== "" ? self.$store.state.base_url+foto : default_phono
     },
 
     getGrado(inscripciones){

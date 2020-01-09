@@ -138,8 +138,9 @@ export default {
         let self = this
         store.state.services.loginService.me()
             .then(r => {
-                store.dispatch('setUser', r.data)
-                if (r.data.rol.rol == 'admin') {
+                store.dispatch('setUser', r.data.user)
+                store.dispatch('setInstitucion', r.data.institucion)
+                if (r.data.user.rol.rol == 'admin') {
                     store.dispatch('setMenu', this.items_admin)
                 } else {
                     store.dispatch('setMenu', this.items_operario)

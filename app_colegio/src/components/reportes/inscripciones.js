@@ -31,7 +31,7 @@ export default {
                             width: 100,
                         },
                         {
-                            text: '\nCOLEGIO DE CIENCIAS COMERCIALES\n "SAN JOSE" \n REPORTE DE INSCRIPCIONES DE ' + rep.grado.toUpperCase() + ' ' + c,
+                            text: store.state.institucion.definicion+' '+store.state.institucion.nombre +'\n REPORTE DE INSCRIPCIONES DE ' + rep.grado.toUpperCase() + ' ' + c,
                             width: '*',
                             alignment: 'center'
                         },

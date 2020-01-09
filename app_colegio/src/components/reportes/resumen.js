@@ -76,7 +76,7 @@ export default {
                             width: 100,
                         },
                         {
-                            text: '\nCOLEGIO DE CIENCIAS COMERCIALES\n "SAN JOSE" \nREPORTE DE CICLO ESCOLAR ' + ciclo.ciclo,
+                            text: store.state.institucion.definicion+' '+store.state.institucion.nombre +'\nREPORTE DE CICLO ESCOLAR ' + ciclo.ciclo,
                             width: '*',
                             alignment: 'center'
                         },

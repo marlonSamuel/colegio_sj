@@ -100,7 +100,7 @@ export default {
                             width: 100,
                         },
                         {
-                            text: '\nCOLEGIO DE CIENCIAS COMERCIALES\n "SAN JOSE" \nREPORTE DE ALUMNOS REGISTRADOS ',
+                            text: store.state.institucion.definicion+' '+store.state.institucion.nombre +'\nREPORTE DE ALUMNOS REGISTRADOS ',
                             width: '*',
                             alignment: 'center'
                         },

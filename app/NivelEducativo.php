@@ -14,6 +14,7 @@ class NivelEducativo extends Model
 
     protected $fillable= [
     	'nombre',
+        'resolucion',
     	'es_carrera'
     ];
 

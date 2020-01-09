@@ -79,7 +79,7 @@ export default {
                             width: 100,
                         },
                         {
-                            text: '\nCOLEGIO DE CIENCIAS COMERCIALES\n "SAN JOSE" \nREPORTE DE ALUMNOS MOROSOS ',
+                            text: store.state.institucion.definicion+' '+store.state.institucion.nombre + '\nREPORTE DE ALUMNOS MOROSOS ',
                             width: '*',
                             alignment: 'center'
                         },

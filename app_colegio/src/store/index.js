@@ -15,17 +15,22 @@ const state = {
     permisos: [],
     usuario: {},
     ciclo: {},
+    institucion: {},
     token: null,
     is_login: false,
     token_expired: null,
     client_id: 2,
-    base_url: 'http://www.colegio.com/',
+    base_url: 'http://www.san_pablo.com/',
     client_secret: 'VAOleDJwZUrZG5K5XGKi7lDTanSjZBGck5AQdF50'
 }
 
 const mutations = {
     setUser(state, usuario) {
         state.usuario = usuario
+    },
+
+    setInstitucion(state, institucion) {
+        state.institucion = institucion
     },
 
     setCiclo(state, ciclo) {
@@ -85,6 +90,10 @@ const actions = {
 
     setUser({ commit }, user) {
         commit('setUser', user)
+    },
+
+    setInstitucion({ commit }, institucion) {
+        commit('setInstitucion', institucion)
     },
 
     setCiclo({ commit }, ciclo) {

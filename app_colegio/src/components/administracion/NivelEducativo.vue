@@ -39,6 +39,16 @@
                         :error-messages="errors.collect('nivel_educativo')">
                     </v-text-field>
                   </v-flex>
+                  <v-flex xs12 sm8 md8>
+                    <v-text-field v-model="form.resolucion" 
+                        label="No. resolución"
+                        v-validate="'required'"
+                        type="text"
+                        data-vv-name="no_resolucion"
+                        data-vv-as="numero deresolucion"
+                        :error-messages="errors.collect('no_resolucion')">
+                    </v-text-field>
+                  </v-flex>
                   <v-flex xs12 md3 lg3>
                       <v-checkbox
                           v-model="form.es_carrera"
@@ -65,6 +75,7 @@
       >
         <template v-slot:items="props">
           <td class="text-xs-left">{{ props.item.nombre }}</td>
+          <td class="text-xs-left">{{ props.item.resolucion }}</td>
           <td class="text-xs-left">
             <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -108,12 +119,14 @@ export default {
       items: [],
       headers: [
         { text: 'Nombre', value: 'nombre' },
+        { text: 'Numero de resolución', value: 'resolucion' },
         { text: 'Acciones', value: '', sortable: false }
       ],
 
       form: {
         id: null,
         nombre: '',
+        resolucion: '',
         es_carrera: false
       },
     };
@@ -233,6 +246,7 @@ export default {
         let self = this
         self.form.id = data.id
         self.form.nombre = data.nombre
+        self.form.resolucion = data.resolucion
         self.form.es_carrera = data.es_carrera
     },
 

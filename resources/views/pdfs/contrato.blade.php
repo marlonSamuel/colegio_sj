@@ -67,7 +67,7 @@
     <body>
         <!-- Define header and footer blocks before your content -->
         <header>
-            <img class="logo" src="{{asset('img/logo2.jpg')}}" width="100px" height="100px"/> 
+            <img class="logo" src="{{asset('img/logo.jpg')}}" width="100px" height="100px"/> 
             <b>CONTRATO POR ADHESION POR PRESTACION DE SERVICIOS EDUCATIVOS <br />
              DEL {{strtoupper($institucion->nombre)}} </b>
         </header>
@@ -75,7 +75,7 @@
         <!-- Wrap the content of your PDF inside a main tag -->
         <main>
             <p class="right"> Contrato No. {{$inscripcion->numero}}<br />
-            <b> Autorizado según resolución DIACO ____________</b>
+            <b> Autorizado según resolución DIACO {{$inscripcion->grado_nivel_educativo->nivelEducativo->resolucion}}</b>
             </p><br /><br />
 
             <p>En el municipio del puerto de san josé departamento de Escuintla el dia <span>{{$date->dia}}</span><br />

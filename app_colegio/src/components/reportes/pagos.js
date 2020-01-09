@@ -30,7 +30,7 @@ export default {
                             width: 100,
                         },
                         {
-                            text: '\nCOLEGIO DE CIENCIAS COMERCIALES\n "SAN JOSE" \n REPORTE DE PAGOS AL ' + rep.nombre + ' ' + c,
+                            text: store.state.institucion.definicion+' '+store.state.institucion.nombre +'\n REPORTE DE PAGOS AL ' + rep.nombre + ' ' + c,
                             width: '*',
                             alignment: 'center'
                         },

@@ -29,7 +29,7 @@ import SerieFacturaService from '../services/SerieFacturaService'
 import RolService from '../services/RolService'
 
 
-let baseUrl = 'http://www.colegio.com/' //base url desarrollo
+let baseUrl = 'http://www.san_pablo.com/' //base url desarrollo
 let token_data = $cookies.get('token_data')
 
 // Axios Configuration

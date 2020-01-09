@@ -24,7 +24,8 @@ class NivelEducativoController extends ApiController
     public function store(Request $request)
     {
         $reglas = [
-            'nombre' => 'required|string'
+            'nombre' => 'required|string',
+            'resolucion' => 'required'
         ];
         
         $this->validate($request, $reglas);
@@ -43,11 +44,13 @@ class NivelEducativoController extends ApiController
     {
         $reglas = [
             'nombre' => 'required|string|unique:niveles_educativos,nombre,' . $niveles_educativo->id,
+            'resolucion' => 'required'
         ];
 
         $this->validate($request, $reglas);
 
         $niveles_educativo->nombre = $request->nombre;
+        $niveles_educativo->resolucion = $request->resolucion;
         $niveles_educativo->es_carrera = $request->es_carrera;
 
          if (!$niveles_educativo->isDirty()) {

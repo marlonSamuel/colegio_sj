@@ -15,6 +15,7 @@ class NivelEducativoSeeder extends Seeder
     {
         $data = new NivelEducativo;
         $data->nombre = "Primaria";
+        $data->resolucion = '1969-2017';
         $data->save();
 
         for($i = 1; $i<7; $i++){
@@ -26,6 +27,7 @@ class NivelEducativoSeeder extends Seeder
 
         $data = new NivelEducativo;
         $data->nombre = "Basico";
+        $data->resolucion = '1969-2017';
         $data->save();
 
         for($i = 1; $i<4; $i++){
@@ -38,6 +40,7 @@ class NivelEducativoSeeder extends Seeder
         $data = new NivelEducativo;
         $data->nombre = "Bachiller en computacion";
         $data->es_carrera= true;
+        $data->resolucion = '1969-2017';
         $data->save();
 
         for($i = 4; $i<6; $i++){
@@ -50,6 +53,7 @@ class NivelEducativoSeeder extends Seeder
         $data = new NivelEducativo;
         $data->nombre = "Bachiller en ciencias y letras";
         $data->es_carrera = true;
+        $data->resolucion = '1969-2017';
         $data->save();
 
         for($i = 4; $i<6; $i++){
@@ -62,6 +66,7 @@ class NivelEducativoSeeder extends Seeder
         $data = new NivelEducativo;
         $data->nombre = "Perito en administracion de empresas";
         $data->es_carrera = true;
+        $data->resolucion = '1969-2017';
         $data->save();
 
         for($i = 4; $i<7; $i++){
@@ -74,6 +79,7 @@ class NivelEducativoSeeder extends Seeder
         $data = new NivelEducativo;
         $data->nombre = "Perito contador";
         $data->es_carrera = true;
+        $data->resolucion = '1969-2017';
         $data->save();
 
         for($i = 4; $i<7; $i++){
