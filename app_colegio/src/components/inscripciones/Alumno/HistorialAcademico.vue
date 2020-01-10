@@ -67,11 +67,11 @@
                 </v-card-title>
                 <v-card-text>
                     <v-btn block :color="saldo > 0 ? 'red lighten-2' : 'green lighten-2' " dark>{{saldo > 0 ? 'Alumno moroso':'Alumno solvente'}}</v-btn>
-                    <v-btn block small color="blue lighten-2" dark>Saldo total hasta fecha {{current_date | moment('DD/MM/YYYY')}}</v-btn>
+                    <v-btn block color="blue lighten-2" dark>Saldo total hasta fecha <br /> {{current_date | moment('DD/MM/YYYY')}}</v-btn>
                     <div class="text-xs-center">
                         <h3>{{saldo | currency('Q ')}}</h3>
                     </div>
-                    <v-btn block small color="warning" dark>adeudos por pagos al credito</v-btn>
+                    <v-btn block color="warning" dark>adeudos por pagos <br /> al credito</v-btn>
                     <div class="text-xs-center">
                         <h3>{{pagosParciales(pagos) | currency('Q ')}}</h3>
                     </div>

@@ -173,10 +173,12 @@ export default {
         self.alumnos.forEach(alumno => {
           var detalle = []
           self.conceptos.forEach(concepto => {
-             var m = self.verifyIsMoroso(concepto,alumno.inscripciones)
-             if(m !== ''){
-                detalle.push({descripcion: m})
-             }
+            alumno.inscripciones.forEach(inscripcion => {
+              var m = self.verifyIsMoroso(concepto,inscripcion)
+              if(m !== ''){
+                  detalle.push({descripcion: m})
+              }
+            });
              //m !== "" ? moroso = moroso+', '+m : ''
           })
           var parciales = self.verityIfPagoParcial(alumno.inscripciones)
@@ -187,25 +189,23 @@ export default {
         })
     },
 
-    verifyIsMoroso(concepto,inscripciones){
+    verifyIsMoroso(concepto,inscripcion){
         let self = this
         var debe = ''
-        inscripciones.forEach(inscripcion=> {
-            var existe = inscripcion.pagos.some(x=>x.cuota.concepto_pago.id === concepto.id)
-            if(concepto.forma_pago === "A"){
-              if(!existe){
-                debe = debe+ ' debe '+concepto.nombre + ' por ciclo escolar '+inscripcion.ciclo.ciclo
-              }
-            }else{
-                if(concepto.forma_pago === "M"){
-                   var meses = inscripcion.pagos.filter(x=>x.cuota.concepto_pago.id === concepto.id)
-                   var debe_mes = self.verifyIfPagoMonths(meses,inscripcion.ciclo)
-                   if(debe_mes !== ""){
-                       debe = "debe por concepto de "+concepto.nombre+' el mes de '+debe_mes+' correspondiente al ciclo escolar '+ inscripcion.ciclo.ciclo
-                   }
+        var existe = inscripcion.pagos.some(x=>x.cuota.concepto_pago.id === concepto.id)
+        if(concepto.forma_pago === "A"){
+          if(!existe){
+            debe = debe+ ' debe '+concepto.nombre + ' por ciclo escolar '+inscripcion.ciclo.ciclo
+          }
+        }else{
+            if(concepto.forma_pago === "M"){
+                var meses = inscripcion.pagos.filter(x=>x.cuota.concepto_pago.id === concepto.id)
+                var debe_mes = self.verifyIfPagoMonths(meses,inscripcion.ciclo)
+                if(debe_mes !== ""){
+                    debe = "debe por concepto de "+concepto.nombre+' el mes de '+debe_mes+' correspondiente al ciclo escolar '+ inscripcion.ciclo.ciclo
                 }
             }
-        })
+        }
         return debe
     },
 

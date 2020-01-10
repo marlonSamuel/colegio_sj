@@ -85,13 +85,15 @@ export default {
     getPagosAtrasados(){
         let self = this
         self.conceptos.forEach(concepto => {
-            var m = self.verifyIsMoroso(concepto)
+          self.inscripciones.forEach(inscripcion => {
+            var m = self.verifyIsMoroso(concepto,inscripcion)
             if(m !== ""){
                 self.items.push({
                     descripcion: m.descripcion,
                     cantidad: m.cantidad
                 })
             }
+          });
         });
 
         var saldo = self.totalSaldo(self.items)
@@ -100,34 +102,33 @@ export default {
         });
     },
 
-    verifyIsMoroso(concepto){
+    verifyIsMoroso(concepto, inscripcion){
         let self = this
         var debe = ''
         var cantidad = 0
         //var existe = pagos.some(x=>x.cuota.concepto_pago.id === concepto.id)
-        self.inscripciones.forEach(inscripcion => {
-            var cuota = concepto.cuotas.find(x=>x.grado_nivel_educativo_id === inscripcion.grado_nivel_educativo_id && x.ciclo_id == inscripcion.ciclo_id)
-            var pagos = self.pagos.filter(x=>x.inscripcion_id == inscripcion.id)
-            var pago = pagos.find(x=>x.cuota.concepto_pago.id === concepto.id)
-            var meses_ciclo = self.monthsOfDate(inscripcion.ciclo.inicio, inscripcion.ciclo.fin)
-            if(concepto.forma_pago === 'A'){
-              if(_.isEmpty(pago)){
-                debe = 'debe por concepto de '+concepto.nombre + ' por ciclo escolar '+inscripcion.ciclo.ciclo
-                cantidad = cuota.cuota
-              }
-            }else{
-                if(concepto.forma_pago === "M"){
-                    var meses = pagos.filter(x=>x.cuota.concepto_pago.id === concepto.id)
-                    var debe_meses = self.verifyIfPagoMonths(meses, inscripcion.ciclo)
-                    if(debe_meses.length > 0){
-                        var d_m = debe_meses.map(item => item.mes).join(', ')
-                        debe = "debe por concepto de "+concepto.nombre+' el mes de '+d_m+' correspondiente al ciclo escolar '+ inscripcion.ciclo.ciclo
-                        cantidad = debe_meses.length * cuota.cuota
-                    }
+        var cuota = concepto.cuotas.find(x=>x.grado_nivel_educativo_id === inscripcion.grado_nivel_educativo_id && x.ciclo_id == inscripcion.ciclo_id)
+        var pagos = self.pagos.filter(x=>x.inscripcion_id == inscripcion.id)
+        var pago = pagos.find(x=>x.cuota.concepto_pago.id === concepto.id)
+        var meses_ciclo = self.monthsOfDate(inscripcion.ciclo.inicio, inscripcion.ciclo.fin)
+
+        if(concepto.forma_pago === 'A'){
+          if(_.isEmpty(pago)){
+            debe = 'debe por concepto de '+concepto.nombre + ' por ciclo escolar '+inscripcion.ciclo.ciclo
+            cantidad = cuota.cuota
+          }
+        }else{
+            if(concepto.forma_pago === "M"){
+                var meses = pagos.filter(x=>x.cuota.concepto_pago.id === concepto.id)
+                var debe_meses = self.verifyIfPagoMonths(meses, inscripcion.ciclo)
+                if(debe_meses.length > 0){
+                    var d_m = debe_meses.map(item => item.mes).join(', ')
+                    debe = "debe por concepto de "+concepto.nombre+' el mes de '+d_m+' correspondiente al ciclo escolar '+ inscripcion.ciclo.ciclo
+                    cantidad = debe_meses.length * cuota.cuota
                 }
             }
-        })
-        if(debe !== '' && cantidad !== 0){
+        }
+        if(debe !== '' && cantidad > 0){
             return {descripcion: debe, cantidad: cantidad }
         }
         return ''
