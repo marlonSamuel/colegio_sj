@@ -76,7 +76,7 @@
         </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <h2 class="hidden-sm-and-down">COLEGIO {{getName}} {{ciclo.ciclo ? 'CICLO ESCOLAR '+ciclo.ciclo : 'NO EXISTE CICLO ACTUAL'}}</h2>
+      <h2 class="hidden-sm-and-down">COLEGIO {{getName}} {{ciclo}}</h2>
       <v-spacer></v-spacer>
       
       {{userName}}
@@ -177,12 +177,18 @@ export default {
       let self = this
       return self.$store.state.usuario.name
     },
+
     ciclo(){
-      return this.$store.state.ciclo
+      var ciclo = this.$store.state.ciclo
+      if(_.isEmpty(ciclo)){
+        return 'NO EXISTE CICLO ACTUAL'
+      }
+      return 'CICLO ESCOLAR '+ ciclo.ciclo
     },
+    
     getName(){
       let self = this
-      return self.$store.state.usuario.nombre
+      return self.$store.state.institucion.nombre
     }
   }
 }
