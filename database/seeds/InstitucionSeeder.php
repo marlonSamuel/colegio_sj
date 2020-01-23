@@ -15,13 +15,13 @@ class InstitucionSeeder extends Seeder
     {
         //$data = new Institucion();
         $data = new Institucion;
-        $data->definicion = 'Colegio de ciencias comerciales';
-        $data->nombre = 'SAN JOSÉ';
+        $data->definicion = 'Colegio Preuniversitario';
+        $data->nombre = 'SAN PABLO';
         $data->representante_legal = 'Norma Yolanda ozorio';
         $data->municipio_id = 1;
         $data->profesion = 'Perito en administracion de empresas';
         $data->calidad_de = 'Directora educativa';
-        $data->estado_civil = 'Casado';
+        $data->estado_civil = 'Casada';
         $data->nacionalidad = 'Guatemalteca';
         $data->fecha_nac = "1980-5-23";
         $data->cui ="2548966180501";
