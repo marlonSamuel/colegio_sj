@@ -79,6 +79,9 @@ export default {
         .then(r => {
           self.loading = false
           self.ciclos = r.data
+          var ciclo_id = self.$store.state.ciclo.id
+          self.ciclo_id = ciclo_id
+          self.selectedCiclo(ciclo_id)
         })
         .catch(r => {});
     },

@@ -114,7 +114,6 @@ class CicloController extends ApiController
             return $this->errorResponse('No se puede eliminar ciclo escolar porque ya tiene cuotas asignadas', 422);
         }
 
-
         if($ciclo->actual){
             $menor = $ciclo->ciclo -1;
             $ciclo_menor = Ciclo::where('ciclo',$menor)->first();
