@@ -17,6 +17,7 @@ class CreateNivelelesEducativosTable extends Migration
             $table->bigIncrements('id');
             $table->string('nombre',50);
             $table->string('resolucion',50);
+            $table->datetime('fecha');
             $table->boolean('es_carrera')->default(0);
             $table->softDeletes();
             $table->timestamps();
