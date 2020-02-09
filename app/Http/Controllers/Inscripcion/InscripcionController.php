@@ -15,7 +15,7 @@ class InscripcionController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
     }
 
     public function index()
@@ -62,6 +62,24 @@ class InscripcionController extends ApiController
         $data = $request->all();
         $data['numero'] = $this->getCorrelativo($request->ciclo_id);
         $inscripcion = Inscripcion::create($data);
+
+        return $this->showOne($inscripcion,201);
+    }
+
+    public function documento(Request $request)
+    {
+        $reglas = [
+            "documento" => "required|mimes:pdf|max:10000"
+        ];
+        
+        $this->validate($request, $reglas);
+        $inscripcion = Inscripcion::where('id',$request->id)->with('alumno')->first();
+
+        $folder = 'alumno_'.$inscripcion->alumno_id.$inscripcion->alumno->primer_nombre.$inscripcion->alumno->primer_apellido;
+        $name = $request->documento->getClientOriginalName();
+        $inscripcion->documento = $request->documento->storeAs($folder, $name);
+
+        $inscripcion->save();
 
         return $this->showOne($inscripcion,201);
     }

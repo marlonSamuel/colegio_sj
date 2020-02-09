@@ -17,6 +17,7 @@ class Inscripcion extends Model
 
     protected $fillable= [
         'numero',
+        'documento',
     	'alumno_id',
     	'ciclo_id',
     	'grado_nivel_educativo_id',

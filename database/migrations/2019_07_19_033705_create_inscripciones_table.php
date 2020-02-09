@@ -16,6 +16,7 @@ class CreateInscripcionesTable extends Migration
         Schema::create('inscripciones', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('numero')->unique();
+            $table->string('documento',150)->nullable();
             $table->unsignedBigInteger('alumno_id');
             $table->unsignedBigInteger('grado_nivel_educativo_id');
             $table->unsignedBigInteger('ciclo_id');

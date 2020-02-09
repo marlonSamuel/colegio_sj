@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => 'documentos',
 
     /*
     |--------------------------------------------------------------------------
@@ -58,6 +58,12 @@ return [
         'images' => [
             'driver' => 'local',
             'root' => public_path('img/alumnos'),
+            'visibility' => 'public',
+        ],
+
+        'documentos' => [
+            'driver' => 'local',
+            'root' => public_path('documentos'),
             'visibility' => 'public',
         ],
 
