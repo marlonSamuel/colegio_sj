@@ -18,6 +18,7 @@ class CreateConceptoPagosTable extends Migration
             $table->string('nombre',25);
             $table->boolean('is_parcial')->default(1);
             $table->boolean('obligatorio')->default(1);
+            $table->boolean('mora')->default(0);
             $table->char('forma_pago',1)->default('N');
             $table->softDeletes();
             $table->timestamps();
