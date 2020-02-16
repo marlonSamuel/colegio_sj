@@ -11,7 +11,7 @@ class GradoNivelEducativoCuotaController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
     }
 
     public function index(GradoNivelEducativo $gradoNivelEducativo)
@@ -24,6 +24,7 @@ class GradoNivelEducativoCuotaController extends ApiController
     {
     	$grado = GradoNivelEducativo::find($id);
     	$cuotas = $grado->cuotas()->with('concepto_pago','ciclo')->where('ciclo_id',$ciclo_id)->get()->values();
+
         return $this->showAll($cuotas);
     }
 }

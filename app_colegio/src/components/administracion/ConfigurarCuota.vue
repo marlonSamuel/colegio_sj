@@ -170,6 +170,7 @@ export default {
       self.form.cuota = data.form.cuota;
       self.form.grado_nivel_educativo_id = data.grado_nivel_educativo_id;
     },
+    
     createOrEdit() {
       this.$validator.validateAll().then(result => {
         if (result) {
@@ -182,6 +183,7 @@ export default {
       });
       let self = this;
     },
+
     clearData() {
       let self = this;
 
@@ -197,6 +199,7 @@ export default {
       self.clearData();
     }
   },
+  
   computed: {
     setTitle() {
       let self = this;

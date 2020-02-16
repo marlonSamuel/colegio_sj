@@ -28,6 +28,8 @@ class InstitucionSeeder extends Seeder
         $data->nit ="168263-3";
         $data->telefono ="7881-1076";
         $data->direccion = 'Avenida del comercio 1-27 zona 1 San Jose Escuintla';
+        $data->mora = 10;
+        $data->dia_pago = 5;
         $data->save();
     }
 }
