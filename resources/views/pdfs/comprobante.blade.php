@@ -156,7 +156,7 @@
                             @if($pago->cuota->concepto_pago->forma_pago === 'A' || $pago->cuota->concepto_pago->forma_pago === 'N')
                               <tr>
                                 <td style="text-align:center;">pago por concepto de {{$pago->cuota->concepto_pago->nombre}} ciclo escolar {{$pago->inscripcion->ciclo->ciclo}} </td>
-                                <td style="text-align:center;"> Q {{number_format($pago->total, 2)}} </td>
+                                <td style="text-align:center;"> Q {{number_format($pago->total - $pago->mora, 2)}} </td>
                             </tr>
                             @else
                                 <tr>
@@ -170,12 +170,19 @@
                                     </tr>
                                 @endforeach
                               @endif
+
+                            <tr>
+                                @if($pago->cuota->concepto_pago->mora && $pago->mora > 0)
+                                    <td style="text-align:center;">recargo por mora</td>
+                                    <td style="text-align:center;"> Q {{number_format($pago->mora, 2)}} </td>
+                                @endif
+                            </tr>
                           
                         </tbody>
                         <tfoot>
-                            <tr>
+                            <tr style="font:bold;">
                                 <td style="text-align:right;">Total</td>
-                                <td style="text-align:center;"> Q {{number_format($pago->total, 2)}}</td>
+                                <td style="text-align:center;"><label>Q {{number_format($pago->total, 2)}}</label></td>
                             </tr>
                         </tfoot>
                     </table>
