@@ -152,6 +152,7 @@ class CicloController extends ApiController
     public function getCicloActual()
     {
         $ciclo = Ciclo::where('actual',true)->first();
+        
         if(is_null($ciclo)){
             return $this->errorResponse('Ciclo actual aun no ah sido registrado', 422);
         }

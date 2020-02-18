@@ -21,7 +21,7 @@ const state = {
     token_expired: null,
     client_id: 2,
     base_url: 'http://www.san_pablo.com/',
-    client_secret: 'VAOleDJwZUrZG5K5XGKi7lDTanSjZBGck5AQdF50'
+    client_secret: 'X5dG5eTSr3ZO1XwcVaD8cAxesXAFzBA5t2jSa7Uw'
 }
 
 const mutations = {
