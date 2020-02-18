@@ -155,7 +155,10 @@
                         <tbody>
                             @if($pago->cuota->concepto_pago->forma_pago === 'A' || $pago->cuota->concepto_pago->forma_pago === 'N')
                               <tr>
-                                <td style="text-align:center;">pago por concepto de {{$pago->cuota->concepto_pago->nombre}} ciclo escolar {{$pago->inscripcion->ciclo->ciclo}} </td>
+                                <td style="text-align:center;">pago por concepto de {{$pago->cuota->concepto_pago->nombre}} ciclo escolar {{$pago->inscripcion->ciclo->ciclo}}
+                                    {{$pago->descripcion}
+                                 </td>
+                                    }
                                 <td style="text-align:center;"> Q {{number_format($pago->total - $pago->mora, 2)}} </td>
                             </tr>
                             @else

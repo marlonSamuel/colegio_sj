@@ -1,6 +1,6 @@
 <template>
   <v-layout v-if="data !== null" v-loading="loading" grid-list-md>
-      <v-layout wrap>
+      <v-layout wrap v-if="isAdmin">
         <v-flex xs6 md4 sm4 lg4>
           <v-card
             class="mx-auto"
@@ -120,6 +120,17 @@
         </v-flex>
 
       </v-layout>
+      <v-layout v-else wrap>
+        <v-flex>
+            <v-alert
+              :value="true"
+              type="info"
+            >
+              BIENVENIDO {{userName | uppercase}} <br />
+              <small>usted esta navegando navegando como usuario {{rol}}</small>
+            </v-alert>
+        </v-flex>
+      </v-layout>
   </v-layout>
 </template>
 
@@ -195,6 +206,32 @@ export default {
     logo(){
       let self = this
       return self.$store.state.global.getLogo()
+    },
+
+    isAdmin(){
+      let self = this
+      var user = self.$store.state.usuario
+      if(!_.isEmpty(user) && user.rol.rol === 'admin'){
+        return true
+      }
+      return false
+    },
+
+    userName(){
+      let self = this
+      var user = self.$store.state.usuario
+      if(!_.isEmpty(user)){
+        return user.name
+      }
+      return ''
+    },
+    rol(){
+      let self = this
+      var user = self.$store.state.usuario
+      if(!_.isEmpty(user)){
+        return user.rol.rol
+      }
+      return ''
     }
   },
 };

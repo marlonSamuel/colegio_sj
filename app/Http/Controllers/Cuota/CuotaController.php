@@ -13,7 +13,9 @@ class CuotaController extends ApiController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:asignarcuota')->except(['index']);
     }
+
     public function index(ConceptoPago $concepto_pago){
         $cuota = $concepto_pago->cuotas()->with('concepto_pago','grado_nivel_educativo','grado_nivel_educativo.grado','grado_nivel_educativo.nivelEducativo')->get();
         return $this->showAll($cuota);

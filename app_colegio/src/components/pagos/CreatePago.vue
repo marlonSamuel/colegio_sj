@@ -1,7 +1,7 @@
 <template>
     <v-layout>
         <v-flex>
-            <v-dialog persistent v-model="dialog" max-width="1000px" align-start>
+            <v-dialog persistent v-model="dialog" max-width="1100px" align-start>
                 <v-card v-loading="loading">
                     <v-card-title>
                         <span class="headline" v-if="inscripcion !== null">Nuevo pago ciclo escolar {{inscripcion.ciclo.ciclo}}</span>
@@ -93,16 +93,34 @@
                                                 :error-messages="errors.collect('exonerar_mora')">
                                             </v-text-field>
                                         </v-flex>
+                                        <v-flex xs12 sm4 md4 lg4 v-if="!concepto.concepto_pago.obligatorio">
+                                            <v-text-field v-model="form.total_a_pagar" 
+                                                label='Total'
+                                                v-validate="'required|decimal|min_value:'+concepto.cuota"
+                                                type="text"
+                                                data-vv-name="total"
+                                                prepend-icon="money"
+                                                :error-messages="errors.collect('total')">
+                                            </v-text-field>
+                                        </v-flex>
                                         <v-flex xs12 sm4 md4 lg4>
                                             <v-text-field v-model="form.total_cancelado" 
                                                 :label="form.is_credito ? 'Abono':'Total pagado'"
-                                                v-validate="form.is_credito ? 'required':''"
+                                                v-validate="form.is_credito ? 'required|decimal':''"
                                                 type="text"
                                                 :readonly="!form.is_credito"
                                                 data-vv-name="total_cancelado"
                                                 prepend-icon="money"
                                                 :error-messages="errors.collect('total_cancelado')">
                                             </v-text-field>
+                                        </v-flex>
+                                        <v-flex xs12 md8 lg8 v-if="!concepto.concepto_pago.obligatorio && descripcion">
+                                            <v-textarea
+                                            placeholder="especifique descripcion extra para facturar"
+                                            prepend-icon="highlight_off"
+                                            v-model="form.descripcion"
+                                            label="Descripcion para facturar"
+                                            ></v-textarea>
                                         </v-flex>
                                         <v-flex md12 v-if="concepto.concepto_pago.forma_pago === 'M'">
                                             <h3 class="grey--text">Seleccione meses a cancelar</h3>
@@ -207,8 +225,10 @@ export default {
             total_cancelado: 0,
             serie: '',
             factura: null,
+            total_a_pagar: 0,
             serie_factura_id: null,
             pago_mensual: false,
+            descripcion: '',
             fecha: new Date().toISOString().substr(0, 10),
             meses: []
         }
@@ -320,6 +340,12 @@ export default {
           this.$toastr.error('debe seleccionar al menos un mes', 'error')
           return
       }
+      
+      if(!self.concepto.concepto_pago.obligatorio){
+          if(parseFloat(data.total_a_pagar) > parseFloat(data.total)){
+              data.total = data.total_a_pagar
+          }
+      }
 
       self.loading = true
       self.$store.state.services.pagoService
@@ -370,6 +396,7 @@ export default {
     selectConcepto(id){
         let self = this
         self.concepto = self.conceptos.find(x=>x.id === id)
+        self.form.total_a_pagar = self.concepto.cuota
     },
 
     setTotal(){
@@ -504,6 +531,15 @@ export default {
         let self = this
         self.form.fecha = moment().format('YYYY-MM-DD')
         return moment(self.form.fecha !== '' ? self.form.fecha : moment()).format('DD/MM/YYYY')
+      },
+
+      descripcion(){
+          let self = this
+          if(parseFloat(self.form.total_a_pagar) > parseFloat(self.form.total)){
+              return true
+          }else{
+              self.form.descripcion = ''
+          }
       }
     },
 };

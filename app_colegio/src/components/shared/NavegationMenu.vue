@@ -1,4 +1,4 @@
-<template v-loading="loading">
+<template>
 <div>
 <v-navigation-drawer
       v-model="drawer"
@@ -6,6 +6,10 @@
       fixed
       app
       dark
+      element-loading-text="cargando menú..."
+    element-loading-spinner="el-icon-loading"
+    v-loading="emptyMenu" 
+    element-loading-background="rgba(0, 0, 0, 0.8)"
     >
       <v-list dense>
         <template>
@@ -30,7 +34,7 @@
               </v-list-tile-content>
             </v-list-tile>
             <template v-for="child in item.children">
-              <v-list-tile :to="child.path">
+              <v-list-tile :to="'/'+child.path">
                 <v-list-tile-action>
                   <v-icon>{{child.icon}}</v-icon>
                 </v-list-tile-action>
@@ -189,6 +193,12 @@ export default {
     getName(){
       let self = this
       return self.$store.state.institucion.nombre
+    },
+
+    emptyMenu(){
+      let self = this
+      console.log("llego")
+      return self.$store.state.menu.length === 0 ? true : false
     }
   }
 }

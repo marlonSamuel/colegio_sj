@@ -12,6 +12,7 @@ class CicloInscripcionController extends ApiController
    public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:consultaciclo')->except(['index']);
     }
 
     public function index(Ciclo $ciclo)

@@ -12,6 +12,7 @@ class PagoPagoParcialController extends ApiController
    public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:pago');
     }
 
     public function index(Pago $pago)

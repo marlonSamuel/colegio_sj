@@ -11,7 +11,8 @@ class SerieFacturaController extends ApiController
 {
      public function __construct()
     {
-        //parent::__construct();
+        parent::__construct();
+        $this->middleware('scope:seriefactura')->except(['index']);
     }
 
     public function index()

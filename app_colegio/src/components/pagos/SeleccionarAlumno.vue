@@ -2,7 +2,7 @@
   <v-layout align-start>
     <v-flex>
         <v-card>
-            <v-card-title class="headline blue darken-3">
+            <v-card-title class="headline red darken-4">
               <h4 class="white--text">Buscar alumno por codigo o nombre</h4>
             </v-card-title>
             <v-card-text>

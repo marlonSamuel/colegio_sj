@@ -22,7 +22,7 @@ Route::post('oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenContro
 
 Route::name('me')->get('auth/me', 'Usuario\AuthController@user');
 Route::name('cambiar_contraseña')->post('usuarios_change_password', 'Usuario\UsuarioController@changePassword');
-Route::resource('roles', 'Rol\RolController', ['except' => ['create', 'edit']]);
+Route::resource('rols', 'Rol\RolController', ['except' => ['create', 'edit']]);
 
 Route::resource('cursos', 'Curso\CursoController', ['except' => ['create', 'edit']]);
 Route::resource('grados', 'Grado\GradoController', ['except' => ['create', 'edit']]);
@@ -72,3 +72,4 @@ Route::name('pagos_reporte')->get('pagos_reporte/{inicio?}/{fin?}', 'Pago\PagoCo
 Route::resource('ciclos.inscripciones', 'Ciclo\CicloInscripcionController', ['except' => ['create', 'edit']]);
 Route::resource('ciclos.pagos', 'Ciclo\CicloPagoController', ['except' => ['create', 'edit']]);
 Route::name('inscripciones_documento')->post('inscripciones_documento', 'Inscripcion\InscripcionController@documento');
+Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);

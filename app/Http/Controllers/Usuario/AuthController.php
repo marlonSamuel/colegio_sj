@@ -28,6 +28,12 @@ class AuthController extends Controller
 
         $credentials = request(['email', 'password']);
 
+        $user = User::where('email',$request->email)->first();
+
+        if(!is_null($user)){
+            $scopes = $this->getAllScopes($user);
+        }
+
         $http = new Client();
 
         $response = $http->post('http://www.san_pablo.com/oauth/token', [
@@ -37,7 +43,7 @@ class AuthController extends Controller
                 'client_secret' => config('services.passport.client_secret'),
                 'username' => $request->email,
                 'password' => $request->password,
-                'scope' => '*',
+                'scope' => $scopes,
             ],
         ]);
 
@@ -64,5 +70,18 @@ class AuthController extends Controller
             'user' => $user,
             'institucion' => $institucion
         ]);
+    }
+
+    public function getAllScopes(User $user)
+    {
+        $scopes = [];
+        $menus = $user->rol->with('menus')->get()->pluck('menus')->collapse();
+
+        foreach ($menus as $menu) {
+            $name = strtolower($menu->name);
+            array_push($scopes, $name);
+        }
+
+        return $scopes;
     }
 }

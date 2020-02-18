@@ -43,9 +43,6 @@ const isLoggedOut = (to, from, next) => {
 
 //proteger rutas de los sistema, verificar si tiene acceso
 const permissionValidations = (to, from, next) => {
-    if (store.state.usuario.rol !== undefined && store.state.usuario.rol.rol === 'admin') {
-        return next()
-    }
     var permisos = store.state.permisos //obtener permisos del usuario
     name = to.name
     var permiso = _.includes(permisos, name) //verificar si permiso existe
@@ -61,7 +58,7 @@ const routes = [
     { path: '/grado', name: 'Grado', component: Grado, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/nivel_educativo', name: 'NivelEducativo', component: NivelEducativo, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/seccion', name: 'Seccion', component: Seccion, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
-    { path: '/configurar_nivel/:id', name: 'ConfigurarNivel', component: ConfigurarNivel, beforeEnter: multiguard([isLoggedIn]) },
+    { path: '/configurar_nivel/:id', name: 'ConfigurarNivel', component: ConfigurarNivel, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/ciclo', name: 'Ciclo', component: Ciclo, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/concepto_pago', name: 'ConceptoPago', component: ConceptoPago, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/configurar_cuota/:id', name: 'ConfigurarCuota', component: ConfigurarCuota, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },

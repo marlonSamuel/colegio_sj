@@ -4,7 +4,7 @@ class RolService {
 
     constructor(axios, baseUrl) {
         this.axios = axios
-        this.baseUrl = `${baseUrl}roles`
+        this.baseUrl = `${baseUrl}rols`
     }
 
     getAll() {
@@ -24,12 +24,17 @@ class RolService {
 
     update(data) {
         let self = this;
-        return self.axios.put(`${self.baseUrl}/${data.id}`,data);
+        return self.axios.put(`${self.baseUrl}/${data.id}`, data);
     }
 
-    destroy(data){
+    destroy(data) {
         let self = this;
         return self.axios.delete(`${self.baseUrl}/${data.id}`);
+    }
+
+    getMenus(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}/${id}/menus`);
     }
 }
 

@@ -141,12 +141,7 @@ export default {
             .then(r => {
                 store.dispatch('setUser', r.data.user)
                 store.dispatch('setInstitucion', r.data.institucion)
-                if (r.data.user.rol.rol == 'admin') {
-                    store.dispatch('setMenu', this.items_admin)
-                } else {
-                    store.dispatch('setMenu', this.items_operario)
-                    store.dispatch('setPermisos', self.permisos_operario)
-                }
+                this.getMenus(r.data.user.rol_id)
             }).catch(e => {
 
             })
@@ -155,8 +150,8 @@ export default {
     getCicloActual() {
         store.state.services.cicloService.actual()
             .then(r => {
-                if(r.response){
-                    toastr.error('no existe ciclo actual, por favor active uno','error')
+                if (r.response) {
+                    toastr.error('no existe ciclo actual, por favor active uno', 'error')
                     router.push('/ciclo')
                     return
                 }
@@ -164,5 +159,54 @@ export default {
             }).catch(e => {
 
             })
+    },
+
+    getMenus(id) {
+        let self = this
+        self.loading = true
+        store.state.services.rolService
+            .getMenus(id)
+            .then(r => {
+                self.loading = false
+                if (r.response !== undefined) {
+                    self.$toastr.error(r.response.data.error, 'error')
+                    return
+                }
+
+                this.mapMenu(r.data)
+
+            }).catch(e => {
+
+            })
+    },
+
+    mapMenu(items) {
+        var menu = []
+        var permissions = []
+        items.forEach(function(item) {
+            permissions.push(item.name)
+            if (item.father === 0 && !item.hide) {
+                var object = new Object
+                object.icon = item.icon
+                object.text = item.text
+                object.path = item.path
+                object.name = item.name
+                object.model = true
+                object.children = []
+                items.forEach(function(child, i) {
+                    if (item.id === child.father && !child.hide) {
+                        var object2 = new Object()
+                        object2.icon = child.icon
+                        object2.text = child.text
+                        object2.path = child.path
+
+                        object.children.push(object2)
+                    }
+                });
+                menu.push(object)
+            }
+        })
+        store.dispatch('setMenu', menu)
+        store.dispatch('setPermisos', permissions)
     }
 }

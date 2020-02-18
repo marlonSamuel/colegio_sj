@@ -12,12 +12,12 @@ class CursoController extends ApiController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:curso')->except(['index']);
     }
 
     public function index()
     {
         $cursos = Curso::all();
-
         return $this->showAll($cursos);
     }
 

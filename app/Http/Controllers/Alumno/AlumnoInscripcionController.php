@@ -11,7 +11,7 @@ class AlumnoInscripcionController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
+        parent::__construct();
     }
    
     public function index(Alumno $alumno)

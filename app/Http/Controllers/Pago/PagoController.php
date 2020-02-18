@@ -17,6 +17,7 @@ class PagoController extends  ApiController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:pago')->except(['getByFechas','comprobante']);
     }
 
     public function index()

@@ -13,6 +13,7 @@ class NivelEducativoGradoController extends ApiController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:niveleducativo')->except(['index']);
     }
 
     public function index(NivelEducativo $niveles_educativo)

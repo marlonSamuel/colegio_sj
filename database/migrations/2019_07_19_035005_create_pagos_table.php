@@ -27,6 +27,7 @@ class CreatePagosTable extends Migration
             $table->integer('dias_mora')->default(0);
             $table->integer('exonerar_mora')->default(0);
             $table->string('motivo_anulado')->nullable();
+            $table->string('descripcion',500)->nullable();
             $table->unsignedBigInteger('cuota_id');
             $table->datetime('fecha');
 

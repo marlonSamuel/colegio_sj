@@ -11,6 +11,7 @@ class SeccionController extends ApiController
      public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:seccion')->except(['index']);
     }
 
     public function index()

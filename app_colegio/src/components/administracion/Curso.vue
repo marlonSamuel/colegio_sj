@@ -118,6 +118,9 @@ export default {
         .getAll()
         .then(r => {
           self.loading = false
+          if(self.$store.state.global.captureError(r)){
+            return
+          }
           self.items = r.data
         })
         .catch(r => {});
@@ -133,8 +136,7 @@ export default {
         .create(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
+          if(self.$store.state.global.captureError(r)){
             return
           }
           this.$toastr.success('registro agregado con éxito', 'éxito')

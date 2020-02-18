@@ -29,7 +29,8 @@ class Pago extends Model
         'fecha',
         'serie_factura_id',
         'factura',
-        'apoderado_id'
+        'apoderado_id',
+        'descripcion'
     ];
 
     public function inscripcion()

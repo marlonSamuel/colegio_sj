@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
+use App\Menu;
 use Carbon\Carbon;
-use Laravel\Passport\Passport;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use Laravel\Passport\Passport;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -31,5 +32,16 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::tokensExpireIn(Carbon::now()->addMinutes(350));
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(15));
+
+        $menus = Menu::all(); 
+        $scopes = [];
+
+        foreach ($menus as $menu) {
+            $name = strtolower($menu->name);
+            $scope = [$name=>''];
+            $scopes = array_merge($scopes, $scope);
+        }
+        //dd($scopes);
+        Passport::tokensCan($scopes);
     }
 }

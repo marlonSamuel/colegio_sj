@@ -17,6 +17,7 @@ class UsuarioController extends ApiController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:usuario');
     }
 
     public function index()
