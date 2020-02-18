@@ -1,5 +1,5 @@
 <template>
-  <v-layout align-start>
+  <v-layout align-start v-loading="loading">
     
       <factura></factura>
     <v-dialog persistent v-model="dialog" max-width="800px">

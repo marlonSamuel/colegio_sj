@@ -2,7 +2,7 @@
     <v-layout>
         <v-flex>
             <v-dialog persistent v-model="dialog" max-width="1000px" align-start>
-                <v-card>
+                <v-card v-loading="loading">
                     <v-card-title>
                         <span class="headline" v-if="inscripcion !== null">Nuevo pago ciclo escolar {{inscripcion.ciclo.ciclo}}</span>
                     </v-card-title>
@@ -48,7 +48,8 @@
                                                 :error-messages="errors.collect('fecha')"
                                             ></v-text-field>
                                             </template>
-                                            <v-date-picker locale="es" v-model="form.fecha" @input="menu = false"></v-date-picker>
+                                            <v-date-picker 
+                                                @change="calculateMora(form.fecha)" locale="es" v-model="form.fecha" @input="menu = false"></v-date-picker>
                                         </v-menu>
                                     </v-flex>
                                     <v-flex xs12 sm4 md4 lg4>
@@ -75,11 +76,22 @@
                                         </v-text-field>
                                     </v-flex>
                                     <template v-if="concepto !== null">
-                                        <v-flex xs12 sm6 md6 lg6 v-if="concepto.concepto_pago.is_parcial && concepto !== null">
+                                        <v-flex xs12 sm4 md6 lg4 v-if="concepto.concepto_pago.is_parcial && concepto !== null">
                                             <v-checkbox
                                                 v-model="form.is_credito"
                                                 label="pago al crédito"
                                                 ></v-checkbox>
+                                        </v-flex>
+                                        <v-flex xs12 sm4 md4 lg4 v-if="concepto.concepto_pago.mora && concepto !== null">
+                                                <v-text-field v-model="form.exonerar_mora" 
+                                                label="exonerar mora (%)"
+                                                v-validate="'numeric|max_value: 100|min_value: 0'"
+                                                type="text"
+                                                data-vv-name="exonerar_mora"
+                                                data-vv-as="exonerar mora"
+                                                prepend-icon="money"
+                                                :error-messages="errors.collect('exonerar_mora')">
+                                            </v-text-field>
                                         </v-flex>
                                         <v-flex xs12 sm4 md4 lg4>
                                             <v-text-field v-model="form.total_cancelado" 
@@ -109,24 +121,37 @@
                                         </v-flex>
 
                                         
-                                        <v-flex xs12 sm8 md8 lg8 offset-sm2>
+                                        <v-flex xs12 sm12 md8 lg12>
                                             <v-card>
                                                 <v-card-title>
-                                                <div>
-                                                    <h3 class="grey--text">Detalle pago</h3>
-                                                    <h4>cuota: {{concepto.cuota | currency('Q ')}}</h4>
-                                                    <h4>
-                                                        por concepto de {{concepto.concepto_pago.nombre | lowercase()}}
-                                                        <span v-for="m in form.meses" :key="m.id">
-                                                            {{getLabelMeses(m)}}
-                                                        </span>
-                                                    </h4>
-                                                    <h4>por inscripcion no {{inscripcion.numero}} ciclo escolar {{inscripcion.ciclo.ciclo}}</h4>
-                                                </div>
+                                                <v-container>
+                                                    <v-layout wrap>
+                                                        <v-flex xs12 xsm6 lg6>
+                                                            <h3 class="grey--text">Detalle pago</h3>
+                                                            <h4>cuota: {{concepto.cuota | currency('Q ')}}</h4>
+                                                            <h4>
+                                                                por concepto de {{concepto.concepto_pago.nombre | lowercase()}}
+                                                                <span v-for="m in form.meses" :key="m.id">
+                                                                    {{getLabelMeses(m)}}
+                                                                </span>
+                                                            </h4>
+                                                            <h4>por inscripcion no {{inscripcion.numero}} ciclo escolar {{inscripcion.ciclo.ciclo}}</h4>
+                                                        </v-flex>
+                                                        <v-flex xs12 xsm6 lg6 v-if="concepto.concepto_pago.mora">
+                                                            &nbsp; <h3 class="grey--text">Detalle mora</h3>
+                                                            <h4 v-for="(item,i) in meses_show" :key="i">
+                                                               <span class="red--text" v-if="item.mora > 0 && ifMeses(item.id)">{{item.mes}}: {{item.mora | currency('Q ')}} ({{item.dias_mora}} dias)</span>
+                                                            </h4>
+                                                        </v-flex>
+
+                                                    </v-layout>
+                                                </v-container>
                                                 </v-card-title>
                                                 <v-card-actions>
-                                                <v-btn flat color="blue">total: {{getTotal | currency('Q ')}} </v-btn>
-                                                <v-btn flat color="blue">total cancelado : {{form.total_cancelado}}</v-btn>
+                                                <v-btn v-if="concepto.concepto_pago.mora" flat color="blue">total {{concepto.concepto_pago.nombre}} : {{form.total_concepto | currency('Q ')}} </v-btn>
+                                                <v-btn v-if="concepto.concepto_pago.mora" flat color="blue">total mora: {{form.mora | currency('Q ')}} </v-btn>
+                                                <v-btn flat color="blue">total a pagar : {{getTotal | currency('Q ')}}</v-btn>
+                                                <v-btn flat color="blue">total cancelado : {{form.total_cancelado | currency('Q ')}}</v-btn>
                                                 </v-card-actions>
                                             </v-card>
                                         </v-flex>
@@ -167,6 +192,7 @@ export default {
         pagos: [],
         meses: [],
         meses_show: [],
+        current_date: moment(),
         form: {
             id: null,
             inscripcion_id: null,
@@ -174,6 +200,10 @@ export default {
             apoderado_id: null,
             is_credito: false,
             total: 0,
+            total_concepto: 0,
+            mora: 0,
+            exonerar_mora: 0,
+            dias_mora: 0,
             total_cancelado: 0,
             serie: '',
             factura: null,
@@ -210,6 +240,7 @@ export default {
         self.getMeses()
         self.meses_show = self.monthsOfDate(inscripcion.ciclo.inicio, inscripcion.ciclo.fin)
         self.getSerie()
+        self.calculateMora(moment())
     },
 
     filterCuotas(){
@@ -281,14 +312,16 @@ export default {
     //funcion para guardar registro
     create(){
       let self = this
-      self.loading = true
       let data = self.form
-
+      if(data.exonerar_mora == null){
+          data.exonerar_mora = 0
+      }
       if(self.concepto.concepto_pago.forma_pago === 'M' && data.meses.length == 0){
           this.$toastr.error('debe seleccionar al menos un mes', 'error')
           return
       }
 
+      self.loading = true
       self.$store.state.services.pagoService
         .create(data)
         .then(r => {
@@ -307,13 +340,12 @@ export default {
 
     //funcion, validar si se guarda o actualiza
     validate(){
+        let self = this
       this.$validator.validateAll().then((result) => {
           if (result) {
               self.create()
            }
       });
-
-      let self = this
     },
 
     //limpiar data de formulario
@@ -361,13 +393,15 @@ export default {
         endDate = moment(endDate);
         var meses = [];    
         while (startDate.isBefore(endDate)) {
+            var dia = self.$store.state.institucion.dia_pago
             var id = parseInt(startDate.format("M"))
             var mes = moment().month(id - 1).format('MMMM')
+            var fecha_pago = moment(startDate.format("Y")+'-'+id+'-'+dia)
             meses.push({
                 id: id,
-                mes: mes
+                mes: mes,
+                fecha_pago: fecha_pago
             })
-
             startDate.add(1, 'month')
         }
         return meses
@@ -388,15 +422,55 @@ export default {
     formatCode(n, len = 4) {
         return (new Array(len + 1).join('0') + n).slice(-len)
     },
+
+    calculateMora(fecha){
+        let self = this
+        var total = 0
+        self.meses_show.forEach(m => {
+            var a = moment(fecha)
+            var b = m.fecha_pago
+            m.mora = 0
+            m.dias_mora = 0
+            if(a > b){
+                var diff = a.diff(b, 'days')
+                m.mora = diff * self.$store.state.institucion.mora
+                m.dias_mora+=diff
+            }
+        })
+    },
+
+    getMora(meses){
+        let self = this
+        var mora = 0
+        var dias_mora = 0
+        meses.forEach(m => {
+            var mes = self.meses_show.find(x=>x.id == m)
+            mora+=mes.mora
+            dias_mora+=mes.dias_mora
+        })
+        return {
+            mora: mora,
+            dias_mora: dias_mora
+        }
+    },
+
+    ifMeses(id){
+        let self = this
+        return self.form.meses.some(x=>x == id)
+    }
   },
 
   computed: {
       getTotal(){
         let self = this
+        var mora = self.getMora(self.form.meses)
+        self.form.mora = 0
+        self.form.dias_mora = 0
         if(self.concepto.concepto_pago.forma_pago === 'M'){
             self.form.pago_mensual = true
+            self.form.total_concepto = self.concepto.cuota * self.form.meses.length
             self.form.total = self.concepto.cuota * self.form.meses.length
-            self.form.total_cancelado = self.concepto.cuota * self.form.meses.length
+            self.form.total_cancelado = self.form.total
             if(self.form.is_credito){
                 self.form.total_cancelado = 0
             }
@@ -404,10 +478,23 @@ export default {
             self.form.pago_mensual = false
             self.form.total = self.concepto.cuota
             self.form.total_cancelado = self.concepto.cuota
+            self.form.mora = 0
+            self.form.total_concepto = self.form.total
             self.form.meses = []
             if(self.form.is_credito){
                 self.form.total_cancelado = 0
             }
+        }
+        
+        if(self.concepto.concepto_pago.mora && self.form.exonerar_mora >= 0 && self.form.exonerar_mora <= 100){
+            self.form.mora = mora.mora - (mora.mora * self.form.exonerar_mora/100)
+            self.form.total+= self.form.mora
+            self.form.dias_mora = mora.dias_mora
+            if(self.form.is_credito !== null){
+                self.form.total_cancelado = self.form.total
+            }
+        }else{
+            self.form.exonerar_mora = 0
         }
 
         return self.form.total

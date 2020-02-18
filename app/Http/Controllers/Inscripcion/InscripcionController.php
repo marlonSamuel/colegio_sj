@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Inscripcion;
 
 use App\Ciclo;
+use App\Cuota;
 use App\Inscripcion;
 use App\Institucion;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class InscripcionController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
     }
 
     public function index()
@@ -61,6 +62,24 @@ class InscripcionController extends ApiController
         $data = $request->all();
         $data['numero'] = $this->getCorrelativo($request->ciclo_id);
         $inscripcion = Inscripcion::create($data);
+
+        return $this->showOne($inscripcion,201);
+    }
+
+    public function documento(Request $request)
+    {
+        $reglas = [
+            "documento" => "required|mimes:pdf|max:10000"
+        ];
+        
+        $this->validate($request, $reglas);
+        $inscripcion = Inscripcion::where('id',$request->id)->with('alumno')->first();
+
+        $folder = 'alumno_'.$inscripcion->alumno_id.$inscripcion->alumno->primer_nombre.$inscripcion->alumno->primer_apellido;
+        $name = $request->documento->getClientOriginalName();
+        $inscripcion->documento = $request->documento->storeAs($folder, $name);
+
+        $inscripcion->save();
 
         return $this->showOne($inscripcion,201);
     }
@@ -132,11 +151,13 @@ class InscripcionController extends ApiController
 
         $inscripcion = Inscripcion::where('id',$inscripcion_id)->with('grado_nivel_educativo.grado','grado_nivel_educativo.nivelEducativo')->first();
         $alumno = $inscripcion->alumno;
+        $cuota_inscripcion = Cuota::where('concepto_pago_id',1)->where('grado_nivel_educativo_id',$inscripcion->grado_nivel_educativo->id)->where('ciclo_id',$inscripcion->ciclo_id)->first();
+        $cuota_colegiatura = Cuota::where('concepto_pago_id',2)->where('grado_nivel_educativo_id',$inscripcion->grado_nivel_educativo->id)->where('ciclo_id',$inscripcion->ciclo_id)->first();
         $responsable = $alumno->responsable()->with('apoderado.municipio.departamento','apoderado.telefonos')->first();
         $institucion = Institucion::with('municipio.departamento')->first();
         $date = $this->getCurrentDates(date("Y/m/d"));
 
-        $pdf = \PDF::loadView('pdfs.contrato',['inscripcion'=>$inscripcion, 'alumno'=>$alumno, 'responsable' => $responsable, 'institucion' => $institucion,'date'=>$date]);
+        $pdf = \PDF::loadView('pdfs.contrato',['inscripcion'=>$inscripcion, 'alumno'=>$alumno, 'responsable' => $responsable, 'institucion' => $institucion,'date'=>$date,'cuota_inscripcion'=>$cuota_inscripcion,'cuota_colegiatura'=>$cuota_colegiatura]);
 
         $pdf->setPaper('legal', 'portrait');
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>colegio san jose</title>
+    <title>COLEGIO SAN PABLO</title>
     <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
@@ -13,6 +13,6 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <div style="height: 100%" id="app"></div>
     <!-- built files will be auto injected -->
-<script type="text/javascript" src="bundle/js/manifest.6aa67b56925988dfee92.js"></script><script type="text/javascript" src="bundle/js/app.1bc6421f205985e42874.js"></script></body>
+<script type="text/javascript" src="bundle/js/manifest.6aa67b56925988dfee92.js"></script><script type="text/javascript" src="bundle/js/app.31ee52ba8a202e2c800a.js"></script></body>
 
 </html>

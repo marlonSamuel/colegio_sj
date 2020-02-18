@@ -123,7 +123,7 @@
               </template>
               <span>Editar</span>
             </v-tooltip>
-            <v-tooltip top>
+            <v-tooltip top v-if="items.length > 1">
               <template v-slot:activator="{ on }">
                   <v-icon v-on="on" color="error" fab dark @click="destroy(props.item)">delete</v-icon>
               </template>
@@ -140,6 +140,7 @@
 </template>
 <script>
 import moment from 'moment'
+import auth from '../../auth/index'
 export default {
   name: "Ciclo",
   props: {
@@ -165,8 +166,8 @@ export default {
         id: null,
         ciclo: null,
         actual: true,
-        inicio: '',
-        fin: ''
+        inicio: new Date().toISOString().substr(0, 10),
+        fin: new Date().toISOString().substr(0, 10)
       }
     };
   },
@@ -178,8 +179,8 @@ export default {
 
   methods: {
     getAll() {
-      let self = this;
-      self.loading = true;
+      let self = this
+      self.loading = true
 
       self.$store.state.services.cicloService
         .getAll()
@@ -192,11 +193,16 @@ export default {
 
     //funcion para guardar registro
     create() {
-      let self = this;
-      self.loading = true;
-      let data = self.form;
-      let estado = data.actual === false ? 0 : 1;
-      data.actual = estado;
+      let self = this
+      self.loading = true
+      let data = self.form
+      if(self.items.some(x=>x.ciclo == data.ciclo)){
+        this.$toastr.error('ciclo ya fue agregado','error')
+        return
+      }
+
+      let estado = data.actual === false ? 0 : 1
+      data.actual = estado
       self.$store.state.services.cicloService
         .create(data)
         .then(r => {
@@ -214,11 +220,23 @@ export default {
 
     //funcion para actualizar registro
     update() {
-      let self = this;
-      self.loading = true;
-      let data = self.form;
-      let estado = data.actual === false ? 0 : 1;
-      data.actual = estado;
+      let self = this
+      let data = self.form
+
+      var items_filter = self.items.filter(x=>x.id !== data.id)
+      if(items_filter.some(x=>x.ciclo == data.ciclo)){
+        this.$toastr.error('ciclo ya fue agregado','error')
+        return
+      }
+
+      if(!data.actual && items_filter.filter(x=>x.actual).length == 0){
+        this.$toastr.error('debe haber al menos un ciclo activo','error')
+        return
+      }
+      
+      let estado = data.actual === false ? 0 : 1
+      data.actual = estado
+      self.loading = true
       self.$store.state.services.cicloService
         .update(data)
         .then(r => {
@@ -227,9 +245,12 @@ export default {
             this.$toastr.error(r.response.data.error, "error");
             return;
           }
-          self.getAll();
+          if(data.actual){
+            auth.getCicloActual()
+          }
+          self.getAll()
           this.$toastr.success("registro actualizado con éxito", "éxito");
-          self.close();
+          self.close()
         })
         .catch(r => {
         });

@@ -690,8 +690,6 @@ export default {
     //funcion, validar si se guarda o actualiza
     beforeCreate(scope){
       let self = this
-      self.datos++
-      return
       this.$validator.validateAll(scope).then((result) => {
           if (result) {
              self.datos++

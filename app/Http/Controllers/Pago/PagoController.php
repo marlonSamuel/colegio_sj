@@ -57,6 +57,9 @@ class PagoController extends  ApiController
         
         $this->validate($request, $reglas);
         DB::beginTransaction();
+            if($request->exonerar_mora == '' || is_null($request->exonerar_mora)){
+                $request->exonerar_mora = 0;
+            }
             $data = $request->all();
 
             if(!$request->is_credito){

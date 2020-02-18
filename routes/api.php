@@ -71,3 +71,4 @@ Route::name('inscripciones_reporte')->get('inscripciones_reporte/{inicio?}/{fin?
 Route::name('pagos_reporte')->get('pagos_reporte/{inicio?}/{fin?}', 'Pago\PagoController@getByFechas');
 Route::resource('ciclos.inscripciones', 'Ciclo\CicloInscripcionController', ['except' => ['create', 'edit']]);
 Route::resource('ciclos.pagos', 'Ciclo\CicloPagoController', ['except' => ['create', 'edit']]);
+Route::name('inscripciones_documento')->post('inscripciones_documento', 'Inscripcion\InscripcionController@documento');

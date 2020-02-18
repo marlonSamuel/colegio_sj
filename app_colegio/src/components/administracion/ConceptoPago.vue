@@ -54,6 +54,10 @@
                       v-model="form.obligatorio"
                       :label="`¿es pago obligatorio? ${form.obligatorio.toString() === 'false' ?'No':'Si'}`"
                     ></v-switch>
+                    <v-switch
+                      v-model="form.mora"
+                      :label="`¿aplica mora? ${form.mora.toString() === 'false' ?'No':'Si'}`"
+                    ></v-switch>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -70,8 +74,9 @@
       <v-data-table :headers="headers" :items="items" :search="search" class="elevation-1">
         <template v-slot:items="props">
           <td class="text-xs-left">{{ props.item.nombre }}</td>
-          <td class="text-xs-left">{{ props.item.is_parcial === 0 ?'No':'Si' }}</td>
-          <td class="text-xs-left">{{ props.item.obligatorio ?'No':'Si' }}</td>
+          <td class="text-xs-left">{{ props.item.is_parcial ? 'Si':'No' }}</td>
+          <td class="text-xs-left">{{ props.item.obligatorio ?'Si':'No' }}</td>
+          <td class="text-xs-left">{{ props.item.mora ?'Si':'No' }}</td>
           <td class="text-xs-left">{{ props.item.forma_pago === 'A' ?'Anual':props.item.forma_pago === 'M' ? 'Mensual' : 'Ninguno' }}</td>
           <td class="text-xs-left">
             <v-tooltip top>
@@ -111,6 +116,7 @@ export default {
         { text: "Nombre", value: "nombre" },
         { text: "¿pago al crédito?", value: "is_parcial" },
         { text: "¿obligatorio?", value: "obligatorio" },
+        { text: "¿aplica mora?", value: "mora" },
         { text: "Forma pago", value: "forma_pago" },
         { text: "Acciones", value: "", sortable: false }
       ],
@@ -123,6 +129,7 @@ export default {
         nombre: null,
         is_parcial: true,
         obligatorio: true,
+        mora: true,
         forma_pago: ''
       },
 
@@ -248,6 +255,7 @@ export default {
       self.form.is_parcial = !!(data.is_parcial)
       self.form.obligatorio = !!(data.obligatorio)
       self.form.forma_pago = data.forma_pago
+      self.form.mora = data.mora
     },
 
     //funcion, validar si se guarda o actualiza

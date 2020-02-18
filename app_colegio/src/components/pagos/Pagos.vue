@@ -47,6 +47,7 @@
                     <template v-slot:items="props">
                         <td class="text-xs-left">{{'Serie "'+ props.item.serie.serie+'" - factura no.'+getFormat(props.item)}}</td>
                         <td class="text-xs-left">{{ props.item.cuota.concepto_pago.nombre}}</td>
+                        <td class="text-xs-left">{{ props.item.mora | currency('Q ')}}</td>
                         <td class="text-xs-left">{{ props.item.total | currency('Q ')}}</td>
                         <td class="text-xs-left">{{ props.item.total_cancelado | currency('Q ')}}</td>
                         <td class="text-xs-left">{{ props.item.is_credito ? 'Al credito' : 'Al contado'}} 
@@ -121,6 +122,7 @@ export default {
         headers: [
         { text: '# Serie - Factura', value: 'factura' },
         { text: 'Concepto pago', value: 'concepto_pago' },
+        { text: 'Mora', value: 'mora' },
         { text: 'Monto', value: 'monto' },
         { text: 'Total cancelado', value: 'total_cacnelado' },
         { text: 'Forma pago', value: 'is_credito' },

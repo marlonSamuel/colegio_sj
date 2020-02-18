@@ -30,6 +30,8 @@ class CreateInstitucionTable extends Migration
             $table->datetime('fecha_nac')->nullable();
             $table->string('direccion',100)->nullable();
             $table->string('telefono',50)->nullable();
+            $table->decimal('mora',5,2)->nullable();
+            $table->integer('dia_pago')->nullable();
             $table->timestamps();
         });
     }

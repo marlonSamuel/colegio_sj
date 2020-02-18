@@ -11,7 +11,7 @@ class ConceptoPagoController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
+        parent::__construct();
     }
 
 
@@ -48,6 +48,7 @@ class ConceptoPagoController extends ApiController
         $concepto_pago->obligatorio = $request->obligatorio;
         $concepto_pago->forma_pago = $request->forma_pago;
         $concepto_pago->is_parcial = $request->is_parcial;
+        $concepto_pago->mora = $request->mora;
 
 
         if(!$concepto_pago->isDirty()) {

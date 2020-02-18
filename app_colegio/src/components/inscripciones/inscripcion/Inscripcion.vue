@@ -124,6 +124,42 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog persistent v-model="dialog_documento" max-width="800px">
+          <v-card>
+            <v-card-title>
+              <span class="headline">subir contrato documento </span>
+            </v-card-title>
+             <v-layout row wrap justify-center v-if="form.numero !== ''">
+              <v-toolbar-title>Inscripción no: {{form.numero}}</v-toolbar-title>
+            </v-layout>
+  
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex>
+                    <div id="uploader">
+                      <v-tooltip top>
+                              <template v-slot:activator="{ on }">
+                                  <v-icon v-on="on" color="error" @click="$refs.file.click()">attach_file</v-icon> seleccionar contrato
+                              </template>
+                              <span>Seleccionar contrato</span>
+                          </v-tooltip>
+                        <input  v-show="false" @change="selectedDocumento" ref="file" class="input-file hidden" type="file" accept="application/pdf" />
+                    
+                    </div>
+                  </v-flex>
+                </v-layout>
+                <iframe v-if="file_name !== ''" :src="file_name" style="width: 100%;" height="500"/>
+              </v-container>
+            </v-card-text>
+  
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" flat @click="close">Volver</v-btn>
+              <v-btn v-if="file_name !== ''" color="blue darken-1" flat @click="updateDocumento">Guardar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-toolbar>
       <v-data-table
         :headers="headers"
@@ -143,11 +179,23 @@
           <td class="text-xs-left">{{ props.item.grado_nivel_educativo.grado.nombre }} {{ props.item.grado_nivel_educativo.nivel_educativo.nombre }}</td>
           <td class="text-xs-left">{{ props.item.jornada === 'M' ? 'Matutina' : 'Vespertina'}}</td>
           <td class="text-xs-left">
+            <v-tooltip top v-if="props.item.documento !== null">
+                <template v-slot:activator="{ on }">
+                    <v-icon color="error" v-on="on" @click="descargarContrato(props.item.documento)"> attach_file</v-icon>
+                </template>
+                <span>imprimir contrato firmado</span>
+            </v-tooltip>
+            <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                    <v-icon color="error" v-on="on" @click="documento(props.item)"> file_copy</v-icon>
+                </template>
+                <span>subir contrato</span>
+            </v-tooltip>
             <v-tooltip top>
                 <template v-slot:activator="{ on }">
                     <v-icon v-on="on" @click="printContrato(props.item)"> local_printshop</v-icon>
                 </template>
-                <span>imprimir contrato</span>
+                <span>imprimir contrato sin firmar</span>
             </v-tooltip>
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -173,15 +221,18 @@
 
 <script>
 import moment from 'moment'
-import contrato from './contrato'
+import contrato from './contrato.js'
 export default {
   name: "InscripcionAlumno",
   props: {
       source: String
     },
+  components: {
+  },
   data() {
     return {
       dialog: false,
+      dialog_documento: false,
       menu: false,
       show_nuevo: true,
       search: '',
@@ -192,6 +243,8 @@ export default {
       items: [],
       nivel_educativos: [],
       grados: [],
+      file_name: '',
+      pageCount: 2,
       jornadas: [{text: 'Matutina',value: 'M'},{text: 'Vespertina',value: 'V'}],
       itemsB: [{
               text: 'ALUMNOS',
@@ -219,6 +272,7 @@ export default {
         ciclo_id: null,
         jornada: '',
         grado_nivel_educativo_id: null,
+        documento: '',
         fecha: new Date().toISOString().substr(0, 10)
       },
     };
@@ -383,6 +437,7 @@ export default {
             self.form[key] = null
         });
 
+        self.file_name = ''
         self.$validator.reset()
     },
 
@@ -450,11 +505,63 @@ export default {
         .catch(r => {});
     },
 
+    documento(item){
+      let self = this
+      self.$refs.file.value = ''
+      self.dialog_documento = true
+      self.mapData(item)
+    },
+
+    selectedDocumento() {
+      let self = this
+      var input = document.querySelector("#uploader .input-file")
+      var files = input.files
+      self.form.documento = files[0]
+      var oFReader = new FileReader();
+      oFReader.readAsDataURL(files[0]);
+
+      oFReader.onload = function (oFREvent) {
+          self.file_name = oFREvent.target.result
+      }
+    },
+
     close () {
         let self = this
         self.dialog = false
+        self.dialog_documento = false
         self.clearData()
     },
+
+    getFormData(object) {
+        const formData = new FormData()
+        Object.keys(object).forEach(key => formData.append(key, object[key]))
+        return formData;
+    },
+
+    updateDocumento(){
+      let self = this
+      var data = self.getFormData(self.form)
+      self.loading = true
+      self.$store.state.services.inscripcionService
+        .updateDocumento(data)
+        .then(r => {
+          self.loading = false
+          if(r.response){
+            this.$toastr.error(r.response.data.error, 'error')
+            return
+          }
+          self.getAll(self.alumno.id)
+          this.$toastr.success('documento guardado con éxito', 'éxito')
+          self.close()
+        })
+        .catch(r => {});
+    },
+
+    descargarContrato(documento){
+      let self = this
+      var url = self.$store.state.base_url+'documentos/'+documento
+      window.open(url, '_blank');
+    }
   },
 
   computed: {

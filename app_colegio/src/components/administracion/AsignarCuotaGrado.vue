@@ -147,7 +147,7 @@ export default {
     self.ciclo_id = self.$route.params.id
     self.grado_nivel_educativo_id = self.$route.params.grado_id
     self.getCuotas(self.grado_nivel_educativo_id, self.ciclo_id)
-    self.getGrado(self.$route.params.id)
+    self.getGrado(self.grado_nivel_educativo_id)
     self.setBreadCrub()
   },
 

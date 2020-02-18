@@ -200,7 +200,6 @@ export default {
             self.alumno = r.data
             self.inscripciones = self.alumno.inscripciones
             self.inscripcion = self.getInscripcionActual(self.alumno.inscripciones)
-            console.log(self.inscripcion)
             self.inscripcion_id = self.inscripcion.id
             self.getPagos(self.inscripcion_id)
         }).catch(r => {});
@@ -258,7 +257,6 @@ export default {
     selectInscripcion(id){
         let self = this
         self.inscripcion = self.inscripciones.find(x=>x.id == id)
-        console.log(self.inscripcion)
         self.onEventPagos(self.inscripcion)
     },
 

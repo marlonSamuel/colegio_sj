@@ -31,8 +31,9 @@ class CicloController extends ApiController
     public function store(Request $request)
     {
         $reglas = [
-            'ciclo' => 'required|numeric',
-            
+            'ciclo' => 'required', 
+            'inicio' => 'required',
+            'fin' => 'required'
         ];
         $this->validate($request, $reglas);
 
@@ -41,10 +42,12 @@ class CicloController extends ApiController
             $data = $request->all();
             $data['actual'] = true;
             $activos = Ciclo::where('actual',true)->get();
+
             foreach ($activos as $activo) {
                 $activo->actual = false;
                 $activo->save();
             }
+
             $ciclo = Ciclo::create($data);
         DB::commit();
 
@@ -111,6 +114,14 @@ class CicloController extends ApiController
             return $this->errorResponse('No se puede eliminar ciclo escolar porque ya tiene cuotas asignadas', 422);
         }
 
+        if($ciclo->actual){
+            $menor = $ciclo->ciclo -1;
+            $ciclo_menor = Ciclo::where('ciclo',$menor)->first();
+            if(!is_null($ciclo_menor)){
+                $ciclo_menor->actual = true;
+                $ciclo_menor->save();
+            }
+        }
         $ciclo->delete();
         return $this->showOne($ciclo);
     }

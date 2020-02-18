@@ -43,6 +43,16 @@ class InscripcionService {
     }
 
     //peticion a funcion create
+    updateDocumento(data) {
+        let self = this
+        return self.axios.post(`${self.baseUrl}_documento`, data,
+            { headers: 
+                {'Content-Type': 'multipart/form-data' }
+            }
+        );
+    }
+
+    //peticion a funcion create
     getContrato(id) {
         let self = this
         return self.axios.get(`${self.baseUrl}_contrato/${id}`, { responseType: 'blob' });

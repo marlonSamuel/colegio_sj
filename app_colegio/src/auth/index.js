@@ -1,6 +1,7 @@
 import Axios from 'axios'
 import router from '../router'
 import store from '../store'
+import toastr from 'toastr'
 
 export default {
 
@@ -154,6 +155,11 @@ export default {
     getCicloActual() {
         store.state.services.cicloService.actual()
             .then(r => {
+                if(r.response){
+                    toastr.error('no existe ciclo actual, por favor active uno','error')
+                    router.push('/ciclo')
+                    return
+                }
                 store.dispatch('setCiclo', r.data)
             }).catch(e => {
 

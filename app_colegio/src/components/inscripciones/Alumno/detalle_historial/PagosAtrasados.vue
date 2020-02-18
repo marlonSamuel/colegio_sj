@@ -120,7 +120,7 @@ export default {
         }else{
             if(concepto.forma_pago === "M"){
                 var meses = pagos.filter(x=>x.cuota.concepto_pago.id === concepto.id)
-                var debe_meses = self.verifyIfPagoMonths(meses, inscripcion.ciclo)
+                var debe_meses = self.verifyIfPagoMonths(meses, inscripcion.ciclo, concepto.mora)
                 if(debe_meses.length > 0){
                     var d_m = debe_meses.map(item => item.mes).join(', ')
                     debe = "debe por concepto de "+concepto.nombre+' el mes de '+d_m+' correspondiente al ciclo escolar '+ inscripcion.ciclo.ciclo
@@ -135,14 +135,19 @@ export default {
     },
 
     //veriricar si pago todos los meses
-    verifyIfPagoMonths(pago_meses,ciclo){
+    verifyIfPagoMonths(pago_meses,ciclo,mora){
         let self = this
         if(ciclo.ciclo > moment().year()){
           return ''
         }
         var meses = self.monthsOfDate(ciclo.inicio, ciclo.fin)
         if(ciclo.ciclo == moment().year()){
-          meses = meses.filter(x=>x.id <= moment().month())
+          var date_mora = moment(ciclo.ciclo+'-'+(moment().format('M'))+'-05')
+          if(mora && moment() > date_mora){
+            meses = meses.filter(x=>x.id <= moment().format('M'))
+          }else{
+            meses = meses.filter(x=>x.id <= moment().month())
+          }
         }
         var meses_pagados = []
         pago_meses.forEach(pago => {
