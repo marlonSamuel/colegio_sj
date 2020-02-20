@@ -76,20 +76,20 @@
         </v-flex>
         <v-layout v-if="inscripcion !== null">
             <v-flex sm12 lg12 md12>
-                <el-tabs type="border-card" @tab-click="selectOption">
-                    <el-tab-pane label="1">
+                <el-tabs v-model="activeName" type="border-card" @tab-click="selectOption">
+                    <el-tab-pane label="1" name="pagos">
                         <span slot="label"><i class="el-icon-date"></i> Pagos realizados</span>
                             <b> Pagos realizados ciclo {{inscripcion.ciclo.ciclo}}</b>
                             <el-divider></el-divider>
                             <pagos></pagos>
                     </el-tab-pane>
-                    <el-tab-pane label="0">
+                    <el-tab-pane label="0" name="otros_pagos">
                         <span slot="label"><i class="el-icon-date"></i> Otros pagos</span>
                         <b> Otros pagos ciclo {{inscripcion.ciclo.ciclo}}</b>
                         <el-divider></el-divider>
                         <pagos></pagos>
                     </el-tab-pane>
-                    <el-tab-pane>
+                    <el-tab-pane name="pendientes">
                         <span slot="label"><i class="el-icon-date"></i> Pagos pendientes</span>
                         <b> Pagos pendientes ciclo {{inscripcion.ciclo.ciclo}} </b>
                         <el-divider></el-divider>
@@ -150,6 +150,7 @@ export default {
                 disabled: true,
             }
         ],
+        activeName: 'pagos',
         loading: true,
         alumno:null,
         inscripcion: null,
@@ -185,6 +186,7 @@ export default {
   methods: {
     onEventPagos(inscripcion){
         let self = this
+        self.activeName = 'pagos'
         self.inscripcion = inscripcion
         inscripcion !== null ? self.getPagos(inscripcion.id) : ''
     },

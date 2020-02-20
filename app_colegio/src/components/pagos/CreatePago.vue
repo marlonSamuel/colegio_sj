@@ -114,7 +114,7 @@
                                                 :error-messages="errors.collect('total_cancelado')">
                                             </v-text-field>
                                         </v-flex>
-                                        <v-flex xs12 md8 lg8 v-if="!concepto.concepto_pago.obligatorio && descripcion">
+                                        <v-flex xs12 md8 lg8 v-if="!concepto.concepto_pago.obligatorio">
                                             <v-textarea
                                             placeholder="especifique descripcion extra para facturar"
                                             prepend-icon="highlight_off"
@@ -345,8 +345,9 @@ export default {
           if(parseFloat(data.total_a_pagar) > parseFloat(data.total)){
               data.total = data.total_a_pagar
           }
+      }else{
+          data.descripcion = ''
       }
-
       self.loading = true
       self.$store.state.services.pagoService
         .create(data)
@@ -524,6 +525,14 @@ export default {
             self.form.exonerar_mora = 0
         }
 
+        if(parseFloat(self.form.total_a_pagar) > parseFloat(self.form.total)){
+            self.form.total = self.form.total_a_pagar
+            self.form.total_cancelado = self.form.total
+            if(self.form.is_credito){
+                self.form.total_cancelado = 0
+            }
+        }
+
         return self.form.total
       },
 
@@ -531,15 +540,6 @@ export default {
         let self = this
         self.form.fecha = moment().format('YYYY-MM-DD')
         return moment(self.form.fecha !== '' ? self.form.fecha : moment()).format('DD/MM/YYYY')
-      },
-
-      descripcion(){
-          let self = this
-          if(parseFloat(self.form.total_a_pagar) > parseFloat(self.form.total)){
-              return true
-          }else{
-              self.form.descripcion = ''
-          }
       }
     },
 };
