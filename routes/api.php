@@ -33,6 +33,7 @@ Route::resource('secciones', 'Seccion\SeccionController', ['except' => ['create'
 Route::resource('gradoNivelEducativos', 'GradoNivelEducativo\GradoNivelEducativoController', ['except' => ['create', 'edit']]);
 Route::resource('gradoNivelEducativosCursos', 'GradoNivelEducativo\CursoGradoNivelController', ['except' => ['create', 'edit']]);
 Route::resource('gradoNivelEducativosSecciones', 'GradoNivelEducativo\GradoNivelEducativoSecController', ['except' => ['create', 'edit']]);
+Route::resource('gradoNivelEducativosInscripciones', 'GradoNivelEducativo\GradoNivelEducativoInscripcionController', ['except' => ['create', 'edit']]);
 
 Route::resource('ciclos', 'Ciclo\CicloController', ['except' => ['create', 'edit']]);
 Route::resource('concepto_pagos', 'ConceptoPago\ConceptoPagoController', ['except' => ['create', 'edit']]);

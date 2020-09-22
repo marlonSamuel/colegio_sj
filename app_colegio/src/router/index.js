@@ -19,6 +19,7 @@ import AlumnoIndex from '@/components/inscripciones/Alumno/Index'
 import AlumnoCreate from '@/components/inscripciones/Alumno/Create'
 import AlumnoEdit from '@/components/inscripciones/Alumno/Edit'
 import Inscripcion from '@/components/inscripciones/Inscripcion/Inscripcion'
+import AsignacionIndex from '@/components/inscripciones/asignacion_seccion/Index'
 import SeleccionarAlumno from '@/components/Pagos/SeleccionarAlumno'
 import PagoAlumno from '@/components/Pagos/PagoAlumno'
 import SerieFactura from '@/components/Pagos/SerieFactura'
@@ -66,6 +67,7 @@ const routes = [
     { path: '/alumno_create', name: 'AlumnoCreate', component: AlumnoCreate, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/alumno_edit/:id', name: 'AlumnoEdit', component: AlumnoEdit, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/inscripcion/:id', name: 'Inscripcion', component: Inscripcion, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
+    { path: '/asignacion_index', name: 'AsignacionIndex', component: AsignacionIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/seleccionar_alumno', name: 'SeleccionarAlumno', component: SeleccionarAlumno, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/pago_alumno/:id', name: 'PagoAlumno', component: PagoAlumno, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/serie_factura', name: 'SerieFactura', component: SerieFactura, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },

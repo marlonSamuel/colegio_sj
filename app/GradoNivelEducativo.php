@@ -4,6 +4,7 @@ namespace App;
 
 use App\Cuota;
 use App\Grado;
+use App\Inscripcion;
 use App\GradSecNivEd;
 use App\CursoGradNivEd;
 use App\NivelEducativo;
@@ -44,5 +45,10 @@ class GradoNivelEducativo extends Model
     public function cuotas()
     {
         return $this->hasMany(Cuota::class,'grado_nivel_educativo_id');
+    }
+
+    public function inscripciones()
+    {
+        return $this->hasMany(Inscripcion::class,'grado_nivel_educativo_id');
     }
 }

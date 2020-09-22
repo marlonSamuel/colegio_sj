@@ -16,7 +16,7 @@ class GradoNivelEducativoSecController extends ApiController
 
     public function index()
     {
-        $grad_nivel_secciones = GradSecNivEd::all();
+        $grad_nivel_secciones = GradSecNivEd::with('seccion','grado_nivel_educativo.grado','grado_nivel_educativo.nivelEducativo')->get();
 
         return $this->showAll($grad_nivel_secciones);
     }
