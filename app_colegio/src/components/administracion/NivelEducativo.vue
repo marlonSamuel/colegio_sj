@@ -218,7 +218,7 @@ export default {
     destroy(data) {
       let self = this;
       self
-        .$confirm("Seguro que desea eliminar curso" + data.nombre + "?")
+        .$confirm("Seguro que desea eliminar nivel educativo "+ data.nombre + "?")
         .then(res => {
           self.loading = true;
           self.$store.state.services.nivelEducativoService

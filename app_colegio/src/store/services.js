@@ -28,8 +28,8 @@ import MesService from '../services/MesService'
 import SerieFacturaService from '../services/SerieFacturaService'
 import RolService from '../services/RolService'
 
-
-let baseUrl = 'http://www.san_pablo.com/' //base url desarrollo
+let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
+//let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
 let token_data = $cookies.get('token_data')
 
 // Axios Configuration

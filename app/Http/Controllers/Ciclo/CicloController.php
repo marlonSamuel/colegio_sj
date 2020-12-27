@@ -14,8 +14,8 @@ class CicloController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:ciclo')->except(['index']);
+        //parent::__construct();
+        //$this->middleware('scope:ciclo')->except(['index']);
     }
     public function index()
     {

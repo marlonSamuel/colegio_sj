@@ -45,6 +45,7 @@ return [
     ],
 
     'passport' => [
+        'url'=> env('URL'),
         'login_endpoint' => env('PASSPORT_LOGIN_ENDPOINT'),
         'client_id' => env('PASSWORD_CLIENT_ID'),
         'client_secret' => env('PASSWORD_CLIENT_SECRET'),

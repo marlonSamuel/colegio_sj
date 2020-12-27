@@ -260,7 +260,7 @@ export default {
     destroy(data) {
       let self = this;
       self
-        .$confirm("Seguro que desea eliminar ciclo" + data.ciclo + "?")
+        .$confirm("Seguro que desea eliminar ciclo "+ data.ciclo + "?")
         .then(res => {
           self.loading = true;
           self.$store.state.services.cicloService

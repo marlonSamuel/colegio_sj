@@ -210,7 +210,7 @@ export default {
       let self = this;
       self
         .$confirm(
-          "Seguro que desea eliminar Concepto de Pago" + data.nombre + "?"
+          "Seguro que desea eliminar Concepto de Pago "+ data.nombre + "?"
         )
         .then(res => {
           self.loading = true;

@@ -32,6 +32,6 @@ class CreateAsignarCursoProfSecTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cursos_grados_niveles_educativos_profesores_secciones');
+        Schema::dropIfExists('asignar_curso_prof_sec');
     }
 }

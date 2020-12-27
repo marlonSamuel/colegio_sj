@@ -208,7 +208,7 @@ export default {
     //funcion para eliminar registro
     destroy(data){
       let self = this
-      self.$confirm('Seguro que desea eliminar curso'+ data.nombre+'?').then(res => {
+      self.$confirm('Seguro que desea eliminar serie factura '+ data.nombre+'?').then(res => {
         self.loading = true
             self.$store.state.services.serieFacturaService
             .destroy(data)

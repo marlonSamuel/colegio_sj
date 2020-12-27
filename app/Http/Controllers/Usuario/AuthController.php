@@ -34,9 +34,13 @@ class AuthController extends Controller
             $scopes = $this->getAllScopes($user);
         }
 
-        $http = new Client();
+        $http = new Client(
+            [
+                'verify' => false
+            ]
+        );
 
-        $response = $http->post('http://www.san_pablo.com/oauth/token', [
+        $response = $http->post(config('services.passport.url').'oauth/token', [
             'form_params' => [
                 'grant_type' => 'password',
                 'client_id' => config('services.passport.client_id'),

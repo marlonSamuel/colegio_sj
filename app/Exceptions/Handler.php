@@ -105,7 +105,7 @@ class Handler extends ExceptionHandler
             return redirect()->back()->withInput($request->input());
         }
 
-        return $this->errorResponse($exception, 500);
+        return $this->errorResponse($exception->getMessage(), 500);
     }
 
     /**

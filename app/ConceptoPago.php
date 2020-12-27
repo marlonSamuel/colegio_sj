@@ -13,7 +13,8 @@ class ConceptoPago extends Model
         'nombre',
         'obligatorio',
         'is_parcial',
-        'forma_pago'
+        'forma_pago',
+        'mora'
     ];
     
     public function cuotas()
