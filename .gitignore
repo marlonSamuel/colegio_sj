@@ -10,5 +10,4 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 app_colegio/bundle/
-/public/bundle
 /resource/views/home.blade
