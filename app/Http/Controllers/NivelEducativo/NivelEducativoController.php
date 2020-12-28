@@ -69,7 +69,7 @@ class NivelEducativoController extends ApiController
     {
         $grados =$niveles_educativo->grados;
 
-        if(count($grados)){
+        if(count($grados)>0){
             return $this->errorResponse('no se puede eliminar nivel educativo, porque ya tiene grados asignados', 422);
         }
 

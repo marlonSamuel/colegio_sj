@@ -5,11 +5,9 @@ namespace App;
 use App\Seccion;
 use App\GradoNivelEducativo;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GradSecNivEd extends Model
 {
-    use SoftDeletes;
 
     protected $table = 'grado_sec_niv_edu';
     protected $fillable= [

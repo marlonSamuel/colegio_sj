@@ -21,7 +21,7 @@ class CreateAlumnosTable extends Migration
             $table->string('tercer_nombre',25)->nullable();
             $table->string('primer_apellido',25);
             $table->string('segundo_apellido',25)->nullable();
-            $table->datetime('fecha_nac');
+            $table->date('fecha_nac');
             $table->char('genero',1);
             $table->string('telefono',25)->nullable();
             $table->string('email',25)->nullable();
@@ -30,7 +30,6 @@ class CreateAlumnosTable extends Migration
             $table->string('alergias',1000)->nullable();
             $table->string('foto',50)->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

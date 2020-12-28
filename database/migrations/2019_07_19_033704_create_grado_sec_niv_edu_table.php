@@ -18,9 +18,7 @@ class CreateGradoSecNivEduTable extends Migration
             $table->unsignedBigInteger('grado_nivel_educativo_id');
             $table->unsignedBigInteger('seccion_id');
 
-            $table->softDeletes();
-
-            $table->foreign('grado_nivel_educativo_id')->references('id')->on('grados_niveles_educativos');
+            $table->foreign('grado_nivel_educativo_id')->references('id')->on('grados_niveles_educativos')->onDelete('cascade');
             $table->foreign('seccion_id')->references('id')->on('secciones');
             $table->timestamps();
         });

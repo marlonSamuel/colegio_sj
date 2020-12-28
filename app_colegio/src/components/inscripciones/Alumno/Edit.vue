@@ -310,9 +310,8 @@ export default {
         .get(id)
         .then(r => {
             self.loading = false
-            if(r.response){
-                this.$toastr.error(r.response.data.error, 'error')
-                return
+            if (self.$store.state.global.captureError(r)) {
+              return;
             }
             self.alumno = r.data
             events.$emit('apoderado_alumno',self.alumno)
@@ -331,9 +330,8 @@ export default {
         .update(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           this.$toastr.success('registro editado con éxito', 'éxito')
           self.$router.push('/alumno_index')

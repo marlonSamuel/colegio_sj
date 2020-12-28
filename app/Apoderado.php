@@ -5,11 +5,9 @@ namespace App;
 use App\Municipio;
 use App\TelefonoApoderado;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Apoderado extends Model
 {
-	use SoftDeletes;
     protected $table = 'apoderados';
     
     protected $fillable = [

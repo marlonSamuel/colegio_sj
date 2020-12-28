@@ -620,9 +620,8 @@ export default {
         .create(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           this.$toastr.success('registro agregado con éxito', 'éxito')
           self.$router.push('/alumno_index')
@@ -668,6 +667,8 @@ export default {
     mapApoderado(data){
         let self= this
         self.form.representante_id = data.id
+        self.form.cui = data.cui
+        self.form.nit = data.nit
         self.form.primer_nombre_a = data.primer_nombre
         self.form.segundo_nombre_a = data.segundo_nombre
         self.form.primer_apellido_a = data.primer_apellido

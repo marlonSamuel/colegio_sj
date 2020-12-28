@@ -32,64 +32,32 @@
                     ></v-text-field>
                   </v-flex>
                   <v-flex xs12 sm4 md64>
-                      <v-menu
-                          v-model="menu"
-                          :close-on-content-click="false"
-                          :nudge-right="40"
-                          lazy
-                          transition="scale-transition"
-                          offset-y
-                          full-width
-                          min-width="290px"
-                      >
-                          <template v-slot:activator="{ on }">
-                          <v-text-field
-                              clearable
-                              v-model="dateFormattedInicio"
-                              label="Fecha inicio"
-                              placeholder="ingrese fecha de inicio"
-                              v-on="on"
-                              v-validate="'required'"
-                              data-vv-name="inicio"
-                              data-vv-as="fecha de inicio"
-                              :error-messages="errors.collect('fecha')"
-                          ></v-text-field>
-                          </template>
-                          <v-date-picker locale="es" v-model="form.inicio" @input="menu = false"></v-date-picker>
-                      </v-menu>
+                            <v-text-field
+                            v-model="form.inicio"
+                            label="Fecha Inicio"
+                            v-validate="'required'"
+                            type="date"
+                            data-vv-name="inicio"
+                            :error-messages="errors.collect('form.inicio')"
+                            >
+                            </v-text-field>
                   </v-flex>
                   <v-flex xs12 sm4 md4>
-                      <v-menu
-                          v-model="menu2"
-                          :close-on-content-click="false"
-                          :nudge-right="40"
-                          lazy
-                          transition="scale-transition"
-                          offset-y
-                          full-width
-                          min-width="290px"
-                      >
-                          <template v-slot:activator="{ on }">
-                          <v-text-field
-                              clearable
-                              v-model="dateFormattedFin"
-                              label="Fecha fin"
-                              placeholder="ingrese fecha fin"
-                              v-on="on"
-                              v-validate="'required'"
-                              data-vv-name="fin"
-                              data-vv-as="fecha fin"
-                              :error-messages="errors.collect('fin')"
-                          ></v-text-field>
-                          </template>
-                          <v-date-picker locale="es" v-model="form.fin" @input="menu2 = false"></v-date-picker>
-                      </v-menu>
+                            <v-text-field
+                            v-model="form.fin"
+                            label="Fecha fin"
+                            v-validate="'required'"
+                            type="date"
+                            data-vv-name="fin"
+                            :error-messages="errors.collect('form.fin')"
+                            >
+                            </v-text-field>
                   </v-flex>
                   
-                    <v-switch v-if="form.id !== null"
+                  <!--  <v-switch v-if="form.id !== null"
                       v-model="form.actual"
                       :label="`Actual: ${form.actual.toString() === 'false' ?'No':'Si'}`"
-                    ></v-switch>
+                    ></v-switch> -->
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -166,8 +134,8 @@ export default {
         id: null,
         ciclo: null,
         actual: true,
-        inicio: new Date().toISOString().substr(0, 10),
-        fin: new Date().toISOString().substr(0, 10)
+        inicio: '',
+        fin: ''
       }
     };
   },
@@ -185,8 +153,13 @@ export default {
       self.$store.state.services.cicloService
         .getAll()
         .then(r => {
-          self.loading = false;
-          self.items = r.data;
+          self.loading = false
+          self.items = r.data
+          
+          self.$nextTick(()=>{
+            events.$emit('update_ciclo',r.data)
+          })
+
         })
         .catch(r => {});
     },
@@ -207,13 +180,13 @@ export default {
         .create(data)
         .then(r => {
           self.loading = false;
-          if (r.response) {
-            this.$toastr.error(r.response.data.error, "error");
+          if (self.$store.state.global.captureError(r)) {
             return;
           }
           this.$toastr.success("registro agregado con éxito", "éxito");
-          self.getAll();
-          self.close();
+          self.getAll()
+          self.$store.dispatch('setCiclo', r.data)
+          self.close()
         })
         .catch(r => {});
     },
@@ -241,15 +214,11 @@ export default {
         .update(data)
         .then(r => {
           self.loading = false;
-          if (r.response) {
-            this.$toastr.error(r.response.data.error, "error");
+          if (self.$store.state.global.captureError(r)) {
             return;
           }
-          if(data.actual){
-            auth.getCicloActual()
-          }
           self.getAll()
-          this.$toastr.success("registro actualizado con éxito", "éxito");
+          this.$toastr.success("registro actualizado con éxito", "éxito")
           self.close()
         })
         .catch(r => {
@@ -267,13 +236,16 @@ export default {
             .destroy(data)
             .then(r => {
               self.loading = false;
-              if (r.response) {
-                this.$toastr.error(r.response.data.error, "error");
+              if (self.$store.state.global.captureError(r)) {
                 return;
               }
               self.getAll();
-              this.$toastr.success("registro eliminado con exito", "exito");
-              self.close();
+              this.$toastr.success("registro eliminado con exito", "exito")
+              
+              if(data.actual){
+                auth.getCicloActual()
+              }
+              self.close()
             })
             .catch(r => {});
         })
@@ -287,7 +259,7 @@ export default {
       Object.keys(self.form).forEach(function(key, index) {
         if (typeof self.form[key] === "string") self.form[key] = '';
         else if (typeof self.form[key] === "boolean") self.form[key] = true;
-        else if (typeof self.form[key] === "number") self.form[key] = true;
+        else if (typeof self.form[key] === "number") self.form[key] = null;
       });
 
       self.$validator.reset();
@@ -305,7 +277,7 @@ export default {
       let self = this
       self.form.id = data.id
       self.form.ciclo = data.ciclo
-      self.form.actual = data.actual === 1 || null ? true : false
+      //self.form.actual = data.actual === 1 || null ? true : false
       self.form.inicio = data.inicio
       self.form.fin = data.fin
     },
@@ -340,16 +312,6 @@ export default {
     setTitle() {
       let self = this;
       return self.form.id !== null ? self.form.ciclo : "Nuevo Registro"
-    },
-
-    dateFormattedInicio(){
-        let self = this
-        return moment(self.form.inicio !== '' ? self.form.inicio : moment()).format('DD/MM/YYYY')
-    },
-
-    dateFormattedFin(){
-        let self = this
-        return moment(self.form.fin !== '' ? self.form.fin : moment()).format('DD/MM/YYYY')
     }
   }
 };

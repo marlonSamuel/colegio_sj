@@ -7,11 +7,9 @@ use App\Ciclo;
 use App\Alumno;
 use App\GradoNivelEducativo;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inscripcion extends Model
 {
-    use SoftDeletes;
 
     protected $table = 'inscripciones';
 

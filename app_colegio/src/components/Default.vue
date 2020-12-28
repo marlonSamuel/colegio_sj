@@ -162,9 +162,22 @@ export default {
   created() {
     let self = this
     self.getData()
+
+    events.$on("dashboard_event", self.onEventDashboard);
+  },
+
+  beforeDestroy() {
+    let self = this;
+    events.$off("dashboard_event", self.onEventDashboard);
   },
 
   methods: {
+
+    onEventDashboard(onEventDashboard) {
+      let self = this
+      self.getData()
+    },
+
     getData(){
         let self = this
         self.loading = true

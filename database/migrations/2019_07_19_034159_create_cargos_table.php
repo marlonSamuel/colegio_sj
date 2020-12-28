@@ -17,7 +17,7 @@ class CreateCargosTable extends Migration
             $table->bigIncrements('id');
             $table->string('nombre',50);
             $table->decimal('salario',11,2)->nullable();
-            $table->softDeletes();
+            
             $table->timestamps();
         });
     }

@@ -5,11 +5,9 @@ namespace App;
 use App\Mes;
 use App\Pago;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PagoMes extends Model
 {
-    use SoftDeletes;
     protected $table = 'pago_meses';
 
     protected $fillable=[

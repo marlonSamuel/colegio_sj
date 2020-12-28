@@ -505,9 +505,8 @@ export default {
         .getApoderados(id)
         .then(r => {
             self.loading = false
-            if(r.response){
-                this.$toastr.error(r.response.data.error, 'error')
-                return
+            if (self.$store.state.global.captureError(r)) {
+                return;
             }
             self.items = r.data
             var padre = self.items.some(e => e.tipo_apoderado === 'P')
@@ -574,10 +573,9 @@ export default {
         .create(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
-          }
+          if (self.$store.state.global.captureError(r)) {
+                return;
+            }
           this.$toastr.success('registro editado con éxito', 'éxito')
           self.get(self.alumno.id)
           self.clearData()
@@ -596,9 +594,8 @@ export default {
         .update(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           this.$toastr.success('registro actualizado con éxito', 'éxito')
           self.get(data.alumno_id)
@@ -668,9 +665,8 @@ export default {
             .destroy(data)
             .then(r => {
                 self.loading = false
-                if(r.response){
-                    this.$toastr.error(r.response.data.error, 'error')
-                    return
+                if (self.$store.state.global.captureError(r)) {
+                  return;
                 }
                 this.$toastr.success('registro eliminado con exito', 'exito')
                 self.get(data.alumno_id)
@@ -720,9 +716,8 @@ export default {
         .create(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           this.$toastr.success('telefono a sido registrado', 'éxito')
           self.get(self.$route.params.id)
@@ -742,9 +737,8 @@ export default {
             .destroy(data)
             .then(r => {
                 self.loading = false
-                if(r.response){
-                    this.$toastr.error(r.response.data.error, 'error')
-                    return
+                if (self.$store.state.global.captureError(r)) {
+                  return;
                 }
                 this.$toastr.success('telefono ah sido removido con exito', 'exito')
                 self.get(self.$route.params.id)

@@ -81,16 +81,30 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <h2 class="hidden-sm-and-down">COLEGIO {{getName}} {{ciclo}}</h2>
+      
+        
       <v-spacer></v-spacer>
       
       {{userName}}
+      
+      <!--  <h1 class="hidden-sm-and-down">
+          (<v-flex xs6 md4 lg4>
+            <v-select
+              v-model="ciclo_id"
+              :items="ciclos"
+              item-value="id"
+              item-text="ciclo"
+              @input="changeCiclo"
+            ></v-select>
+        </v-flex>)
+        </h1> -->
 
       <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
         <v-btn icon large flat slot="activator">
           <v-avatar size="30px">
             <v-btn icon>
-       <v-icon>account_circle</v-icon>
-      </v-btn>
+              <v-icon>account_circle</v-icon>
+              </v-btn>
           </v-avatar>
       </v-btn>
         <v-list class="pa-0">
@@ -114,6 +128,35 @@
           </v-list-tile>
         </v-list>
       </v-menu>
+
+      
+        <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
+            <v-btn icon large flat slot="activator">
+              <v-avatar size="30px">
+                <v-btn icon>
+                  <v-icon>filter_list</v-icon>
+                  </v-btn>
+              </v-avatar>
+          </v-btn>
+            <v-list class="pa-0">
+              <v-list-tile
+                v-for="(item, index) in ciclos"
+                @click="changeCiclo(item.id)"
+                ripple="ripple"
+                :disabled="item.disabled"
+                :target="item.target"
+                rel="noopener"
+                :key="index"
+              >
+                <v-list-tile-action>
+                  <v-icon :class="item.actual ? 'blue--text' : '' ">filter_list</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content :class="item.actual ? 'blue--text' : '' ">
+                  <v-list-tile-title>CICLO {{ item.ciclo }}</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
     </v-toolbar>
 </div>
 </template>
@@ -128,6 +171,8 @@ export default {
         dialog: false,
         drawer: null,
         loading: false,
+        ciclos: [],
+        ciclo_id: null,
         logo: this.$store.state.global.getLogo(),
         options: [
         {
@@ -148,9 +193,25 @@ export default {
 
   created(){
     let self = this
+    self.getCiclos()
+
+    events.$on("update_ciclo", self.onEventCiclo)
+  },
+
+  beforeDestroy() {
+    let self = this
+    events.$off("update_ciclo", self.onEventCiclo);
   },
 
   methods: {
+    onEventCiclo(data){
+      let self = this
+      self.ciclos = data
+      let ciclo = self.ciclos.find(x=>x.actual == 1)
+      if(ciclo!== null){
+        self.ciclo_id = ciclo.id
+      }
+    },
     logout(){
       let self = this
       self.loading = true
@@ -165,6 +226,23 @@ export default {
       })
     },
 
+    getCiclos(){
+      let self = this
+      self.loading = true
+      self.$store.state.services.cicloService
+        .getAll()
+        .then(r => {
+          self.loading = false
+          self.ciclos = r.data
+          let ciclo = self.ciclos.find(x=>x.actual == 1)
+          if(ciclo!== null){
+            self.ciclo_id = ciclo.id
+          }
+        }).catch(e => {
+
+      })
+    },
+
     change(){
       let self = this
       self.$router.push('/change_password')
@@ -173,13 +251,39 @@ export default {
      menu(){
       let self = this
       return self.$store.state.menu
+    },
+
+    changeCiclo(ciclo_id){
+      let self = this
+      self.loading = true
+      let ciclo = self.ciclos.find(x=>x.id == ciclo_id)
+      ciclo.actual = true
+      self.$store.state.services.cicloService
+        .update(ciclo)
+        .then(r => {
+          self.loading = false;
+          if (self.$store.state.global.captureError(r)) {
+            ciclo.actual = false
+            return;
+          }
+          self.$store.dispatch('setCiclo', r.data)
+          self.$nextTick(()=>{
+            events.$emit('dashboard_event',0)
+          })
+        })
+        .catch(r => {
+      });
     }
   },
 
   computed: {
     userName(){
       let self = this
-      return self.$store.state.usuario.name
+      let rol = ''
+      if(self.$store.state.usuario.rol !== undefined){
+        rol = self.$store.state.usuario.rol.rol
+      }
+      return self.$store.state.usuario.name + '('+rol+')'
     },
 
     ciclo(){

@@ -4,11 +4,9 @@ namespace App;
 
 use App\Pago;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class PagoParcial extends Model
 {
-    use SoftDeletes;
 
     protected $table = 'pagos_parciales';
     protected $fillable= [

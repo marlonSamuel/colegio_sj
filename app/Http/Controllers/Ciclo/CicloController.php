@@ -107,11 +107,11 @@ class CicloController extends ApiController
      */
     public function destroy(Ciclo $ciclo)
     {
-        if($ciclo->inscripciones){
+        if(count($ciclo->inscripciones)>0){
             return $this->errorResponse('No se puede eliminar ciclo escolar porque ya tiene inscripciones', 422);
         }
 
-        if($ciclo->pagos){
+        if(count($ciclo->cuotas)>0){
             return $this->errorResponse('No se puede eliminar ciclo escolar porque ya tiene cuotas asignadas', 422);
         }
 
@@ -135,9 +135,12 @@ class CicloController extends ApiController
         $total_inscripciones = count($ciclo->inscripciones);
         
         $pagos = $ciclo->inscripciones()->with('pagos')->get()->pluck('pagos')->collapse()->values();
+        $pagos = $pagos->where('anulado',false);
 
         $total_pagos = $pagos->sum('total');
+
         $pago_cuotas = $ciclo->cuotas()->with('concepto_pago','pagos')->get();
+
         $total_cancelado = $pagos->sum('cancelado');
         $total_credito_cancelado = $pagos->where('is_credito',true)->sum('total_cancelado');
         $total_credito = $pagos->where('is_credito',true)->sum('total');

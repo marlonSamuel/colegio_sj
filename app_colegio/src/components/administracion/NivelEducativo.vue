@@ -182,8 +182,7 @@ export default {
         .create(data)
         .then(r => {
           self.loading = false;
-          if (r.response) {
-            this.$toastr.error(r.response.data.error, "error");
+          if (self.$store.state.global.captureError(r)) {
             return;
           }
           this.$toastr.success("registro agregado con éxito", "éxito");
@@ -203,13 +202,12 @@ export default {
         .update(data)
         .then(r => {
           self.loading = false;
-          if (r.response) {
-            this.$toastr.error(r.response.data.error, "error");
+          if (self.$store.state.global.captureError(r)) {
             return;
           }
           self.getAll();
           this.$toastr.success("registro actualizado con éxito", "éxito");
-          self.clearData();
+          self.close();
         })
         .catch(r => {});
     },
@@ -225,8 +223,7 @@ export default {
             .destroy(data)
             .then(r => {
               self.loading = false;
-              if (r.response) {
-                this.$toastr.error(r.response.data.error, "error");
+              if (self.$store.state.global.captureError(r)) {
                 return;
               }
               self.getAll();

@@ -20,8 +20,7 @@ class CreateApoderadoAlumnoTable extends Migration
             
 
             $table->foreign('apoderado_id')->references('id')->on('apoderados');
-            $table->foreign('alumno_id')->references('id')->on('alumnos');
-            $table->softDeletes();
+            $table->foreign('alumno_id')->references('id')->on('alumnos')->onDelete('cascade');
             $table->timestamps();
         });
     }

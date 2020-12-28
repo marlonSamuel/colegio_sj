@@ -17,9 +17,8 @@ class CreateCiclosTable extends Migration
             $table->bigIncrements('id');
             $table->integer('ciclo');
             $table->boolean('actual')->default(1);
-            $table->datetime('inicio');
-            $table->datetime('fin');
-            $table->softDeletes();
+            $table->date('inicio');
+            $table->date('fin');
             $table->timestamps();
         });
     }

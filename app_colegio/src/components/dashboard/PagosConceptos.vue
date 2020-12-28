@@ -72,6 +72,9 @@ export default {
 
       loadData(data) {
           let self = this
+          self.chartData.labels = []
+          self.dataset.data = []
+          self.dataset.backgroundColor = []
           var items = self.orderData(data)
           items.forEach(item => {
               self.chartData.labels.push(item.nombre)
@@ -100,12 +103,11 @@ export default {
       },
 
       totalAmount(data){
-            data = data.filter(x=>!x.anulado)
             var pagos = []
             data.forEach(d => {
                 pagos = [...pagos, ...d.pagos]
-            });
-
+            })
+            pagos = pagos.filter(x=>x.anulado == false)
             var total = pagos.reduce(function(a, b) {
                 return a + parseFloat(b.total)
             }, 0);

@@ -5,11 +5,9 @@ use App\ConceptoPago;
 use App\Ciclo;
 use App\GradoNivelEducativo;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Cuota extends Model
 {
-    use SoftDeletes;
     protected $table = 'cuotas';
 
     protected $fillable=[

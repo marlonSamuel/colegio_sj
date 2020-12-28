@@ -16,7 +16,7 @@ class ApoderadoAlumnoController extends ApiController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('scope:alumno')->except(['index']);
+        $this->middleware('scope:alumnoindex')->except(['index']);
     }
    
     public function index(Alumno $alumno)
@@ -46,7 +46,7 @@ class ApoderadoAlumnoController extends ApiController
             $apoderado_id = $request->apoderado_id;
             if(is_null($apoderado_id)){
 
-                $apoderado_exists = Apoderado::where('cui',$request->cui)->withTrashed()->first();
+                $apoderado_exists = Apoderado::where('cui',$request->cui)->first();
 
                 if(!is_null($apoderado_exists)) return $this->errorResponse('cui de apoderado ya fue asignado, si el cui es de un representante existente, haga clic la opcion validar del formulario',422);
 

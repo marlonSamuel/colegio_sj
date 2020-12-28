@@ -4,11 +4,9 @@ namespace App;
 
 use App\GradoNivelEducativo;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NivelEducativo extends Model
 {
-    use SoftDeletes;
 
     protected $table = 'niveles_educativos';
 

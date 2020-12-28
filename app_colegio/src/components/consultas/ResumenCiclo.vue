@@ -121,9 +121,8 @@ export default {
         .getData(id)
         .then(r => {
             self.loading = false
-            if(r.response !== undefined){
-              self.$toastr.error(r.response.data.error, 'error')
-              return
+            if (self.$store.state.global.captureError(r)) {
+              return;
             }
             self.data = r.data
             self.items_cuotas = self.getItemsConcepto(r.data.pago_cuotas)
@@ -179,7 +178,7 @@ export default {
         data.forEach(d => {
             pagos = [...pagos, ...d.pagos]
         });
-
+        pagos = pagos.filter(x=>x.anulado == false)
         var total = pagos.reduce(function(a, b) {
             return a + parseFloat(b.total)
         }, 0);

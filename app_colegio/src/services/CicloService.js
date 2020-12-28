@@ -17,7 +17,7 @@ class CicloService {
     }
 
     getInscripciones(id) {
-        let self = this;
+        let self = this
         return self.axios.get(`${self.baseUrl}/${id}/inscripciones`);
     }
 

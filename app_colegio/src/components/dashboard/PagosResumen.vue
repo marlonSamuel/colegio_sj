@@ -63,6 +63,9 @@ export default {
 
       loadData(data) {
           let self = this
+          
+          self.dataset.data = []
+
           self.dataset.data.push(data.total_contado)
           self.dataset.data.push(data.total_cancelado_credito)
           self.dataset.data.push(data.total_credito - data.total_cancelado_credito)

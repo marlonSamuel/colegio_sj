@@ -9,11 +9,9 @@ use App\GradSecNivEd;
 use App\CursoGradNivEd;
 use App\NivelEducativo;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GradoNivelEducativo extends Model
 {
-    use SoftDeletes;
 
     protected $table = 'grados_niveles_educativos';
 

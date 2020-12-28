@@ -343,10 +343,12 @@ export default {
 
     get(id) {
       let self = this
-
+      self.grado_nivel = {}
+      self.loading = true
       self.$store.state.services.gradoNivelEducativoService
         .get(id)
         .then(r => {
+          self.loading = false
           self.grado_nivel = r.data
         })
         .catch(r => {});
@@ -373,9 +375,8 @@ export default {
         .create(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           this.$toastr.success('registro agregado con éxito', 'éxito')
           self.getAll(data.nivel_educativo_id)
@@ -405,9 +406,8 @@ export default {
         .createCurso(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           this.$toastr.success('registro agregado con éxito', 'éxito')
           self.get(data.grado_nivel_educativo_id)
@@ -438,9 +438,8 @@ export default {
         .createSeccion(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           this.$toastr.success('seccion agregado con éxito', 'éxito')
           self.get(data.grado_nivel_educativo_id)
@@ -485,9 +484,8 @@ export default {
         .update(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           self.getAll()
           this.$toastr.success('registro actualizado con éxito', 'éxito')
@@ -506,6 +504,9 @@ export default {
             .destroy(data)
             .then(r => {
                 self.loading = false
+                if (self.$store.state.global.captureError(r)) {
+                  return;
+                }
                 self.getAll(data.nivel_educativo_id)
                 this.$toastr.success('registro remover con exito', 'exito')
                 self.clearData()
@@ -527,6 +528,9 @@ export default {
             .destroyCurso(data)
             .then(r => {
                 self.loading = false
+                if (self.$store.state.global.captureError(r)) {
+                  return;
+                }
                 self.get(data.grado_nivel_educativo_id)
                 this.$toastr.success('registro removido con exito', 'exito')
                 self.clearData()
@@ -548,6 +552,9 @@ export default {
             .destroySeccion(data)
             .then(r => {
                 self.loading = false
+                if (self.$store.state.global.captureError(r)) {
+                  return;
+                }
                 self.get(data.grado_nivel_educativo_id)
                 this.$toastr.success('registro removido con exito', 'exito')
                 self.clearData()
@@ -593,6 +600,8 @@ export default {
 
         self.$validator.reset()
         self.form.nivel_educativo_id = self.$route.params.id
+        self.form.secciones = []
+        self.form.cursos = []
     },
 
     //editar registro

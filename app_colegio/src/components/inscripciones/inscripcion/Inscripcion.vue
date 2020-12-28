@@ -362,9 +362,8 @@ export default {
         .create(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           self.$alert(self.alumno.primer_nombre+' '+self.alumno.segundo_nombre+' '+self.alumno.primer_apellido+' '+self.alumno.segundo_apellido
                         +" ah sido inscrito con exito al ciclo escolar "
@@ -388,9 +387,8 @@ export default {
         .update(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           self.getAll(data.alumno_id)
           this.$toastr.success('registro actualizado con éxito', 'éxito')
@@ -408,10 +406,9 @@ export default {
             .destroy(data)
             .then(r => {
                 self.loading = false
-                 if(r.response){
-                    this.$toastr.error(r.response.data.error, 'error')
-                    return
-                  }
+                 if (self.$store.state.global.captureError(r)) {
+                  return;
+                }
                 
                 self.getAll(data.alumno_id)
                 this.$toastr.success('inscripción eliminada con exito', 'exito')
@@ -491,9 +488,8 @@ export default {
         .getContrato(inscripcion.id)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           const url = window.URL.createObjectURL(new Blob([r.data], { type: 'application/pdf' }));
           const link = document.createElement('a');
@@ -546,9 +542,8 @@ export default {
         .updateDocumento(data)
         .then(r => {
           self.loading = false
-          if(r.response){
-            this.$toastr.error(r.response.data.error, 'error')
-            return
+          if (self.$store.state.global.captureError(r)) {
+            return;
           }
           self.getAll(self.alumno.id)
           this.$toastr.success('documento guardado con éxito', 'éxito')

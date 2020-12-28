@@ -12,7 +12,7 @@ class ConceptoPagoController extends ApiController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('scope:conceptopago')->except(['index']);
+        //$this->middleware('scope:concepto_pago')->except(['index']);
     }
 
 
@@ -66,6 +66,6 @@ class ConceptoPagoController extends ApiController
         }
 
         $concepto_pago->delete();
-        return $this->showOne($ciclo);
+        return $this->showOne($concepto_pago);
     }
 }

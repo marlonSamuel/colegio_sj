@@ -80,6 +80,9 @@ export default {
     loadData(data) {
       let self = this;
       var items = self.orderData(data)
+      self.chartData.labels = []
+      self.dataset.data = []
+      self.dataset.backgroundColor = []
       items.forEach(item => {
         self.chartData.labels.push(item.nombre)
         self.dataset.data.push(item.inscripciones)
