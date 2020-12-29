@@ -22,13 +22,13 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'email'       => 'required|string|email',
+            'email'       => 'required|string',
             'password'    => 'required|string',
         ]);
 
         $credentials = request(['email', 'password']);
 
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('email',$request->email)->orWhere('codigo',$request->email)->first();
 
         if(!is_null($user)){
             $scopes = $this->getAllScopes($user);
@@ -70,6 +70,19 @@ class AuthController extends Controller
         $id = $request->user()->id;
         $user = User::where('id',$id)->with('rol')->first();
         $institucion = Institucion::with('municipio.departamento')->first();
+
+        if(!is_null($user->empleado)){
+            $user->user_info = $user->empleado->empleado;
+        }
+
+        if(!is_null($user->alumno)){
+            $user->user_info = $user->alumno->alumno;
+        }
+
+        if(!is_null($user->representante)){
+            $user->user_info = $user->representante->representante;
+        }
+
         return response()->json([
             'user' => $user,
             'institucion' => $institucion

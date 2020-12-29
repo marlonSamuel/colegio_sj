@@ -67,7 +67,7 @@
       dense
     >
       <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
-        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-side-icon @click.stop="drawer = drawerEvent()"></v-toolbar-side-icon>
         <span class="hidden-sm-and-down" @click="$router.push(`/`)">
           <v-avatar
           :tile="false"
@@ -169,7 +169,7 @@ export default {
   data(){
     return {
         dialog: false,
-        drawer: null,
+        drawer: true,
         loading: false,
         ciclos: [],
         ciclo_id: null,
@@ -273,6 +273,11 @@ export default {
         })
         .catch(r => {
       });
+    },
+
+    drawerEvent(){
+      let self = this
+      return !self.drawer
     }
   },
 
@@ -280,10 +285,12 @@ export default {
     userName(){
       let self = this
       let rol = ''
+      let username = ''
       if(self.$store.state.usuario.rol !== undefined){
         rol = self.$store.state.usuario.rol.rol
+        username = self.$store.state.usuario.name
       }
-      return self.$store.state.usuario.name + '('+rol+')'
+      return self.$store.state.usuario.user_info.primer_nombre + ' '+ self.$store.state.usuario.user_info.primer_apellido + '('+rol+')'
     },
 
     ciclo(){

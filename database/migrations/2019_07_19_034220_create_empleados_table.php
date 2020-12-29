@@ -21,7 +21,7 @@ class CreateEmpleadosTable extends Migration
             $table->string('segundo_nombre',25)->nullable();
             $table->string('primer_apellido',25);
             $table->string('segundo_apellido',25)->nullable();
-            $table->datetime('fecha_nac')->nullable();
+            $table->date('fecha_nac')->nullable();
             $table->string('telefono',15)->nullable();
             $table->string('email',25);
             $table->string('direccion')->nullable();

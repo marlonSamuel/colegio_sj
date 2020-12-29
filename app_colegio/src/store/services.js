@@ -27,9 +27,11 @@ import PagoParcialService from '../services/PagoParcialService'
 import MesService from '../services/MesService'
 import SerieFacturaService from '../services/SerieFacturaService'
 import RolService from '../services/RolService'
+import EmpleadoService from '../services/EmpleadoService'
+import CargoService from '../services/CargoService'
 
-let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
-//let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
+//let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
+let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
 let token_data = $cookies.get('token_data')
 
 // Axios Configuration
@@ -101,5 +103,7 @@ export default {
     pagoParcialService: new PagoParcialService(Axios, baseUrl),
     mesService: new MesService(Axios, baseUrl),
     serieFacturaService: new SerieFacturaService(Axios, baseUrl),
-    rolService: new RolService(Axios, baseUrl)
+    rolService: new RolService(Axios, baseUrl),
+    empleadoService: new EmpleadoService(Axios, baseUrl),
+    cargoService: new CargoService(Axios, baseUrl)
 }

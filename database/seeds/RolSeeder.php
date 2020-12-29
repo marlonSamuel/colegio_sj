@@ -34,6 +34,18 @@ class RolSeeder extends Seeder
         $data->rol = 'reportes';
         $data->save();
 
+        $data = new Rol; 
+        $data->rol = 'profesor';
+        $data->save();
+
+        $data = new Rol; 
+        $data->rol = 'alumno';
+        $data->save();
+
+        $data = new Rol; 
+        $data->rol = 'apoderado';
+        $data->save();
+
         Excel::import(new MenuImport, 'database/seeds/Menu.xlsx');
     }
 }

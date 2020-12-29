@@ -4,22 +4,22 @@ import store from '../store/index'
 import multiguard from 'vue-router-multiguard'
 
 import Default from '@/components/Default'
-import ExampleIndex from '@/components/example/Index'
 import Login from '@/components/login/Index'
 import Curso from '@/components/administracion/Curso'
 import Grado from '@/components/administracion/Grado'
 import Usuario from '@/components/accesos/Usuario'
 import NivelEducativo from '@/components/administracion/NivelEducativo'
 import Seccion from '@/components/administracion/Seccion'
-import ConfigurarNivel from '@/components/administracion/ConfigurarNivelEducativo.vue'
-import ConceptoPago from '@/components/administracion/ConceptoPago.vue'
-import Ciclo from '@/components/administracion/Ciclo.vue'
-import ConfigurarCuota from '@/components/administracion/ConfigurarCuota.vue'
+import ConfigurarNivel from '@/components/administracion/ConfigurarNivelEducativo'
+import ConceptoPago from '@/components/administracion/ConceptoPago'
+import Ciclo from '@/components/administracion/Ciclo'
+import Empleado from '@/components/administracion/Empleado'
+import ConfigurarCuota from '@/components/administracion/ConfigurarCuota'
 import AlumnoIndex from '@/components/inscripciones/Alumno/Index'
 import AlumnoCreate from '@/components/inscripciones/Alumno/Create'
 import AlumnoEdit from '@/components/inscripciones/Alumno/Edit'
 import Inscripcion from '@/components/inscripciones/Inscripcion/Inscripcion'
-import AsignacionIndex from '@/components/inscripciones/asignacion_seccion/Index'
+import AsignacionSeccionIndex from '@/components/inscripciones/asignacion_seccion/Index'
 import SeleccionarAlumno from '@/components/Pagos/SeleccionarAlumno'
 import PagoAlumno from '@/components/Pagos/PagoAlumno'
 import SerieFactura from '@/components/Pagos/SerieFactura'
@@ -62,12 +62,13 @@ const routes = [
     { path: '/configurar_nivel/:id', name: 'ConfigurarNivel', component: ConfigurarNivel, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/ciclo', name: 'Ciclo', component: Ciclo, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/concepto_pago', name: 'ConceptoPago', component: ConceptoPago, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
+    { path: '/empleado', name: 'Empleado', component: Empleado, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/configurar_cuota/:id', name: 'ConfigurarCuota', component: ConfigurarCuota, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/alumno_index', name: 'AlumnoIndex', component: AlumnoIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/alumno_create', name: 'AlumnoCreate', component: AlumnoCreate, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/alumno_edit/:id', name: 'AlumnoEdit', component: AlumnoEdit, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/inscripcion/:id', name: 'Inscripcion', component: Inscripcion, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
-    { path: '/asignacion_index', name: 'AsignacionIndex', component: AsignacionIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
+    { path: '/asignacion_seccion_index', name: 'AsignacionIndex', component: AsignacionSeccionIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/seleccionar_alumno', name: 'SeleccionarAlumno', component: SeleccionarAlumno, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/pago_alumno/:id', name: 'PagoAlumno', component: PagoAlumno, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/serie_factura', name: 'SerieFactura', component: SerieFactura, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },

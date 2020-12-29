@@ -16,7 +16,7 @@ class AlumnoSeeder extends Seeder
     public function run()
     {
         $data = new Alumno();
-        $data->codigo = "0001";
+        $data->codigo = "1-2020-001";
         $data->primer_nombre = "Marlon";
         $data->segundo_nombre = "Samuel";
         $data->tercer_nombre = "";
@@ -30,13 +30,13 @@ class AlumnoSeeder extends Seeder
         $data->save();
 
         $data_p = new Apoderado();
-        $data_p->cui = "55689789879";
+        $data_p->cui = "5568978987999";
         $data_p->primer_nombre = "Faustino";
         $data_p->segundo_nombre = "";
         $data_p->primer_apellido = "Gonzalez";
         $data_p->segundo_apellido = "";
         $data_p->fecha_nac = "1990-03-25";
-        $data_p->email = "";
+        $data_p->email = "faustino@gmail.com";
         $data_p->direccion = "Colonia los conacastes chiquimulilla";
         $data_p->municipio_id = 1;
         $data_p->nacionalidad = "Guatemalteco";

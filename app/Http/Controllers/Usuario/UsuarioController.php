@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Usuario;
 
 use App\User;
+use App\UsuarioEmpleado;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
@@ -16,13 +17,13 @@ class UsuarioController extends ApiController
 
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:usuario');
+        #parent::__construct();
+        #$this->middleware('scope:usuario');
     }
 
     public function index()
     {
-        $usuarios = User::with('rol')->get();
+        $usuarios = User::where('activo',true)->with('rol','empleado.empleado','alumno.alumno','representante.apoderado')->get();
         
         return $this->showAll($usuarios);
     }
@@ -30,21 +31,34 @@ class UsuarioController extends ApiController
     public function store(Request $request)
     {
         $request->validate([
-            'name'     => 'required|string',
+            'empleado_id' => 'required|integer',
+            'codigo'     => 'required|string',
             'email'    => 'required|string|email|unique:users',
             'password' => 'required|string|confirmed',
             'rol_id' => 'required'
         ]);
 
+        DB::beginTransaction();
+        $empleado = Empleado::find($request->empleado_id);
+
         $user = new User([
-            'name'     => $request->name,
-            'email'    => $request->email,
+            'codigo'     => $empleado->codigo,
+            'email'    => $empleado->email,
             'rol_id' => $request->rol_id,
             'password' => bcrypt($request->password),
         ]);
 
 
         $user->save();
+
+        $usuario_empleado = new UsuarioEmpleado([
+                'empleado_id' => $request->empleado_id,
+                'user_id' => $user->id
+            ]);
+
+        $usuario_empleado->save();
+
+        DB::commit();
         
         return $this->showOne($user);
     }
@@ -66,20 +80,22 @@ class UsuarioController extends ApiController
     public function update(Request $request, User $usuario)
     {
         $reglas = [
-            'email' => 'required|string|unique:users,email,' . $usuario->id,
+            'rol_id' => 'required|integer',
+            'empleado_id' => 'required|integer'
         ];
 
         $this->validate($request, $reglas);
 
-        $usuario->email = $request->email;
+        DB::beginTransaction();
         $usuario->rol_id = $request->rol_id;
-        $usuario->name = $request->name;
-
-        if (!$usuario->isDirty()) {
-            return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
-        }
-
         $usuario->save();
+
+        $usuario_empleado = UsuarioEmpleado::find($usuario->id);
+        $usuario_empleado->empleado_id = $request->empleado_id;
+
+        $usuario_empleado->save();
+        DB::commit();
+
         return $this->showOne($usuario);
     }
 

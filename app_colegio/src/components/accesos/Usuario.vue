@@ -28,38 +28,43 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-flex xs12 sm12 md12>
-                    <v-text-field v-model="form.name" 
-                        label="Nombre"
-                        v-validate="'required'"
-                        type="text"
-                        data-vv-name="nombre"
-                        :error-messages="errors.collect('nombre')">
-                    </v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6 md6>
-                    <v-text-field v-model="form.email" 
-                        label="Correo Electronico"
-                        v-validate="'required|email'"
-                        type="text"
-                        data-vv-name="correo"
-                        :error-messages="errors.collect('correo')">
-                    </v-text-field>
-                    </v-flex>
-                    <v-flex xs12 sm6 md6>
+                  <v-flex xs12 sm6 md6>
                     <v-select
-                      v-model="form.rol_id"
-                      placeholder="seleccion rol usuario"
+                      v-model="form.empleado_id"
+                      placeholder="seleccione empleado"
                       v-validate="'required'"
-                      :items="roles"
-                      :error-messages="errors.collect('rol')"
-                      label="Rol usuario"
+                      :items="empleados"
                       item-value="id"
-                      item-text="rol"
-                      data-vv-name="rol"
+                      :error-messages="errors.collect('empleado')"
+                      label="Empleado"
+                      item-text=""
+                      data-vv-name="empleado"
                       clearable
-                    ></v-select>
-                  </v-flex>
+                    >
+                    <template slot="selection" slot-scope="data">
+                        {{ data.item.primer_nombre }} {{ data.item.segundo_nombre }}
+                        {{ data.item.primer_apellido }} {{ data.item.segundo_apellido }}
+                      </template>
+                      <template slot="item" slot-scope="data">
+                        {{ data.item.primer_nombre }} {{ data.item.segundo_nombre }}
+                        {{ data.item.primer_apellido }} {{ data.item.segundo_apellido }}
+                      </template>
+                    </v-select>
+                    </v-flex>
+                    <v-flex xs12 sm6 md6>
+                      <v-select
+                        v-model="form.rol_id"
+                        placeholder="seleccion rol usuario"
+                        v-validate="'required'"
+                        :items="roles"
+                        :error-messages="errors.collect('rol')"
+                        label="Rol usuario"
+                        item-value="id"
+                        item-text="rol"
+                        data-vv-name="rol"
+                        clearable
+                      ></v-select>
+                    </v-flex>
                     <v-flex v-if="form.id == null" xs12 sm6 md6>
                     <v-text-field v-model="form.password" 
                         ref="password"
@@ -98,11 +103,23 @@
         class="elevation-1"
       >
         <template v-slot:items="props">
-          <td class="text-xs-left">{{ props.item.name }}</td>
+          <td class="text-xs-left">{{ props.item.codigo }}</td>
+          <td class="text-xs-left" v-if="props.item.empleado !== null">
+            {{ props.item.empleado.empleado.primer_nombre }}{{ props.item.empleado.empleado.segundo_nombre }}
+            {{ props.item.empleado.empleado.primer_apellido }}{{ props.item.empleado.empleado.segundo_apellido }}
+          </td>
+          <td class="text-xs-left" v-if="props.item.alumno !== null">
+            {{ props.item.alumno.alumno.primer_nombre }}{{ props.item.alumno.alumno.segundo_nombre }}
+            {{ props.item.alumno.alumno.primer_apellido }}{{ props.item.alumno.alumno.segundo_apellido }}
+          </td>
+          <td class="text-xs-left" v-if="props.item.representante !== null">
+             {{ props.item.representante.apoderado.primer_nombre }}{{ props.item.representante.apoderado.segundo_nombre }}
+            {{ props.item.representante.apoderado.primer_apellido }}{{ props.item.representante.apoderado.segundo_apellido }}
+          </td>
           <td class="text-xs-left">{{ props.item.email }}</td>
           <td class="text-xs-left">{{ props.item.rol.rol }}</td>
           <td class="text-xs-left">
-            <v-tooltip top>
+            <v-tooltip top v-if="props.item.empleado !== null">
               <template v-slot:activator="{ on }">
                   <v-icon v-on="on" color="warning" fab dark @click="edit(props.item)">edit</v-icon>
               </template>
@@ -137,7 +154,9 @@ export default {
       loading: false,
       items: [],
       roles: [],
+      empleados: [],
       headers: [
+        { text: 'Codigo', value: 'codigo' },
         { text: 'Nombre', value: 'name' },
         { text: 'Correo electronico', value: 'email' },
         { text: 'Rol', value: 'rol.rol' },
@@ -147,8 +166,7 @@ export default {
       form: {
         id: null,
         rol_id: null,
-        name: '',
-        email: '',
+        empleado_id: '',
         password: '',
         password_confirmation: ''
       },
@@ -159,6 +177,7 @@ export default {
     let self = this
     self.getAll()
     self.getRoles()
+    self.getEmpleados()
   },
 
   methods: {
@@ -171,6 +190,19 @@ export default {
         .then(r => {
           self.loading = false
           self.items = r.data
+        })
+        .catch(r => {});
+    },
+
+     getEmpleados() {
+      let self = this
+      self.loading = true
+
+      self.$store.state.services.empleadoService
+        .getAll()
+        .then(r => {
+          self.loading = false
+          self.empleados = r.data
         })
         .catch(r => {});
     },
@@ -191,8 +223,16 @@ export default {
     //funcion para guardar registro
     create(){
       let self = this
-      self.loading = true
       let data = self.form
+
+      let exists = self.items.some(x=>x.empleado.empleado_id == data.empleado_id)
+
+      if(exists){
+          self.$toastr.error('empleado ya tiene usuario creado','error');
+          return
+      }
+      
+      self.loading = true
 
       self.$store.state.services.usuarioService
         .create(data)
@@ -278,9 +318,8 @@ export default {
     mapData(data){
         let self = this
         self.form.id = data.id
-        self.form.name = data.name
-        self.form.email = data.email
         self.form.rol_id =data.rol_id
+        self.form.empleado_id = data.empleado.empleado_id
     },
 
     //funcion, validar si se guarda o actualiza

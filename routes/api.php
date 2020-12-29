@@ -29,6 +29,8 @@ Route::resource('grados', 'Grado\GradoController', ['except' => ['create', 'edit
 Route::resource('niveles_educativos', 'NivelEducativo\NivelEducativoController', ['except' => ['create', 'edit']]);
 Route::resource('niveles_educativos.grados', 'NivelEducativo\NivelEducativoGradoController', ['except' => ['create', 'edit']]);
 Route::resource('secciones', 'Seccion\SeccionController', ['except' => ['create', 'edit']]);
+Route::resource('cargos', 'Cargo\CargoController', ['except' => ['create', 'edit']]);
+Route::resource('empleados', 'Empleado\EmpleadoController', ['except' => ['create', 'edit']]);
 
 Route::resource('gradoNivelEducativos', 'GradoNivelEducativo\GradoNivelEducativoController', ['except' => ['create', 'edit']]);
 Route::resource('gradoNivelEducativosCursos', 'GradoNivelEducativo\CursoGradoNivelController', ['except' => ['create', 'edit']]);

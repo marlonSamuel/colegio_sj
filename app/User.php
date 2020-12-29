@@ -7,13 +7,16 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Rol;
+use App\UsuarioAlumno;
+use App\UsuarioEmpleado;
+use App\UsuarioRepresentante;
 
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'password','rol_id'
+        'codigo', 'email', 'password','rol_id', 'activo'
     ];
 
 
@@ -27,5 +30,21 @@ class User extends Authenticatable
 
     public function rol(){
         return $this->belongsTo(Rol::class);
+    }
+
+    public function empleado(){
+        return $this->hasOne(UsuarioEmpleado::class,'user_id');
+    }
+
+    public function alumno(){
+        return $this->hasOne(UsuarioAlumno::class,'user_id');
+    }
+
+    public function representante(){
+        return $this->hasOne(UsuarioRepresentante::class,'user_id');
+    }
+
+     public function findForPassport($username) {
+        return $user = $this->where('email', $username)->orWhere('codigo', $username)->first();
     }
 }
