@@ -1,0 +1,129 @@
+<template>
+    <div class="text-xs-left">
+        <v-menu
+        v-model="menu"
+        :close-on-content-click="false"
+        :nudge-width="200"
+        offset-x
+        >
+        <template v-slot:activator="{ on }">
+            <v-btn
+                color="blue-grey"
+                dark
+                v-on="on"
+                >
+                <v-icon right dark>menu</v-icon>
+                Opciones
+            </v-btn>
+        </template>
+
+        <v-card>
+            <v-list>
+                <v-list-tile avatar>
+                    <v-list-tile-avatar>
+                        <img :src="getAvatar(user.user_info)" alt="John">
+                    </v-list-tile-avatar>
+
+                    <v-list-tile-content v-if="user !== false">
+                        <v-list-tile-title>{{user.user_info.primer_nombre}}  
+                                            {{user.user_info.primer_apellido}}
+                        </v-list-tile-title>
+                        <v-list-tile-sub-title>{{user.rol.rol}}</v-list-tile-sub-title>
+                    </v-list-tile-content>
+
+                    <v-list-tile-action>
+                    <v-btn
+                        :class="fav ? 'red--text' : ''"
+                        icon
+                        @click="fav = !fav"
+                    >
+                        <v-icon>favorite</v-icon>
+                    </v-btn>
+                    </v-list-tile-action>
+                </v-list-tile>
+            </v-list>
+
+            <v-divider></v-divider>
+
+            <v-list>
+                <v-list v-for="item in items" :key="item.title">
+                    <v-list-tile
+                        @click="navigateTo('route')"
+                    >
+                    <v-icon>{{item.icon}}</v-icon>
+                        <v-list-tile-title>{{item.title}}</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-list>
+        </v-card>
+        </v-menu>
+    </div>
+</template>
+
+<script>
+export default {
+  name: "ExampleIndex",
+  props: {
+      source: String
+    },
+  data() {
+    return {
+        fav: true,
+        menu: false,
+        message: false,
+        hints: true,
+        items: [],
+        itemsAlumno: [
+            { title: 'Mis notas',icon:"file_copy" },
+            { title: 'Historial de pagos',icon:"file_copy" },
+            { title: 'Historial academico',icon:"file_copy" }
+        ],
+
+         itemsProfesor: [
+            { title: 'Mis cursos',icon:"file_copy" },
+            { title: 'Mis alumnos',icon:"account_circle" }
+        ],
+
+         itemsApoderado: [
+            { title: 'Alumnos representados',icon:"account_circle" }
+        ]
+    }
+  },
+
+  created() {
+    let self = this
+  },
+
+  methods: {
+      navigateTo(route){
+          let self = this
+          self.menu = false
+      },
+
+       getAvatar(user){
+            let self = this
+            if(!_.isEmpty(self.$store.state.usuario)){
+                return (user.foto !== null && user.foto !== undefined) ? self.$store.state.base_url+user.foto : self.$store.state.base_url+'img/user_empty.png'
+            }
+        },
+  },
+
+  computed: {
+        user(){
+            let self = this
+            var user = self.$store.state.usuario
+            if(!_.isEmpty(user)){
+                if(user.rol.rol == 'alumno'){
+                    self.items = self.itemsAlumno
+                }else if(user.rol.rol == 'profesor'){
+                    self.items = self.itemsProfesor
+                }else if((user.rol.rol == 'apoderado')){
+                    self.items = self.itemsApoderado
+                }
+                return user
+            }
+            return !_.isEmpty(user)
+        }
+    },
+};
+</script>

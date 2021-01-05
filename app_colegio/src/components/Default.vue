@@ -121,15 +121,11 @@
 
       </v-layout>
       <v-layout v-else wrap>
-        <v-flex>
-            <v-alert
-              :value="true"
-              type="info"
-            >
-              BIENVENIDO {{userName | uppercase}} <br />
-              <small>usted esta navegando navegando como usuario {{rol}}</small>
-            </v-alert>
-        </v-flex>
+        <v-layout v-if="rol == 'alumno'">
+          <v-flex sm6 md6 xs12 lg6>
+            <panel-alumno></panel-alumno>
+          </v-flex>
+        </v-layout>
       </v-layout>
   </v-layout>
 </template>
@@ -139,23 +135,27 @@ import Resumen from './dashboard/PagosResumen'
 import Conceptos from './dashboard/PagosConceptos'
 import Inscripciones from './dashboard/InscripcionesCiclo'
 import {RotatingSpinner} from 'vue-image-spinner'
+import PanelAlumno from './dashboard/PanelAlumno'
+
 export default {
   name: "default",
   components: {
     Resumen,
     Conceptos,
     Inscripciones,
-    RotatingSpinner
+    RotatingSpinner,
+    PanelAlumno
   },
   props: {
-      source: String
-    },
+ 
+  },
   data() {
     return {
       loading: false,
       search: '',
       data: null,
-      ciclo: this.$store.state.ciclo
+      ciclo: this.$store.state.ciclo,
+      items: []
     };
   },
 

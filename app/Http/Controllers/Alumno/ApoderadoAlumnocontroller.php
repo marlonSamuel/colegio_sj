@@ -6,6 +6,9 @@ use App\Alumno;
 use App\Apoderado;
 use App\ApoderadoAlumno;
 use App\TelefonoApoderado;
+use App\Rol;
+use App\UsuarioRepresentante;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -58,6 +61,24 @@ class ApoderadoAlumnoController extends ApiController
                     'telefono' => $request->telefono,
                     'apoderado_id' => $apoderado_id
                 ]);
+
+                //crear usuario apoderado
+                $rol = Rol::where('rol','apoderado')->first();
+
+                if(!is_null($rol)){
+                    $user = new User;
+
+                    $user->codigo = $apoderado->cui;
+                    $user->email = $apoderado->email;
+                    $user->password = bcrypt($apoderado->cui);
+                    $user->rol_id = $rol->id;
+                    $user->save();
+
+                    $usuario_representante = new UsuarioRepresentante;
+                    $usuario_representante->apoderado_id = $apoderado_id;
+                    $usuario_representante->user_id = $user->id;
+                    $usuario_representante->save();
+                }
             }
 
             if($request->responsable){//quitar responsabilidad a apoderado anterior

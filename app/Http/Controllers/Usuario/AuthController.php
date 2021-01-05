@@ -80,7 +80,7 @@ class AuthController extends Controller
         }
 
         if(!is_null($user->representante)){
-            $user->user_info = $user->representante->representante;
+            $user->user_info = $user->representante->apoderado;
         }
 
         return response()->json([

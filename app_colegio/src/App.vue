@@ -4,6 +4,7 @@
         <!-- =============================================== -->
         <navegationmenu v-if="isLogin"></navegationmenu>
         <v-content>
+        <menu-option v-if="!isAdmin && isLogin"></menu-option>
           <v-container fluid fill-height>
             <v-slide-y-transition mode="out-in">
                 <router-view></router-view>
@@ -22,10 +23,12 @@
 
 <script>
 import navegationmenu from "@/components/shared/NavegationMenu";
+import MenuOption from "@/components/dashboard/MenuOption"
 
 export default {
   components: {
-    navegationmenu
+    navegationmenu,
+    MenuOption
   },
   data: ()=>({
     is_login: false
@@ -55,6 +58,15 @@ export default {
       return name !== undefined ? name.toLowerCase() : ''
     },
 
+    isAdmin(){
+      let self = this
+      var user = self.$store.state.usuario
+      if(!_.isEmpty(user) && user.rol.rol === 'admin'){
+        return true
+      }
+      return false
+    },
+
     getFondo(){
         let self = this
         var  fondo = self.$store.state.base_url+'img/fondo.jpg'
@@ -64,6 +76,8 @@ export default {
           } 
         }
       },
+
+
   }
 };
 </script>

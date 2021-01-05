@@ -45,6 +45,8 @@ Route::resource('alumnos', 'Alumno\AlumnoController', ['except' => ['create', 'e
 Route::name('alumnos')->get('alumnos_search/{search?}', 'Alumno\AlumnoController@searchQuery');
 Route::name('alumnos_historial')->get('alumnos_historial', 'Alumno\AlumnoController@historialAlumnos');
 Route::name('alumnos_historial_alumno')->get('alumnos_historial_alumno/{id}', 'Alumno\AlumnoController@historialAlumno');
+Route::name('alumnos_last_row')->get('alumnos_last_row', 'Alumno\AlumnoController@lastRow');
+
 Route::resource('apoderados', 'Apoderado\ApoderadoController', ['except' => ['create', 'edit']]);
 Route::resource('alumnos.apoderados', 'Alumno\AlumnoApoderadoAlumnoController', ['except' => ['create', 'edit']]);
 Route::resource('alumnos.inscripciones', 'Alumno\AlumnoInscripcionController', ['except' => ['create', 'edit']]);

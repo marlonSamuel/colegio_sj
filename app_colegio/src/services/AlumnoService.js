@@ -60,6 +60,12 @@ class AlumnoService {
         let self = this;
         return self.axios.delete(`${self.baseUrl}/${data.id}`);
     }
+
+    //get last row
+    getLastRow() {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_last_row`);
+    }
 }
 
 export default AlumnoService

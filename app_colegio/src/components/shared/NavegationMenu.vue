@@ -169,7 +169,7 @@ export default {
   data(){
     return {
         dialog: false,
-        drawer: true,
+        drawer: false,
         loading: false,
         ciclos: [],
         ciclo_id: null,
@@ -219,6 +219,11 @@ export default {
         .logout()
         .then(r => {
           self.$store.dispatch("logout")
+          self.$store.dispatch("setMenu",[])
+          self.$store.dispatch("setPermisos",[])
+          self.$store.dispatch("setUser",{})
+          self.drawer = false
+          
           self.$router.push('/login')
           self.loading = false
         }).catch(e => {
@@ -277,6 +282,12 @@ export default {
 
     drawerEvent(){
       let self = this
+      if(self.$store.state.usuario.rol !== undefined){
+        let rol = self.$store.state.usuario.rol.rol
+        if(rol!== 'admin'){
+          return false
+        }
+      }
       return !self.drawer
     }
   },
@@ -289,8 +300,9 @@ export default {
       if(self.$store.state.usuario.rol !== undefined){
         rol = self.$store.state.usuario.rol.rol
         username = self.$store.state.usuario.name
+        return self.$store.state.usuario.user_info.primer_nombre + ' '+ self.$store.state.usuario.user_info.primer_apellido + '('+rol+')'
       }
-      return self.$store.state.usuario.user_info.primer_nombre + ' '+ self.$store.state.usuario.user_info.primer_apellido + '('+rol+')'
+      return ''
     },
 
     ciclo(){
@@ -308,7 +320,6 @@ export default {
 
     emptyMenu(){
       let self = this
-      console.log("llego")
       return self.$store.state.menu.length === 0 ? true : false
     }
   }

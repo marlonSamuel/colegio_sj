@@ -105,16 +105,16 @@
         <template v-slot:items="props">
           <td class="text-xs-left">{{ props.item.codigo }}</td>
           <td class="text-xs-left" v-if="props.item.empleado !== null">
-            {{ props.item.empleado.empleado.primer_nombre }}{{ props.item.empleado.empleado.segundo_nombre }}
-            {{ props.item.empleado.empleado.primer_apellido }}{{ props.item.empleado.empleado.segundo_apellido }}
+            {{ props.item.empleado.empleado.primer_nombre }} {{ props.item.empleado.empleado.segundo_nombre }}
+            {{ props.item.empleado.empleado.primer_apellido }} {{ props.item.empleado.empleado.segundo_apellido }}
           </td>
           <td class="text-xs-left" v-if="props.item.alumno !== null">
-            {{ props.item.alumno.alumno.primer_nombre }}{{ props.item.alumno.alumno.segundo_nombre }}
-            {{ props.item.alumno.alumno.primer_apellido }}{{ props.item.alumno.alumno.segundo_apellido }}
+            {{ props.item.alumno.alumno.primer_nombre }} {{ props.item.alumno.alumno.segundo_nombre }}
+            {{ props.item.alumno.alumno.primer_apellido }} {{ props.item.alumno.alumno.segundo_apellido }}
           </td>
           <td class="text-xs-left" v-if="props.item.representante !== null">
-             {{ props.item.representante.apoderado.primer_nombre }}{{ props.item.representante.apoderado.segundo_nombre }}
-            {{ props.item.representante.apoderado.primer_apellido }}{{ props.item.representante.apoderado.segundo_apellido }}
+             {{ props.item.representante.apoderado.primer_nombre }} {{ props.item.representante.apoderado.segundo_nombre }}
+            {{ props.item.representante.apoderado.primer_apellido }} {{ props.item.representante.apoderado.segundo_apellido }}
           </td>
           <td class="text-xs-left">{{ props.item.email }}</td>
           <td class="text-xs-left">{{ props.item.rol.rol }}</td>

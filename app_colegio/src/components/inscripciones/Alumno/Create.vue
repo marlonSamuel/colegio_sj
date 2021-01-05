@@ -67,6 +67,7 @@
                                           data-vv-name="codigo"
                                           :error-messages="errors.collect('form_alumno.codigo')"
                                           prepend-icon="code"
+                                          readonly
                                       ></v-text-field>
                                   </v-flex>
                                   <v-flex xs12 md6>
@@ -608,6 +609,7 @@ export default {
   created() {
     let self = this
     self.getMunicipios()
+    self.getLastRow()
   },
 
   methods: {
@@ -644,6 +646,21 @@ export default {
                 }
                 self.mapApoderado(r.data)
             }).catch(e=>{})
+    },
+
+    //get last row
+    getLastRow(cui){
+        let self= this
+        self.loading = true
+        self.$store.state.services.alumnoService
+        .getLastRow()
+        .then(r => {
+            self.loading = false
+            if (self.$store.state.global.captureError(r)) {
+                return;
+            }
+            self.setCodigo(r.data)
+        }).catch(e=>{})
     },
 
     getMunicipios(){
@@ -722,6 +739,13 @@ export default {
           self.form.foto = self.image
       };
     },
+
+    setCodigo(last_a){
+        let self = this
+        let codigo = ''
+        codigo = '1-'+moment().year()+'-'+last_a.id +1
+        self.form.codigo = codigo
+    }
   },
 
   computed: {

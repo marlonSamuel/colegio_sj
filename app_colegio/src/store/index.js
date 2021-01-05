@@ -12,6 +12,7 @@ const state = {
     services,
     global,
     menu: [],
+    showSideBar: false,
     permisos: [],
     usuario: {},
     ciclo: {},
@@ -28,6 +29,10 @@ const state = {
 const mutations = {
     setUser(state, usuario) {
         state.usuario = usuario
+    },
+
+    setShowSideBar(state, show) {
+        state.showSideBar = show
     },
 
     setInstitucion(state, institucion) {
@@ -91,6 +96,10 @@ const actions = {
 
     setUser({ commit }, user) {
         commit('setUser', user)
+    },
+
+    setShowSideBar({ commit }, show) {
+        commit('setShowSideBar', show)
     },
 
     setInstitucion({ commit }, institucion) {

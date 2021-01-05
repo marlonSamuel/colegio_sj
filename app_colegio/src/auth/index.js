@@ -141,6 +141,7 @@ export default {
             .then(r => {
                 store.dispatch('setUser', r.data.user)
                 store.dispatch('setInstitucion', r.data.institucion)
+                store.dispatch('setShowSideBar', r.data.user.rol.rol == 'admin' ? true : false)
                 this.getMenus(r.data.user.rol_id)
             }).catch(e => {
 

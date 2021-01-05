@@ -6,6 +6,10 @@ use App\Alumno;
 use App\Apoderado;
 use App\ApoderadoAlumno;
 use App\TelefonoApoderado;
+use App\Rol;
+use App\UsuarioAlumno;
+use App\UsuarioRepresentante;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -58,7 +62,8 @@ class AlumnoController extends ApiController
             'primer_apellido' => 'required|string',
             'fecha_nac' => 'required',
             'genero' => 'required',
-            'direccion' => 'required|string'
+            'direccion' => 'required|string',
+            'email'=>'unique:alumnos'
         ];
         
         $this->validate($request, $reglas);
@@ -84,11 +89,31 @@ class AlumnoController extends ApiController
 
             $alumno = Alumno::create($data);
 
+            //crear usuario apoderado
+            $rol = Rol::where('rol','alumno')->first();
+
+            if(!is_null($rol)){
+                $user = new User;
+
+                $user->codigo = $alumno->codigo;
+                $user->email = $alumno->email;
+                $user->password = bcrypt($alumno->codigo);
+                $user->rol_id = $rol->id;
+                $user->save();
+
+                $usuario_alumno = new UsuarioAlumno;
+                $usuario_alumno->alumno_id = $alumno->id;
+                $usuario_alumno->user_id = $user->id;
+                $usuario_alumno->save();
+            }
+
+
             $representante_id = $request->representante_id;
 
             if(is_null($representante_id)){
 
                 $representante_exits = Apoderado::where('cui',$request->cui)->first();
+
                 if(!is_null($representante_exits)) return $this->errorResponse('cui de representante ya fue asignado, si el cui es de un representante existente, haga clic la opcion validar del formulario',422);
 
                 $representante = Apoderado::create([
@@ -103,7 +128,8 @@ class AlumnoController extends ApiController
                     'ocupacion' => $request->ocupacion,
                     'municipio_id' => $request->municipio_id,
                     'estado_civil' => $request->estado_civil,
-                    'nacionalidad' => $request->nacionalidad
+                    'nacionalidad' => $request->nacionalidad,
+                    'nit' => $request->nit
                 ]); 
 
                 $representante_id = $representante->id;  
@@ -113,6 +139,24 @@ class AlumnoController extends ApiController
                     'telefono' => $request->telefono_a,
                     'apoderado_id' => $representante_id
                 ]);
+
+                //crear usuario apoderado
+                $rol = Rol::where('rol','apoderado')->first();
+
+                if(!is_null($rol)){
+                    $user = new User;
+
+                    $user->codigo = $representante->cui;
+                    $user->email = $representante->email;
+                    $user->password = bcrypt($representante->cui);
+                    $user->rol_id = $rol->id;
+                    $user->save();
+
+                    $usuario_representante = new UsuarioRepresentante;
+                    $usuario_representante->apoderado_id = $representante_id;
+                    $usuario_representante->user_id = $user->id;
+                    $usuario_representante->save();
+                }
             }
 
             ApoderadoAlumno::create([
@@ -241,5 +285,10 @@ class AlumnoController extends ApiController
             'inscripciones' => $inscripciones,
             'pagos' => $pagos
         ]);
+    }
+
+    public function lastRow(){
+        $alumno = Alumno::latest()->first();
+        return $this->showOne($alumno);
     }
 }
