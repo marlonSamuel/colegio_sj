@@ -120,13 +120,7 @@
         </v-flex>
 
       </v-layout>
-      <v-layout v-else wrap>
-        <v-layout v-if="rol == 'alumno'">
-          <v-flex sm6 md6 xs12 lg6>
-            <panel-alumno></panel-alumno>
-          </v-flex>
-        </v-layout>
-      </v-layout>
+      <panel-alumno v-if="rol == 'alumno'"></panel-alumno>
   </v-layout>
 </template>
 

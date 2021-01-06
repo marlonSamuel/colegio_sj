@@ -6,6 +6,7 @@ use App\Pago;
 use App\Ciclo;
 use App\Alumno;
 use App\GradoNivelEducativo;
+use App\AsignacionSeccion;
 use Illuminate\Database\Eloquent\Model;
 
 class Inscripcion extends Model
@@ -41,5 +42,10 @@ class Inscripcion extends Model
     public function pagos()
     {
     	return $this->hasMany(Pago::class,'inscripcion_id');
+    }
+
+    public function seccion()
+    {
+        return $this->hasOne(AsignacionSeccion::class,'inscripcion_id');
     }
 }

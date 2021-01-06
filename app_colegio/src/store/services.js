@@ -29,6 +29,7 @@ import SerieFacturaService from '../services/SerieFacturaService'
 import RolService from '../services/RolService'
 import EmpleadoService from '../services/EmpleadoService'
 import CargoService from '../services/CargoService'
+import AsignacionSeccionService from '../services/AsignacionSeccionService'
 
 //let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
 let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
@@ -105,5 +106,6 @@ export default {
     serieFacturaService: new SerieFacturaService(Axios, baseUrl),
     rolService: new RolService(Axios, baseUrl),
     empleadoService: new EmpleadoService(Axios, baseUrl),
-    cargoService: new CargoService(Axios, baseUrl)
+    cargoService: new CargoService(Axios, baseUrl),
+    asignacionSeccionService: new AsignacionSeccionService(Axios, baseUrl)
 }

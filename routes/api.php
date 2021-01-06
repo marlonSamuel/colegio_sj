@@ -36,6 +36,7 @@ Route::resource('gradoNivelEducativos', 'GradoNivelEducativo\GradoNivelEducativo
 Route::resource('gradoNivelEducativosCursos', 'GradoNivelEducativo\CursoGradoNivelController', ['except' => ['create', 'edit']]);
 Route::resource('gradoNivelEducativosSecciones', 'GradoNivelEducativo\GradoNivelEducativoSecController', ['except' => ['create', 'edit']]);
 Route::resource('gradoNivelEducativosInscripciones', 'GradoNivelEducativo\GradoNivelEducativoInscripcionController', ['except' => ['create', 'edit']]);
+Route::name('gradoNivelEducativosGetSecciones')->get('gradoNivelEducativosGetSecciones/{id}', 'GradoNivelEducativo\GradoNivelEducativoController@secciones');
 
 Route::resource('ciclos', 'Ciclo\CicloController', ['except' => ['create', 'edit']]);
 Route::resource('concepto_pagos', 'ConceptoPago\ConceptoPagoController', ['except' => ['create', 'edit']]);
@@ -77,4 +78,13 @@ Route::name('pagos_reporte')->get('pagos_reporte/{inicio?}/{fin?}', 'Pago\PagoCo
 Route::resource('ciclos.inscripciones', 'Ciclo\CicloInscripcionController', ['except' => ['create', 'edit']]);
 Route::resource('ciclos.pagos', 'Ciclo\CicloPagoController', ['except' => ['create', 'edit']]);
 Route::name('inscripciones_documento')->post('inscripciones_documento', 'Inscripcion\InscripcionController@documento');
+
+Route::resource('asignacion_secciones', 'Inscripcion\AsignacionSeccionController', ['except' => ['create', 'edit']]);
+Route::name('asignacion_secciones_get_all')->get('asignacion_secciones_get_all/{ciclo_id}/{grado_nivel_educativo_id}', 'Inscripcion\AsignacionSeccionController@getAll');
+
+Route::name('asignacion_secciones_get_all_without_section')->get('asignacion_secciones_get_all_without_section/{ciclo_id}/{grado_nivel_educativo_id}', 'Inscripcion\AsignacionSeccionController@getWithoutSection');
+
+
+
+
 Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);

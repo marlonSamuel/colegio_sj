@@ -19,7 +19,7 @@ class CreateAsignacionSeccionsTable extends Migration
             $table->unsignedBigInteger('seccion_id');
 
             $table->foreign('inscripcion_id')->references('id')->on('inscripciones')->onDelete('cascade');
-            $table->foreign('seccion_id')->references('id')->on('secciones')->onDelete('cascade');
+            $table->foreign('seccion_id')->references('id')->on('secciones');
 
             $table->timestamps();
         });

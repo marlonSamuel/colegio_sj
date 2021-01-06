@@ -94,4 +94,12 @@ class GradoNivelEducativoController extends ApiController
 
         return $this->showOne($gradoNivelEducativo);
     }
+
+    public function secciones($id)
+    {
+        $grado_nivel = GradoNivelEducativo::find($id);
+        $secciones = $grado_nivel->secciones()->with('seccion')->get();
+
+        return $this->showAll($secciones);
+    }
 }

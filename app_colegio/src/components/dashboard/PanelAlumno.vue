@@ -1,19 +1,30 @@
 <template>
-    <v-data-table
-            :items="items"
-            class="elevation-1"
-            hide-actions
-            :headers="headers"
-          >
-            <template v-slot:items="props">
-              <td>{{ props.item.name }}</td>
-              <td class="text-xs-right">{{ props.item.calories }}</td>
-              <td class="text-xs-right">{{ props.item.fat }}</td>
-              <td class="text-xs-right">{{ props.item.carbs }}</td>
-              <td class="text-xs-right">{{ props.item.protein }}</td>
-              <td class="text-xs-right">{{ props.item.iron }}</td>
-            </template>
-    </v-data-table>
+    <v-layout wrap>
+        <v-flex sm6 md6 xs12 lg6>
+            <h2>Cursos actuales</h2>
+            <v-data-table
+                    :items="items"
+                    class="elevation-1"
+                    hide-actions
+                    :headers="headers"
+                >
+                    <template v-slot:items="props">
+                    </template>
+            </v-data-table>
+        </v-flex>
+        <v-flex sm6 md6 xs12 lg6 style="padding-left: 5px;">
+            <h2>Tareas asignadas</h2>
+            <v-data-table
+                    :items="items"
+                    class="elevation-1"
+                    hide-actions
+                    :headers="headers2"
+                >
+                    <template v-slot:items="props">
+                    </template>
+            </v-data-table>
+        </v-flex>
+    </v-layout>
 </template>
 
 <script>
@@ -27,8 +38,12 @@ export default {
         loading: false,
         items: [],
         headers: [
-            {text: 'Periodo',value: '',sort: false},
-            {text: 'clase', value: '', sort: false}
+            {text: 'Periodo',value: '',sortable: false},
+            {text: 'clase', value: '', sortable: false}
+        ],
+        headers2: [
+            {text: 'Tarea',value: '',sortable: false},
+            {text: 'fecha entrega', value: '', sortable: false}
         ]
     }
   },

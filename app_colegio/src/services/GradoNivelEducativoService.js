@@ -22,9 +22,14 @@ class GradoNivelEducativoService {
         return self.axios.get(`${self.baseUrl}/${id}/cuotas`);
     }
 
-    getSecciones(id) {
+    getSecciones() {
         let self = this;
         return self.axios.get(`${self.baseUrl}Secciones`);
+    }
+
+    getSeccionesById(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}GetSecciones/${id}`);
     }
 
     getCuotasCiclo(id, ciclo_id) {

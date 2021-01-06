@@ -68,7 +68,7 @@ const routes = [
     { path: '/alumno_create', name: 'AlumnoCreate', component: AlumnoCreate, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/alumno_edit/:id', name: 'AlumnoEdit', component: AlumnoEdit, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/inscripcion/:id', name: 'Inscripcion', component: Inscripcion, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
-    { path: '/asignacion_seccion_index', name: 'AsignacionIndex', component: AsignacionSeccionIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
+    { path: '/asignacion_seccion_index', name: 'AsignacionSeccionIndex', component: AsignacionSeccionIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/seleccionar_alumno', name: 'SeleccionarAlumno', component: SeleccionarAlumno, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/pago_alumno/:id', name: 'PagoAlumno', component: PagoAlumno, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/serie_factura', name: 'SerieFactura', component: SerieFactura, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
