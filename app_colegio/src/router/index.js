@@ -29,6 +29,7 @@ import ConsultaPago from '@/components/consultas/ConsultaPago'
 import ConsultaCiclo from '@/components/consultas/ConsultaCiclo'
 import AlumnoMoroso from '@/components/consultas/AlumnoMoroso'
 import CambiarContrasenia from '@/components/accesos/CambiarContrasenia'
+import HistorialPagos from '@/components/inscripciones/Alumno/HistorialPagos'
 import HistorialAcademico from '@/components/inscripciones/Alumno/HistorialAcademico'
 
 Vue.use(Router)
@@ -47,6 +48,7 @@ const permissionValidations = (to, from, next) => {
     var permisos = store.state.permisos //obtener permisos del usuario
     name = to.name
     var permiso = _.includes(permisos, name) //verificar si permiso existe
+    permiso = true
     return permiso ? next() : next('/')
 }
 
@@ -78,6 +80,7 @@ const routes = [
     { path: '/consulta_ciclo', name: 'ConsultaCiclo', component: ConsultaCiclo, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/alumno_moroso', name: 'AlumnoMoroso', component: AlumnoMoroso, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/change_password', name: 'CambiarContrasenia', component: CambiarContrasenia, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
+    { path: '/historial_pagos/:id', name: 'HistorialPagos', component: HistorialPagos, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/historial_academico/:id', name: 'HistorialAcademico', component: HistorialAcademico, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
 ]
 

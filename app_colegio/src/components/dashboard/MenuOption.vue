@@ -48,7 +48,7 @@
             <v-list>
                 <v-list v-for="item in items" :key="item.title">
                     <v-list-tile
-                        @click="navigateTo('route')"
+                        @click="navigateTo(item.path)"
                     >
                     <v-icon>{{item.icon}}</v-icon>
                         <v-list-tile-title>{{item.title}}</v-list-tile-title>
@@ -74,9 +74,11 @@ export default {
         hints: true,
         items: [],
         itemsAlumno: [
-            { title: 'Mis notas',icon:"file_copy" },
-            { title: 'Historial de pagos',icon:"file_copy" },
-            { title: 'Historial academico',icon:"file_copy" }
+            { title: 'Inicio',icon:"home",path:"/" },
+            { title: 'Mis notas',icon:"file_copy",path:"/historial_academico/" },
+            { title: 'Mis asignaciones',icon:"check_circle_outline",path:"/historial_academico/" },
+            { title: 'Historial de pagos',icon:"attach_money", path:"/historial_pagos/" },
+            { title: 'Historial academico',icon:"file_copy", path:"/historial_academico/" }
         ],
 
          itemsProfesor: [
@@ -85,7 +87,7 @@ export default {
         ],
 
          itemsApoderado: [
-            { title: 'Alumnos representados',icon:"account_circle" }
+            { title: 'Alumnos representados',icon:"account_circle", path: '/' }
         ]
     }
   },
@@ -95,9 +97,16 @@ export default {
   },
 
   methods: {
-      navigateTo(route){
+      navigateTo(path){
           let self = this
           self.menu = false
+          var user = self.$store.state.usuario
+          if(user.rol.rol == 'alumno' & path !== '/'){  
+            self.$router.push(path+user.user_info.id)
+            return
+          }
+          self.$router.push(path)
+
       },
 
        getAvatar(user){

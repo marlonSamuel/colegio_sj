@@ -143,6 +143,9 @@ export default {
                 store.dispatch('setInstitucion', r.data.institucion)
                 store.dispatch('setShowSideBar', r.data.user.rol.rol == 'admin' ? true : false)
                 this.getMenus(r.data.user.rol_id)
+                if(r.data.user.rol.rol == 'apoderado'){
+                    self.getAlumnos(r.data.user.user_info.id)
+                }
             }).catch(e => {
 
             })
@@ -176,6 +179,25 @@ export default {
                 }
 
                 this.mapMenu(r.data)
+
+            }).catch(e => {
+
+            })
+    },
+
+    getAlumnos(id) {
+        let self = this
+        self.loading = true
+        store.state.services.apoderadoService
+            .getAlumnos(id)
+            .then(r => {
+                self.loading = false
+                if (r.response !== undefined) {
+                    self.$toastr.error(r.response.data.error, 'error')
+                    return
+                }
+                console.log(r.data)
+                store.dispatch('setAlumnos', r.data)
 
             }).catch(e => {
 

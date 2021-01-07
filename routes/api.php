@@ -52,6 +52,7 @@ Route::resource('apoderados', 'Apoderado\ApoderadoController', ['except' => ['cr
 Route::resource('alumnos.apoderados', 'Alumno\AlumnoApoderadoAlumnoController', ['except' => ['create', 'edit']]);
 Route::resource('alumnos.inscripciones', 'Alumno\AlumnoInscripcionController', ['except' => ['create', 'edit']]);
 Route::resource('apoderado_alumnos', 'Alumno\ApoderadoAlumnoController', ['except' => ['create', 'edit']]);
+Route::resource('apoderados.alumnos', 'Apoderado\ApoderadoApoderadoAlumnoController', ['except' => ['create', 'edit']]);
 Route::resource('telefono_apoderados', 'TelefonoApoderado\TelefonoApoderadoController', ['except' => ['create', 'edit']]);
 Route::resource('apoderado.telefonos', 'Apoderado\ApoderadoTelefonoApoderadoController', ['except' => ['create', 'edit']]);
 Route::resource('inscripciones', 'Inscripcion\InscripcionController', ['except' => ['create', 'edit']]);
