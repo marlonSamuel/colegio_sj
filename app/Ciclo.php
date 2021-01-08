@@ -3,6 +3,7 @@
 namespace App;
 use App\Cuota;
 use App\Inscripcion;
+use App\CicloPeriodoAcademico;
 use Illuminate\Database\Eloquent\Model;
 
 class Ciclo extends Model
@@ -23,5 +24,9 @@ class Ciclo extends Model
     public function cuotas()
     {
         return $this->hasMany(Cuota::class);
+    }
+    public function periodos_academicos()
+    {
+        return $this->hasMany(CicloPeriodoAcademico::class);
     }
 }

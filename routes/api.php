@@ -78,3 +78,6 @@ Route::resource('ciclos.inscripciones', 'Ciclo\CicloInscripcionController', ['ex
 Route::resource('ciclos.pagos', 'Ciclo\CicloPagoController', ['except' => ['create', 'edit']]);
 Route::name('inscripciones_documento')->post('inscripciones_documento', 'Inscripcion\InscripcionController@documento');
 Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);
+Route::resource('periodos_academicos', 'PeriodoAcademico\PeriodoAcademicoController', ['except' => ['create', 'edit']]);
+Route::resource('asignar_cursos_profesores', 'AsignarCursoProfesor\AsignarCursoProfesorController', ['except' => ['create', 'edit']]);
+Route::name('asignar_cursos_profesores_info')->get('asignar_cursos_profesores_info','AsignarCursoProfesor\AsignarCursoProfesorController@cursoGradoNivel');

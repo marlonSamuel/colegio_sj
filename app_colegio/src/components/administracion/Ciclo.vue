@@ -5,7 +5,13 @@
         <v-toolbar-title>Ciclos</v-toolbar-title>
         <v-divider class="mx-2" inset vertical></v-divider>
         <v-spacer></v-spacer>
-        <v-text-field v-model="search" append-icon="search" label="Buscar" single-line hide-details></v-text-field>
+        <v-text-field
+          v-model="search"
+          append-icon="search"
+          label="Buscar"
+          single-line
+          hide-details
+        ></v-text-field>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="800px">
           <template v-slot:activator="{ on }">
@@ -15,7 +21,7 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="headline">{{setTitle}}</span>
+              <span class="headline">{{ setTitle }} Fechas de Bimestres</span>
             </v-card-title>
 
             <v-card-text>
@@ -31,33 +37,74 @@
                       :error-messages="errors.collect('ciclo')"
                     ></v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm4 md64>
-                            <v-text-field
-                            v-model="form.inicio"
-                            label="Fecha Inicio"
-                            v-validate="'required'"
-                            type="date"
-                            data-vv-name="inicio"
-                            :error-messages="errors.collect('form.inicio')"
-                            >
-                            </v-text-field>
+                  <v-flex xs12 sm4 md4>
+                    <v-text-field
+                      v-model="form.inicio"
+                      label="Fecha Inicio"
+                      v-validate="'required'"
+                      type="date"
+                      data-vv-name="inicio"
+                      :error-messages="errors.collect('inicio')"
+                    >
+                    </v-text-field>
                   </v-flex>
                   <v-flex xs12 sm4 md4>
-                            <v-text-field
-                            v-model="form.fin"
-                            label="Fecha fin"
-                            v-validate="'required'"
-                            type="date"
-                            data-vv-name="fin"
-                            :error-messages="errors.collect('form.fin')"
-                            >
-                            </v-text-field>
+                    <v-text-field
+                      v-model="form.fin"
+                      label="Fecha fin"
+                      v-validate="'required'"
+                      type="date"
+                      data-vv-name="fin"
+                      :error-messages="errors.collect('fin')"
+                    >
+                    </v-text-field>
                   </v-flex>
-                  
                   <!--  <v-switch v-if="form.id !== null"
                       v-model="form.actual"
                       :label="`Actual: ${form.actual.toString() === 'false' ?'No':'Si'}`"
                     ></v-switch> -->
+                </v-layout>
+                
+                <v-layout
+                  v-for="f in form.periodos_academicos"
+                  :key="f.id"
+                  wrap
+                >
+                  <v-flex xs12 sm4 md4>
+                    <v-text-field
+                      v-model="f.nombre"
+                      label="Nombre"
+                      filled
+                      readonly
+                      v-validate="'required'"
+                      type="text"
+                      data-vv-name="nombre"
+                      :error-messages="errors.collect('nombre')"
+                    >
+                    </v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm4 md4>
+                    <v-text-field
+                      v-model="f.inicio"
+                      label="Fecha Inicio"
+                      v-validate="'required'"
+                      type="date"
+                      data-vv-name="inicio_bimestre"
+                      :error-messages="errors.collect('inicio_bimestre')"
+                    >
+                    </v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm4 md4>
+                    <v-text-field
+                      v-model="f.fin"
+                      label="Fecha fin"
+                      v-validate="'required'"
+                      type="date"
+                      data-vv-name="fin_bimestre"
+                      :error-messages="errors.collect('fin_bimestre')"
+                    >
+                    </v-text-field>
+                  </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -65,35 +112,67 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="red darken-1" flat @click="close">Volver</v-btn>
-              <v-btn color="blue darken-1" flat @click="createOrEdit">Guardar</v-btn>
+              <v-btn color="blue darken-1" flat @click="createOrEdit"
+                >Guardar</v-btn
+              >
             </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
-      <v-data-table :headers="headers" :items="items" :search="search" class="elevation-1">
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        :search="search"
+        class="elevation-1"
+      >
         <template v-slot:items="props">
-          <td class="text-xs-left">{{ props.item.ciclo }}<v-chip
+          <td class="text-xs-left">
+            {{ props.item.ciclo
+            }}<v-chip
               v-if="props.item.actual"
               small
               color="blue"
               text-color="white"
-            >Actual</v-chip></td>
+              >Actual</v-chip
+            >
+          </td>
           <td class="text-xs-left">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                  <v-icon v-on="on" color="success" fab dark @click="$router.push(`/configurar_cuota/`+props.item.id)">money</v-icon>
+                <v-icon
+                  v-on="on"
+                  color="success"
+                  fab
+                  dark
+                  @click="$router.push(`/configurar_cuota/` + props.item.id)"
+                  >money</v-icon
+                >
               </template>
               <span>Configurar cuotas</span>
             </v-tooltip>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                  <v-icon v-on="on" color="warning" fab dark @click="edit(props.item)">edit</v-icon>
+                <v-icon
+                  v-on="on"
+                  color="warning"
+                  fab
+                  dark
+                  @click="edit(props.item)"
+                  >edit</v-icon
+                >
               </template>
               <span>Editar</span>
             </v-tooltip>
             <v-tooltip top v-if="items.length > 1">
               <template v-slot:activator="{ on }">
-                  <v-icon v-on="on" color="error" fab dark @click="destroy(props.item)">delete</v-icon>
+                <v-icon
+                  v-on="on"
+                  color="error"
+                  fab
+                  dark
+                  @click="destroy(props.item)"
+                  >delete</v-icon
+                >
               </template>
               <span>Eliminar</span>
             </v-tooltip>
@@ -107,12 +186,12 @@
   </v-layout>
 </template>
 <script>
-import moment from 'moment'
-import auth from '../../auth/index'
+import moment from "moment";
+import auth from "../../auth/index";
 export default {
   name: "Ciclo",
   props: {
-    source: String
+    source: String,
   },
   data() {
     return {
@@ -124,144 +203,157 @@ export default {
       items: [],
       headers: [
         { text: "Ciclo", value: "ciclo" },
-        { text: "Acciones", value: "", sortable: false }
+        { text: "Acciones", value: "", sortable: false },
       ],
       pagination: {
-        sortBy: "id"
+        sortBy: "id",
       },
-
+      periodos: [],
       form: {
         id: null,
         ciclo: null,
         actual: true,
-        inicio: '',
-        fin: ''
-      }
+        inicio: "",
+        fin: "",
+        periodos_academicos: [],
+      },
     };
   },
 
   created() {
     let self = this;
     self.getAll();
+    self.getPeriodos();
   },
 
   methods: {
     getAll() {
-      let self = this
-      self.loading = true
+      let self = this;
+      self.loading = true;
 
       self.$store.state.services.cicloService
         .getAll()
-        .then(r => {
-          self.loading = false
-          self.items = r.data
-          
-          self.$nextTick(()=>{
-            events.$emit('update_ciclo',r.data)
-          })
+        .then((r) => {
+          self.loading = false;
+          self.items = r.data;
 
+          self.$nextTick(() => {
+            events.$emit("update_ciclo", r.data);
+          });
         })
-        .catch(r => {});
+        .catch((r) => {});
+    },
+    getPeriodos() {
+      let self = this;
+      self.loading = true;
+
+      self.$store.state.services.periodoAcademicoService
+        .getAll()
+        .then((r) => {
+          self.loading = false;
+          self.periodos = r.data;
+          self.mapPeriodos(self.periodos);
+        })
+        .catch((r) => {});
     },
 
     //funcion para guardar registro
     create() {
-      let self = this
-      self.loading = true
-      let data = self.form
-      if(self.items.some(x=>x.ciclo == data.ciclo)){
-        this.$toastr.error('ciclo ya fue agregado','error')
-        return
+      let self = this;
+      self.loading = true;
+      let data = self.form;
+      if (self.items.some((x) => x.ciclo == data.ciclo)) {
+        this.$toastr.error("ciclo ya fue agregado", "error");
+        return;
       }
 
-      let estado = data.actual === false ? 0 : 1
-      data.actual = estado
+      let estado = data.actual === false ? 0 : 1;
+      data.actual = estado;
       self.$store.state.services.cicloService
         .create(data)
-        .then(r => {
+        .then((r) => {
           self.loading = false;
           if (self.$store.state.global.captureError(r)) {
             return;
           }
           this.$toastr.success("registro agregado con éxito", "éxito");
-          self.getAll()
-          self.$store.dispatch('setCiclo', r.data)
-          self.close()
+          self.getAll();
+          self.$store.dispatch("setCiclo", r.data);
+          self.close();
         })
-        .catch(r => {});
+        .catch((r) => {});
     },
 
     //funcion para actualizar registro
     update() {
-      let self = this
-      let data = self.form
+      let self = this;
+      let data = self.form;
 
-      var items_filter = self.items.filter(x=>x.id !== data.id)
-      if(items_filter.some(x=>x.ciclo == data.ciclo)){
-        this.$toastr.error('ciclo ya fue agregado','error')
-        return
+      var items_filter = self.items.filter((x) => x.id !== data.id);
+      if (items_filter.some((x) => x.ciclo == data.ciclo)) {
+        this.$toastr.error("ciclo ya fue agregado", "error");
+        return;
       }
 
-      if(!data.actual && items_filter.filter(x=>x.actual).length == 0){
-        this.$toastr.error('debe haber al menos un ciclo activo','error')
-        return
+      if (!data.actual && items_filter.filter((x) => x.actual).length == 0) {
+        this.$toastr.error("debe haber al menos un ciclo activo", "error");
+        return;
       }
-      
-      let estado = data.actual === false ? 0 : 1
-      data.actual = estado
-      self.loading = true
+
+      let estado = data.actual === false ? 0 : 1;
+      data.actual = estado;
+      self.loading = true;
       self.$store.state.services.cicloService
         .update(data)
-        .then(r => {
+        .then((r) => {
           self.loading = false;
           if (self.$store.state.global.captureError(r)) {
             return;
           }
-          self.getAll()
-          this.$toastr.success("registro actualizado con éxito", "éxito")
-          self.close()
+          self.getAll();
+          this.$toastr.success("registro actualizado con éxito", "éxito");
+          self.close();
         })
-        .catch(r => {
-        });
+        .catch((r) => {});
     },
 
     //funcion para eliminar registro
     destroy(data) {
       let self = this;
       self
-        .$confirm("Seguro que desea eliminar ciclo "+ data.ciclo + "?")
-        .then(res => {
+        .$confirm("Seguro que desea eliminar ciclo " + data.ciclo + "?")
+        .then((res) => {
           self.loading = true;
           self.$store.state.services.cicloService
             .destroy(data)
-            .then(r => {
+            .then((r) => {
               self.loading = false;
               if (self.$store.state.global.captureError(r)) {
                 return;
               }
               self.getAll();
-              this.$toastr.success("registro eliminado con exito", "exito")
-              
-              if(data.actual){
-                auth.getCicloActual()
+              this.$toastr.success("registro eliminado con exito", "exito");
+
+              if (data.actual) {
+                auth.getCicloActual();
               }
-              self.close()
+              self.close();
             })
-            .catch(r => {});
+            .catch((r) => {});
         })
-        .catch(cancel => {});
+        .catch((cancel) => {});
     },
 
     //limpiar data de formulario
     clearData() {
       let self = this;
 
-      Object.keys(self.form).forEach(function(key, index) {
-        if (typeof self.form[key] === "string") self.form[key] = '';
+      Object.keys(self.form).forEach(function (key, index) {
+        if (typeof self.form[key] === "string") self.form[key] = "";
         else if (typeof self.form[key] === "boolean") self.form[key] = true;
         else if (typeof self.form[key] === "number") self.form[key] = null;
       });
-
+      self.mapPeriodos(self.periodos);
       self.$validator.reset();
     },
 
@@ -274,18 +366,47 @@ export default {
 
     //mapear datos a formulario
     mapData(data) {
-      let self = this
-      self.form.id = data.id
-      self.form.ciclo = data.ciclo
+      let self = this;
+
+      self.form.id = data.id;
+
+      self.form.ciclo = data.ciclo;
       //self.form.actual = data.actual === 1 || null ? true : false
-      self.form.inicio = data.inicio
-      self.form.fin = data.fin
+      self.form.inicio = data.inicio;
+      self.form.fin = data.fin;
+      this.mapPeriodos(
+        data.periodos_academicos.length > 0 ? data.periodos_academicos : self.periodos
+      );
+      console.log(self.form);
+    },
+
+    mapPeriodos(data) {
+      console.log(data);
+      let self = this;
+      self.form.periodos_academicos = [];
+      data.forEach((element) => {
+        self.form.periodos_academicos.push({
+          id: element.periodo_academico_id === undefined ? null : element.id,
+          ciclo_id: self.form.id != null ? self.form.id : null,
+          periodo_academico_id:
+            element.periodo_academico_id === undefined
+              ? element.id
+              : element.periodo_academico_id,
+          nombre:
+            element.periodo_academico === undefined
+              ? element.nombre
+              : element.periodo_academico.nombre,
+          inicio: element.inicio,
+          fin: element.fin,
+          actual:true
+        });
+      });
     },
 
     //funcion, validar si se guarda o actualiza
     createOrEdit() {
-      let self = this
-      this.$validator.validateAll().then(result => {
+      let self = this;
+      this.$validator.validateAll().then((result) => {
         if (result) {
           if (self.form.id > 0 && self.form.id !== null) {
             self.update();
@@ -294,25 +415,24 @@ export default {
           }
         }
       });
-
     },
 
     cancelar() {
-      let self = this
+      let self = this;
     },
 
     close() {
-      let self = this
-      self.dialog = false
-      self.clearData()
-    }
+      let self = this;
+      self.dialog = false;
+      self.clearData();
+    },
   },
 
   computed: {
     setTitle() {
       let self = this;
-      return self.form.id !== null ? self.form.ciclo : "Nuevo Registro"
-    }
-  }
+      return self.form.id !== null ? self.form.ciclo : "Nuevo Registro";
+    },
+  },
 };
 </script>

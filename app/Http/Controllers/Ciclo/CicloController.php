@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ciclo;
 
 use App\Alumno;
 use App\Ciclo;
+use App\CicloPeriodoAcademico;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Pago;
@@ -19,7 +20,7 @@ class CicloController extends ApiController
     }
     public function index()
     {
-        $ciclo = Ciclo::all();
+        $ciclo = Ciclo::with('periodos_academicos','periodos_academicos.periodo_academico')->get();
         return $this->showAll($ciclo);
     }
 
@@ -37,7 +38,7 @@ class CicloController extends ApiController
             'fin' => 'required'
         ];
         $this->validate($request, $reglas);
-
+        
         DB::beginTransaction();
 
             $data = $request->all();
@@ -50,6 +51,15 @@ class CicloController extends ApiController
             }
 
             $ciclo = Ciclo::create($data);
+            foreach ($request->periodos_academicos as $key => $value) {
+                $periodos = CicloPeriodoAcademico::create([
+                    'ciclo_id'=> $ciclo->id,
+                    'periodo_academico_id'=>$value['periodo_academico_id'],
+                    'inicio'=>$value['inicio'],
+                    'fin'=> $value['fin'],
+                    'actual'=> $value['periodo_academico_id'] == 1 ? true : false
+                ]);
+            }
         DB::commit();
 
         return $this->showOne($ciclo, 201);
@@ -82,6 +92,7 @@ class CicloController extends ApiController
         $ciclo->fin = $request->fin;
         $ciclo->actual = $request->actual;
 
+        $periodos_academicos = $request->periodos_academicos;
         if($request->actual){
             $activos = Ciclo::where('actual',true)->get();
             foreach ($activos as $activo) {
@@ -89,6 +100,16 @@ class CicloController extends ApiController
                 $activo->save();
             }
         }
+        foreach ($periodos_academicos as $key => $value) {
+            $periodo = CicloPeriodoAcademico::where('id',$value['id'])->firstOrFail();
+            $periodo->inicio = $value['inicio'];
+            $periodo->fin = $value['fin'];
+            $periodo->actual = $value['actual'];
+            //$periodo->periodo_academico_id = $value->periodo_academico_id;
+            //$periodo->ciclo_id = $value->ciclo_id;
+            $periodo->save();
+        }
+        
 
         if (!$ciclo->isDirty()) {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
@@ -113,6 +134,9 @@ class CicloController extends ApiController
 
         if(count($ciclo->cuotas)>0){
             return $this->errorResponse('No se puede eliminar ciclo escolar porque ya tiene cuotas asignadas', 422);
+        }
+        if(count($ciclo->periodos_academicos)>0){
+            return $this->errorResponse('No se puede eliminar ciclo escolar porque ya tiene bimestres', 422);
         }
 
         if($ciclo->actual){
