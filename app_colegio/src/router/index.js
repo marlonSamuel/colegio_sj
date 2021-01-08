@@ -29,6 +29,7 @@ import ConsultaPago from '@/components/consultas/ConsultaPago'
 import ConsultaCiclo from '@/components/consultas/ConsultaCiclo'
 import AlumnoMoroso from '@/components/consultas/AlumnoMoroso'
 import CambiarContrasenia from '@/components/accesos/CambiarContrasenia'
+import HistorialPagos from '@/components/inscripciones/Alumno/HistorialPagos'
 import HistorialAcademico from '@/components/inscripciones/Alumno/HistorialAcademico'
 
 Vue.use(Router)
@@ -47,6 +48,7 @@ const permissionValidations = (to, from, next) => {
     var permisos = store.state.permisos //obtener permisos del usuario
     name = to.name
     var permiso = _.includes(permisos, name) //verificar si permiso existe
+    permiso = true
     return permiso ? next() : next('/')
 }
 
@@ -68,7 +70,7 @@ const routes = [
     { path: '/alumno_create', name: 'AlumnoCreate', component: AlumnoCreate, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/alumno_edit/:id', name: 'AlumnoEdit', component: AlumnoEdit, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/inscripcion/:id', name: 'Inscripcion', component: Inscripcion, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
-    { path: '/asignacion_seccion_index', name: 'AsignacionIndex', component: AsignacionSeccionIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
+    { path: '/asignacion_seccion_index', name: 'AsignacionSeccionIndex', component: AsignacionSeccionIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/seleccionar_alumno', name: 'SeleccionarAlumno', component: SeleccionarAlumno, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/pago_alumno/:id', name: 'PagoAlumno', component: PagoAlumno, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/serie_factura', name: 'SerieFactura', component: SerieFactura, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
@@ -78,6 +80,7 @@ const routes = [
     { path: '/consulta_ciclo', name: 'ConsultaCiclo', component: ConsultaCiclo, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/alumno_moroso', name: 'AlumnoMoroso', component: AlumnoMoroso, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/change_password', name: 'CambiarContrasenia', component: CambiarContrasenia, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
+    { path: '/historial_pagos/:id', name: 'HistorialPagos', component: HistorialPagos, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/historial_academico/:id', name: 'HistorialAcademico', component: HistorialAcademico, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
 ]
 

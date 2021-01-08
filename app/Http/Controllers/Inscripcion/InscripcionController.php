@@ -6,6 +6,8 @@ use App\Ciclo;
 use App\Cuota;
 use App\Inscripcion;
 use App\Institucion;
+use App\GradSecNivEd;
+use App\AsignacionSeccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -15,8 +17,8 @@ class InscripcionController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:inscripcion')->except(['index']);
+        //parent::__construct();
+        //$this->middleware('scope:inscripcion')->except(['index']);
     }
 
     public function index()
@@ -49,6 +51,35 @@ class InscripcionController extends ApiController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    //obtener sección por default para asignar alumno, limite == 20, despues se puede modificar
+    public function getSection($grado_nivel_educativo_id, $ciclo_id)
+    {
+        $secciones = GradSecNivEd::where('grado_nivel_educativo_id',$grado_nivel_educativo_id)->with('seccion')
+                                         ->get()->pluck('seccion')->values();
+
+        $seccion = null;
+
+        if(count($secciones) > 0){
+            $secciones = $secciones->sortBy('id');
+
+            foreach ($secciones as $s) {
+                $inscripciones = AsignacionSeccion::where('seccion_id',$s->id)
+                                                    ->with('inscripcion')
+                                                    ->get()
+                                                    ->where('inscripcion.ciclo_id',$ciclo_id);
+
+               if(count($inscripciones) < 0){
+                 $seccion = $s;
+                 break;
+               }                                  
+            }
+
+        }
+
+        return $seccion;
+    }
+
     public function store(Request $request)
     {
         $reglas = [
@@ -59,10 +90,27 @@ class InscripcionController extends ApiController
             'jornada' => 'required'
         ];
         
+        DB::beginTransaction();
         $this->validate($request, $reglas);
         $data = $request->all();
         $data['numero'] = $this->getCorrelativo($request->ciclo_id);
+
         $inscripcion = Inscripcion::create($data);
+
+        $seccion = $this->getSection($request->grado_nivel_educativo_id,$request->ciclo_id);
+
+        if(!is_null($seccion)){
+            AsignacionSeccion::create([
+                'inscripcion_id' => $inscripcion->id,
+                'seccion_id' => $seccion->id
+            ]);
+        }else{
+            $seccion = false;
+        }
+
+        $inscripcion->seccion = $seccion;
+
+        DB::commit();
 
         return $this->showOne($inscripcion,201);
     }

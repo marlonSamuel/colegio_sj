@@ -36,6 +36,7 @@ Route::resource('gradoNivelEducativos', 'GradoNivelEducativo\GradoNivelEducativo
 Route::resource('gradoNivelEducativosCursos', 'GradoNivelEducativo\CursoGradoNivelController', ['except' => ['create', 'edit']]);
 Route::resource('gradoNivelEducativosSecciones', 'GradoNivelEducativo\GradoNivelEducativoSecController', ['except' => ['create', 'edit']]);
 Route::resource('gradoNivelEducativosInscripciones', 'GradoNivelEducativo\GradoNivelEducativoInscripcionController', ['except' => ['create', 'edit']]);
+Route::name('gradoNivelEducativosGetSecciones')->get('gradoNivelEducativosGetSecciones/{id}', 'GradoNivelEducativo\GradoNivelEducativoController@secciones');
 
 Route::resource('ciclos', 'Ciclo\CicloController', ['except' => ['create', 'edit']]);
 Route::resource('concepto_pagos', 'ConceptoPago\ConceptoPagoController', ['except' => ['create', 'edit']]);
@@ -51,6 +52,7 @@ Route::resource('apoderados', 'Apoderado\ApoderadoController', ['except' => ['cr
 Route::resource('alumnos.apoderados', 'Alumno\AlumnoApoderadoAlumnoController', ['except' => ['create', 'edit']]);
 Route::resource('alumnos.inscripciones', 'Alumno\AlumnoInscripcionController', ['except' => ['create', 'edit']]);
 Route::resource('apoderado_alumnos', 'Alumno\ApoderadoAlumnoController', ['except' => ['create', 'edit']]);
+Route::resource('apoderados.alumnos', 'Apoderado\ApoderadoApoderadoAlumnoController', ['except' => ['create', 'edit']]);
 Route::resource('telefono_apoderados', 'TelefonoApoderado\TelefonoApoderadoController', ['except' => ['create', 'edit']]);
 Route::resource('apoderado.telefonos', 'Apoderado\ApoderadoTelefonoApoderadoController', ['except' => ['create', 'edit']]);
 Route::resource('inscripciones', 'Inscripcion\InscripcionController', ['except' => ['create', 'edit']]);
@@ -81,3 +83,13 @@ Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', '
 Route::resource('periodos_academicos', 'PeriodoAcademico\PeriodoAcademicoController', ['except' => ['create', 'edit']]);
 Route::resource('asignar_cursos_profesores', 'AsignarCursoProfesor\AsignarCursoProfesorController', ['except' => ['create', 'edit']]);
 Route::name('asignar_cursos_profesores_info')->get('asignar_cursos_profesores_info','AsignarCursoProfesor\AsignarCursoProfesorController@cursoGradoNivel');
+
+Route::resource('asignacion_secciones', 'Inscripcion\AsignacionSeccionController', ['except' => ['create', 'edit']]);
+Route::name('asignacion_secciones_get_all')->get('asignacion_secciones_get_all/{ciclo_id}/{grado_nivel_educativo_id}', 'Inscripcion\AsignacionSeccionController@getAll');
+
+Route::name('asignacion_secciones_get_all_without_section')->get('asignacion_secciones_get_all_without_section/{ciclo_id}/{grado_nivel_educativo_id}', 'Inscripcion\AsignacionSeccionController@getWithoutSection');
+
+
+
+
+//Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);

@@ -14,6 +14,7 @@ const state = {
     menu: [],
     showSideBar: false,
     permisos: [],
+    alumnos: [],//solo en caso de rol apoderado
     usuario: {},
     ciclo: {},
     institucion: {},
@@ -69,6 +70,10 @@ const mutations = {
     setPermisos(state, permisos) {
         state.permisos = permisos
     },
+
+    setAlumnos(state, alumnos) {
+        state.alumnos = alumnos
+    },
 }
 
 const actions = {
@@ -117,6 +122,10 @@ const actions = {
     setPermisos({ commit }, permisos) {
         commit('setPermisos', permisos)
     },
+
+    setAlumnos({ commit }, alumnos) {
+        commit('setAlumnos', alumnos)
+    }
 }
 
 export default new Vuex.Store({

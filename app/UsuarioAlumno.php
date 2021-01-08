@@ -15,7 +15,7 @@ class UsuarioAlumno extends Model
 
     public function alumno()
     {
-        return $this->belongsTo(Alumno::class,);
+        return $this->belongsTo(Alumno::class);
     }
 
     public function user()

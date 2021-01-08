@@ -22,6 +22,11 @@ class ApoderadoService {
         return self.axios.get(`${self.baseUrl}/${id}/telefonos`);
     }
 
+    getAlumnos(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}/${id}/alumnos`);
+    }
+
     create(data) {
         let self = this;
         return self.axios.post(`${self.baseUrl}`, data);

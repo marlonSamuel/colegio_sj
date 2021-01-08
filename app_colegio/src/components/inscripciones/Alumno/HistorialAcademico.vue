@@ -2,7 +2,7 @@
   <v-layout align-start>
     <v-flex>
         <v-layout row wrap justify-end>
-            <div>
+            <div v-if="isAdmin">
                 <v-breadcrumbs :items="itemsB">
                 <template v-slot:divider>
                     <v-icon>forward</v-icon>
@@ -15,7 +15,7 @@
         <v-toolbar-title v-if="alumno !== null">Historial academico {{getName(alumno,true)}} </v-toolbar-title>
       </v-toolbar>
       <v-layout wrap>
-          <v-flex xs12 md9 sm9 lg9>
+          <v-flex xs12 md12 sm12 lg12>
             <v-card v-if="alumno !== null">
                     <v-card-text>
                         <v-layout row wrap>
@@ -60,24 +60,6 @@
                     </v-card-text>
                 </v-card>
           </v-flex>
-          <v-flex md4 sm4 xs12 lg3 style="padding-left: 5px;">
-            <v-card v-if="alumno !== null">
-                <v-card-title>
-                    <h4 class="primary--text"><v-icon small color="blue">account_balance</v-icon> Cuenta # {{alumno.codigo}}</h4>
-                </v-card-title>
-                <v-card-text>
-                    <v-btn block :color="saldo > 0 ? 'red lighten-2' : 'green lighten-2' " dark>{{saldo > 0 ? 'Alumno moroso':'Alumno solvente'}}</v-btn>
-                    <v-btn block color="blue lighten-2" dark>Saldo total hasta fecha <br /> {{current_date | moment('DD/MM/YYYY')}}</v-btn>
-                    <div class="text-xs-center">
-                        <h3>{{saldo | currency('Q ')}}</h3>
-                    </div>
-                    <v-btn block color="warning" dark>adeudos por pagos <br /> al credito</v-btn>
-                    <div class="text-xs-center">
-                        <h3>{{pagosParciales(pagos) | currency('Q ')}}</h3>
-                    </div>
-                </v-card-text>
-            </v-card>
-            </v-flex>
       </v-layout>
         
         
@@ -91,24 +73,6 @@
                             <el-divider></el-divider>
                             <inscripciones></inscripciones>
                     </el-tab-pane>
-                    <el-tab-pane label="1">
-                        <span slot="label"><v-icon small color="blue">money</v-icon> Pagos</span>
-                        <b> Pagos realizados</b>
-                        <el-divider></el-divider>
-                        <pagos></pagos>
-                    </el-tab-pane>
-                    <el-tab-pane label="0">
-                        <span slot="label"><v-icon small color="blue">money</v-icon> Otros pagos</span>
-                        <b> Otros pagos</b>
-                        <el-divider></el-divider>
-                        <pagos></pagos>
-                    </el-tab-pane>
-                    <el-tab-pane>
-                        <span slot="label"><v-icon small color="blue">money</v-icon> Pagos atrasados</span>
-                        <b> Pagos atrasados </b>
-                        <el-divider></el-divider>
-                        <pagos-atrasados></pagos-atrasados>
-                    </el-tab-pane>
                 </el-tabs>
             </v-flex>
         </v-layout>
@@ -119,15 +83,11 @@
 <script>
 import moment from 'moment'
 import Inscripciones from './detalle_historial/Inscripciones'
-import Pagos from './detalle_historial/Pagos'
-import PagosAtrasados from './detalle_historial/PagosAtrasados'
 
 export default {
-  name: "ExampleIndex",
+  name: "HistorialAcademico",
   components: {
-      Inscripciones,
-      Pagos,
-      PagosAtrasados
+      Inscripciones
   },
   props: {
       source: String
@@ -224,26 +184,18 @@ export default {
             });
         }
 
-    },
-
-    pagosParciales(pagos){
-        let self = this
-        pagos = pagos.filter(x=>!x.anulado && !x.pagado)
-
-        return self.totalParciales(pagos)
-    },
-
-    totalParciales(data){
-        let self = this
-        var total = data.reduce((a, b) => {
-            return a + parseFloat(b.total - b.total_cancelado)
-        },0);
-
-        return total
     }
   },
 
   computed: {
+        isAdmin(){
+            let self = this
+            var user = self.$store.state.usuario
+            if(!_.isEmpty(user) && user.rol.rol === 'admin'){
+                return true
+            }
+            return false
+        }
     },
 };
 </script>

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Municipio;
 use App\TelefonoApoderado;
+use App\ApoderadoAlumno;
 use Illuminate\Database\Eloquent\Model;
 
 class Apoderado extends Model
@@ -35,5 +36,10 @@ class Apoderado extends Model
     public function municipio()
     {
         return $this->belongsTo(Municipio::class);
+    }
+
+    public function alumnos()
+    {
+        return $this->hasMany(ApoderadoAlumno::class,'apoderado_id');
     }
 }

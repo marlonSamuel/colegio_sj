@@ -30,6 +30,7 @@ import RolService from '../services/RolService'
 import EmpleadoService from '../services/EmpleadoService'
 import CargoService from '../services/CargoService'
 import PeriodoAcademicoService from '../services/PeriodoAcademicoService'
+import AsignacionSeccionService from '../services/AsignacionSeccionService'
 
 //let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
 let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
@@ -107,5 +108,6 @@ export default {
     rolService: new RolService(Axios, baseUrl),
     empleadoService: new EmpleadoService(Axios, baseUrl),
     cargoService: new CargoService(Axios, baseUrl),
-    periodoAcademicoService:new PeriodoAcademicoService(Axios,baseUrl)
+    periodoAcademicoService:new PeriodoAcademicoService(Axios,baseUrl),
+    asignacionSeccionService: new AsignacionSeccionService(Axios, baseUrl)
 }

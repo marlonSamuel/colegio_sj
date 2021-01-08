@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AsignacionSeccion extends Model
 {
-	protected $table = 'asignacion_sessions';
+	protected $table = 'asignacion_seccions';
 
     protected $fillable = [
 		'inscripcion_id',

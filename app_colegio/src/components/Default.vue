@@ -120,13 +120,8 @@
         </v-flex>
 
       </v-layout>
-      <v-layout v-else wrap>
-        <v-layout v-if="rol == 'alumno'">
-          <v-flex sm6 md6 xs12 lg6>
-            <panel-alumno></panel-alumno>
-          </v-flex>
-        </v-layout>
-      </v-layout>
+      <panel-alumno v-if="rol == 'alumno'"></panel-alumno>
+      <panel-apoderado v-if="rol == 'apoderado'"></panel-apoderado>
   </v-layout>
 </template>
 
@@ -136,6 +131,7 @@ import Conceptos from './dashboard/PagosConceptos'
 import Inscripciones from './dashboard/InscripcionesCiclo'
 import {RotatingSpinner} from 'vue-image-spinner'
 import PanelAlumno from './dashboard/PanelAlumno'
+import PanelApoderado from './dashboard/PanelApoderado'
 
 export default {
   name: "default",
@@ -144,7 +140,8 @@ export default {
     Conceptos,
     Inscripciones,
     RotatingSpinner,
-    PanelAlumno
+    PanelAlumno,
+    PanelApoderado
   },
   props: {
  
