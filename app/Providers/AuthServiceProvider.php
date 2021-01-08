@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Menu;
+use App\Alumno;
+use App\Policies\AlumnoPolicy;
 use Carbon\Carbon;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -16,7 +18,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        Alumno::class => AlumnoPolicy::class,
     ];
 
     /**
@@ -30,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes();
 
-        Passport::tokensExpireIn(Carbon::now()->addMinutes(350));
+        Passport::tokensExpireIn(Carbon::now()->addMinutes(1000));
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(15));
 
         $menus = Menu::all(); 

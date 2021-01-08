@@ -83,7 +83,7 @@ export default {
 
          itemsProfesor: [
             { title: 'Mis cursos',icon:"file_copy" },
-            { title: 'Mis alumnos',icon:"account_circle" }
+            { title: 'Asignaciones',icon:"account_circle" }
         ],
 
          itemsApoderado: [
