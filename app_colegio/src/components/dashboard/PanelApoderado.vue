@@ -1,7 +1,4 @@
 <template>
-    <v-layout align-start>
-    <v-flex>
-        <v-layout row wrap>
         <v-layout justify-center>
             <v-flex xs12 sm12 md12 lg12>
             <v-toolbar color="blue-grey" dark>
@@ -14,50 +11,58 @@
                 grid-list-md
                 >
                 <v-layout row wrap>
-                    <v-flex
-                    v-for="card in getAlumnos"
-                    :key="card.title"
-                    v-bind="{ [`xs${card.flex}`]: true }"
-                    >
-                    <v-card>
-                        <v-img
-                        :src="card.src"
-                        height="300px"
-                        >
-                        <v-container
-                            fill-height
-                            fluid
-                            pa-2
-                        >
-                            <v-layout fill-height>
-                            <v-flex xs12 align-end flexbox>
-                                <h2 class="black--text darken-4" v-text="card.title"></h2>
+                    <v-flex xs12 md3 lg3 v-for="card in getAlumnos" :key="card.id">
+                        <v-card color="blue lighten-5" class="black--text">
+                        <v-layout>
+                            <v-flex xs5>
+                            <v-img
+                                :src="card.src"
+                                height="150px"
+                                contain
+                            ></v-img>
                             </v-flex>
-                            </v-layout>
-                        </v-container>
-                        </v-img>
-
-                        <v-card-actions>
-                        <v-btn small flat color="blue">
-                            <v-icon>file_copy</v-icon> Notas
-                        </v-btn>
-                        <v-btn small flat color="blue"  @click="$router.push(`/historial_pagos/`+card.id)">
-                            <v-icon>money</v-icon> Pagos
-                        </v-btn>
-                        <v-btn small flat color="blue" @click="$router.push(`/historial_academico/`+card.id)">
-                            <v-icon>file_copy</v-icon> Historial academico
-                        </v-btn>
+                            <v-flex xs7>
+                            <v-card-title primary-title>
+                                <div>
+                                    <div class="headline">{{card.title}}</div>
+                                </div>
+                            </v-card-title>
+                            </v-flex>
+                        </v-layout>
+                        <v-divider light></v-divider>
+                        <v-card-actions class="pa-2">
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn small flat color="blue" v-on="on" @click="$router.push(`/historial_pagos/`+card.id)">
+                                        <v-icon>file_copy</v-icon> Notas
+                                    </v-btn>
+                                </template>
+                                <span>Ir notas</span>
+                            </v-tooltip>
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn small flat color="blue" v-on="on" @click="$router.push(`/historial_pagos/`+card.id)">
+                                        <v-icon>money</v-icon> Pagos
+                                    </v-btn>
+                                </template>
+                                <span>Ir historial de pagos</span>
+                            </v-tooltip>
+                            <v-tooltip top>
+                                <template v-slot:activator="{ on }">
+                                    <v-btn small flat color="blue" v-on="on" @click="$router.push(`/historial_academico/`+card.id)">
+                                        <v-icon>file_copy</v-icon> Historial
+                                    </v-btn>
+                                </template>
+                                <span>Ir historial academico</span>
+                            </v-tooltip>
                         </v-card-actions>
-                    </v-card>
+                        </v-card>
                     </v-flex>
                 </v-layout>
                 </v-container>
             </v-card>
             </v-flex>
         </v-layout>
-        </v-layout>
-    </v-flex>
-  </v-layout>
 </template>
 
 <script>
@@ -69,11 +74,7 @@ export default {
   data() {
     return {
         loading: false,
-        items: [],
-        cards: [
-            { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-            { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 }
-        ]
+        items: []
     }
   },
 
