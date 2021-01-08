@@ -84,6 +84,8 @@ Route::resource('periodos_academicos', 'PeriodoAcademico\PeriodoAcademicoControl
 Route::resource('asignar_cursos_profesores', 'AsignarCursoProfesor\AsignarCursoProfesorController', ['except' => ['create', 'edit']]);
 Route::name('asignar_cursos_profesores_info')->get('asignar_cursos_profesores_info','AsignarCursoProfesor\AsignarCursoProfesorController@cursoGradoNivel');
 
+Route::name('asignar_cursos_profesores_get_all')->get('asignar_cursos_profesores_get_all/{profesor_id}','AsignarCursoProfesor\AsignarCursoProfesorController@getAll');
+
 Route::resource('asignacion_secciones', 'Inscripcion\AsignacionSeccionController', ['except' => ['create', 'edit']]);
 Route::name('asignacion_secciones_get_all')->get('asignacion_secciones_get_all/{ciclo_id}/{grado_nivel_educativo_id}', 'Inscripcion\AsignacionSeccionController@getAll');
 

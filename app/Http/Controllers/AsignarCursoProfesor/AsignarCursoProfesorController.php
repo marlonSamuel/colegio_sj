@@ -20,10 +20,13 @@ class AsignarCursoProfesorController extends ApiController
 
     public function index()
     {
-        $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo','grado_nivel_educativo.nivelEducativo','grado_nivel_educativo.grado','curso')->get();
-
-        $data = $this->prepareData($curso_niveles);
-        return $this->showQuery($data);
+        $curso_niveles = AsignarCursoProfesor::all();
+        return $this->showAll($curso_niveles);
+    }
+    public function getAll($idProfesor)
+    {
+        $curso_niveles = AsignarCursoProfesor::where('empleado_id',$idProfesor)->get();
+        return $this->showAll($curso_niveles);
     }
 
     public function cursoGradoNivel(){
@@ -60,10 +63,10 @@ class AsignarCursoProfesorController extends ApiController
         DB::beginTransaction();
         $data = $request->all();
         $curso_nivel = AsignarCursoProfesor::create($data);
-        foreach ($request->seccion as $key => $value) {
+        foreach ($request->secciones as $seccion) {
             $curso_prof_secc = AsignarCursoProfSec::create([
                 'asignar_curso_profersor_id'=>$curso_nivel->id,
-                'seccion_id'=>$value['seccion_id']
+                'seccion_id'=>$seccion
             ]);
         }
         DB::commit();
