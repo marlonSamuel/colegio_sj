@@ -92,7 +92,7 @@ class AuthController extends Controller
     public function getAllScopes(User $user)
     {
         $scopes = [];
-        $menus = $user->rol->with('menus')->get()->pluck('menus')->collapse();
+        $menus = $user->rol()->with('menus')->get()->pluck('menus')->collapse();
 
         foreach ($menus as $menu) {
             $name = strtolower($menu->name);

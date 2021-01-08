@@ -22,6 +22,8 @@ class AlumnoController extends ApiController
     {
         parent::__construct();
         $this->middleware('scope:alumnoindex')->only(['create','update','destroy']);
+        $this->middleware('scope:historialacademico')->only(['historialAlumno']);
+        $this->middleware('can:history,App\Alumno,id')->only('historialAlumno');
     }
 
     public function index()
@@ -277,6 +279,11 @@ class AlumnoController extends ApiController
 
     public function historialAlumno($id){
         $alumno = Alumno::where('id',$id)->with('responsable.apoderado')->first();
+
+        if(is_null($alumno)){
+            return $this->errorResponse('alumno no encontrado',404);
+        }
+
         $inscripciones = $alumno->inscripciones()->with('ciclo','grado_nivel_educativo.grado','grado_nivel_educativo.nivelEducativo')->get();
         $pagos = $alumno->inscripciones()->with('pagos.serie','pagos.pagos_parciales', 'pagos.pagos_meses','pagos.cuota.concepto_pago','pagos.cuota.ciclo')->get()->pluck('pagos')->collapse()->values();
 

@@ -48,7 +48,6 @@ const permissionValidations = (to, from, next) => {
     var permisos = store.state.permisos //obtener permisos del usuario
     name = to.name
     var permiso = _.includes(permisos, name) //verificar si permiso existe
-    permiso = true
     return permiso ? next() : next('/')
 }
 
