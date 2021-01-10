@@ -122,6 +122,7 @@
       </v-layout>
       <panel-alumno v-if="rol == 'alumno'"></panel-alumno>
       <panel-apoderado v-if="rol == 'apoderado'"></panel-apoderado>
+      <panel-profesor v-if="rol == 'profesor'"></panel-profesor>
   </v-layout>
 </template>
 
@@ -132,6 +133,7 @@ import Inscripciones from './dashboard/InscripcionesCiclo'
 import {RotatingSpinner} from 'vue-image-spinner'
 import PanelAlumno from './dashboard/PanelAlumno'
 import PanelApoderado from './dashboard/PanelApoderado'
+import PanelProfesor from './dashboard/PanelProfesor'
 
 export default {
   name: "default",
@@ -141,7 +143,8 @@ export default {
     Inscripciones,
     RotatingSpinner,
     PanelAlumno,
-    PanelApoderado
+    PanelApoderado,
+    PanelProfesor
   },
   props: {
  

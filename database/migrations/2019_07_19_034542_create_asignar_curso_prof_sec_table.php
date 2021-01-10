@@ -15,10 +15,10 @@ class CreateAsignarCursoProfSecTable extends Migration
     {
         Schema::create('asignar_curso_prof_sec', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('asignar_curso_profersor_id');
+            $table->unsignedBigInteger('asignar_curso_profresor_id');
             $table->unsignedBigInteger('seccion_id');
 
-            $table->foreign('asignar_curso_profersor_id')->references('id')->on('asignar_curso_profesor');
+            $table->foreign('asignar_curso_profresor_id')->references('id')->on('asignar_curso_profesor');
             $table->foreign('seccion_id')->references('id')->on('secciones');
             $table->timestamps();
         });

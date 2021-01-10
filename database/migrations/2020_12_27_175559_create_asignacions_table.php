@@ -15,17 +15,18 @@ class CreateAsignacionsTable extends Migration
     {
         Schema::create('asignacions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('asignar_curso_prof_sec_id');
+            $table->unsignedBigInteger('asignar_curso_profresor_id');
             $table->boolean('cuestionario')->default(0);
             $table->decimal('nota',5,2);
+            $table->string('titulo',50);
             $table->string('descripcion',500);
             $table->date('fecha_entrega');
             $table->date('fecha_habilitacion');
-            $table->integer('tiempo')->nullable();
+            $table->integer('tiempo')->default(0);
             $table->boolean('entrega_tarde')->default(0);
             $table->string('adjunto',100)->nullable();
 
-            $table->foreign('asignar_curso_prof_sec_id')->references('id')->on('asignar_curso_prof_sec')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('asignar_curso_profresor_id')->references('id')->on('asignar_curso_profresor')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

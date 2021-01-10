@@ -15,7 +15,7 @@ class EmpleadoController extends ApiController
 {
     public function __construct()
     {
-        #parent::__construct();
+        parent::__construct();
         #$this->middleware('scope:alumnoindex')->except(['index']);
     }
 
@@ -139,5 +139,11 @@ class EmpleadoController extends ApiController
         }
         DB::commit();
         return $this->showOne($empleado,201);
+    }
+
+    //obtener grados y cursos de profesor
+    public function getCursos(Request $request)
+    {
+        
     }
 }

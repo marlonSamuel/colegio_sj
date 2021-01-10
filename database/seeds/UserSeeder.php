@@ -20,11 +20,11 @@ class UserSeeder extends Seeder
 
         //agregado cargos
         $cargo = new Cargo;
-        $cargo->nombre = 'profesor';
+        $cargo->nombre = 'director';
         $cargo->save();
 
         $cargo = new Cargo;
-        $cargo->nombre = 'director';
+        $cargo->nombre = 'profesor';
         $cargo->save();
 
         //agregar un empleado, director y profesor

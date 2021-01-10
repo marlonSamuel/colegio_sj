@@ -198,7 +198,6 @@ export default {
                 }
                 console.log(r.data)
                 store.dispatch('setAlumnos', r.data)
-
             }).catch(e => {
 
             })

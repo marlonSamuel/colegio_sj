@@ -92,6 +92,8 @@ Route::name('asignacion_secciones_get_all')->get('asignacion_secciones_get_all/{
 Route::name('asignacion_secciones_get_all_without_section')->get('asignacion_secciones_get_all_without_section/{ciclo_id}/{grado_nivel_educativo_id}', 'Inscripcion\AsignacionSeccionController@getWithoutSection');
 
 
-
+//asignaciones modulo profesores
+Route::resource('asignaciones', 'Asignacion\AsignacionController', ['except' => ['create', 'edit']]);
+Route::name('asignaciones_update')->post('asignaciones_update/{id}', 'Asignacion\AsignacionController@updateData');
 
 //Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);
