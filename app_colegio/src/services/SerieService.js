@@ -4,7 +4,7 @@ class SerieService {
 
     constructor(axios, baseUrl) {
         this.axios = axios
-        this.baseUrl = `${baseUrl}meses`
+        this.baseUrl = `${baseUrl}series`
     }
 
     getAll() {

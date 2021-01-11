@@ -7,7 +7,7 @@
                 <v-layout row wrap>
                     <v-flex sm12 md12 xs12 lg12>
                          <v-toolbar flat color="white">
-                            <v-toolbar-title>ASIGNACIONES  CIENCIAS NATURALES PRIMERO BASICO</v-toolbar-title>
+                            <v-toolbar-title>ASIGNACIONES </v-toolbar-title>
                             <v-divider
                             class="mx-2"
                             inset
@@ -176,7 +176,7 @@
                                         <td class="text-xs-left">
                                             <v-tooltip top v-if="props.item.flag_tiempo">
                                                 <template v-slot:activator="{ on }">
-                                                    <v-icon color="blue" @click="" v-on="on"> question_answer</v-icon>
+                                                    <v-icon color="blue" @click="$router.push(`/serie/`+curso_id+'/asignacion/'+props.item.id)" v-on="on"> question_answer</v-icon>
                                                 </template>
                                                 <span>Configurar series, preguntas y respuestas de cuestionario</span>
                                             </v-tooltip>
@@ -260,6 +260,7 @@ export default {
         search: '',
         ciclos: [],
         ciclo_id: null,
+        curso_id: null,
         items: [],
         headers: [
             {text: 'Titulo',value: '',sortable: false},
@@ -293,6 +294,7 @@ export default {
 
   created() {
     let self = this
+    self.curso_id = self.$route.params.id
     self.getAll(self.$route.params.id)
   },
 

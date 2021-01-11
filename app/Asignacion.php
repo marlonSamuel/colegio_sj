@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Serie;
 use App\AsignarCursoProfesor;
 
 use Illuminate\Database\Eloquent\Model;
@@ -26,5 +27,9 @@ class Asignacion extends Model
 
     public function asignar_curso_profesor(){
     	return $this->belongsTo(AsignarCursoProfesor::class,'asignar_curso_profesor_id');
+    }
+
+    public function series(){
+        return $this->hasMany(Serie::class);
     }
 }

@@ -17,6 +17,11 @@ class AsignacionService {
         return self.axios.get(`${self.baseUrl}/${id}`);
     }
 
+    getSeries(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}/${id}/series`);
+    }
+
     create(data) {
         let self = this;
         return self.axios.post(`${self.baseUrl}`, data,

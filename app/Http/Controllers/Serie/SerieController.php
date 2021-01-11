@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Serie;
 
 use App\Serie;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 
 class SerieController extends ApiController
 {
    public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
     }
 
     public function index()
@@ -32,7 +32,7 @@ class SerieController extends ApiController
             'asignacion_id'=> 'required|integer',
             'descripcion'=> 'required|string',
             'tipo_serie'=> 'required|string',
-            'nota'=> 'required|integer'
+            'nota'=> 'required|numeric'
         ];
         
         $this->validate($request, $reglas);
@@ -48,9 +48,10 @@ class SerieController extends ApiController
      * @param  \App\serie  $serie
      * @return \Illuminate\Http\Response
      */
-    public function show(serie $serie)
+    public function show($id)
     {
-        
+        $serie = Serie::find($id);
+        return $this->showOne($serie);
     }
 
     /**
@@ -60,12 +61,13 @@ class SerieController extends ApiController
      * @param  \App\serie  $serie
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, serie $serie)
+    public function update(Request $request, $id)
     {
+        $serie = Serie::find($id);
         $reglas = [
             'descripcion'=> 'required|string',
             'tipo_serie'=> 'required|string',
-            'nota'=> 'required|integer'
+            'nota'=> 'required|numeric'
         ];
 
         $this->validate($request, $reglas);
@@ -88,9 +90,10 @@ class SerieController extends ApiController
      * @param  \App\serie  $serie
      * @return \Illuminate\Http\Response
      */
-    public function destroy(serie $serie)
+    public function destroy($id)
     {
+        $serie = Serie::find($id);
         $serie->delete();
-        return $this->showOne($serie);
+        return $this->showOne($serie,201);
     }
 }
