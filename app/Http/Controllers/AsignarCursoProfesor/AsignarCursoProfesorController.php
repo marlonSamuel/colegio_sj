@@ -23,12 +23,22 @@ class AsignarCursoProfesorController extends ApiController
         $curso_niveles = AsignarCursoProfesor::all();
         return $this->showAll($curso_niveles);
     }
+<<<<<<< HEAD
     public function getAll($idProfesor,$ciclo_id)
     {
         $curso_niveles = AsignarCursoProfesor::where([['empleado_id',$idProfesor],['ciclo_id',$ciclo_id]])
         ->with('curso_grado_nivel','curso_grado_nivel.grado_nivel_educativo.nivelEducativo','curso_grado_nivel.grado_nivel_educativo.grado','curso_grado_nivel.curso')
         ->get();
         $curso_niveles = $this->infoProfesor($curso_niveles);
+=======
+
+    public function getAll($idProfesor)
+    {
+        $curso_niveles = AsignarCursoProfesor::where('empleado_id',$idProfesor)
+                                              ->with('curso_grado_nivel.curso',
+                                                     'curso_grado_nivel.grado_nivel_educativo.grado',
+                                                     'curso_grado_nivel.grado_nivel_educativo.nivelEducativo')->get();
+>>>>>>> 959beb0d739c03c2f2d08c14186ff0ea63fca9ed
         return $this->showAll($curso_niveles);
     }
 
@@ -92,10 +102,12 @@ class AsignarCursoProfesorController extends ApiController
     }
 
     /**
+        obtener asignaciones por cursos y profesores
      */
-    public function show(Curso $curso)
+    public function show(AsignarCursoProfesor $asignar_cursos_profesore)
     {
-        
+        $asignaciones = $asignar_cursos_profesore->asignaciones;
+        return $this->showAll($asignaciones);
     }
 
     /**

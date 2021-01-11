@@ -2,9 +2,27 @@
 
 namespace App;
 
+use App\Asignacion;
+
 use Illuminate\Database\Eloquent\Model;
 
 class AsignacionAlumno extends Model
 {
-    //
+    protected $table = "asignacion_alumnos";
+
+    protected $fillable = [
+    	'asignacion_id',
+    	'inscripcion_id',
+    	'nota',
+    	'descripcion',
+    	'fecha_entrega',
+    	'entrega_tarde',
+    	'adjunto',
+    	'calificado',
+    	'entregado'
+    ];
+
+    public function asignacion(){
+    	return $this->belongsTo(Asignacion::class,'asignacion_id');
+    }
 }

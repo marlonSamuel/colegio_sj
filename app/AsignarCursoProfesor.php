@@ -3,9 +3,10 @@
 namespace App;
 
 use App\Ciclo;
+use App\Asignacion;
 use App\CursoGradNivEd;
-use App\Empleado;
 use App\AsignarCursoProfSec;
+use App\Empleado;
 use Illuminate\Database\Eloquent\Model;
 
 class AsignarCursoProfesor extends Model
@@ -18,9 +19,7 @@ class AsignarCursoProfesor extends Model
         'curso_grad_niv_edu_id'
 	];
 
-	public function secciones(){
-		return $this->hasMany(AsignarCursoProfSec::class);
-	}
+	
     public function profesor(){
         return $this->belongsTo(Empleado::class);
     }
@@ -32,5 +31,13 @@ class AsignarCursoProfesor extends Model
 	public function curso_grado_nivel()
 	{
 		return $this->belongsTo(CursoGradNivEd::class,'curso_grad_niv_edu_id');
+	}
+
+	public function asignaciones(){
+		return $this->hasMany(Asignacion::class,'asignar_curso_profresor_id');
+	}
+
+	public function secciones(){
+		return $this->hasMany(AsignarCursoProfSec::class,'asignar_curso_profresor_id');
 	}
 }

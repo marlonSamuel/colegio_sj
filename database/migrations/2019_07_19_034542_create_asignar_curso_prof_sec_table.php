@@ -17,7 +17,6 @@ class CreateAsignarCursoProfSecTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('asignar_curso_profesor_id');
             $table->unsignedBigInteger('seccion_id');
-
             $table->foreign('asignar_curso_profesor_id')->references('id')->on('asignar_curso_profesor');
             $table->foreign('seccion_id')->references('id')->on('secciones');
             $table->timestamps();

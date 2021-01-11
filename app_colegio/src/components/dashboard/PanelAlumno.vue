@@ -1,35 +1,43 @@
 <template>
-    <v-layout wrap>
-        <v-flex sm6 md6 xs12 lg6>
-            <h2>Cursos actuales</h2>
-            <v-data-table
-                    :items="items"
-                    class="elevation-1"
-                    hide-actions
-                    :headers="headers"
-                >
-                    <template v-slot:items="props">
-                    </template>
-            </v-data-table>
-        </v-flex>
-        <v-flex sm6 md6 xs12 lg6 style="padding-left: 5px;">
-            <h2>Tareas asignadas</h2>
-            <v-data-table
-                    :items="items"
-                    class="elevation-1"
-                    hide-actions
-                    :headers="headers2"
-                >
-                    <template v-slot:items="props">
-                    </template>
-            </v-data-table>
+    <v-layout justify-center>
+        <v-flex xs12 sm12 md12>
+            <v-container
+            fluid
+            grid-list-md>
+                <v-layout row wrap>
+                        <v-flex sm6 md6 xs12 lg6>
+                            <h2>Cursos actuales</h2>
+                            <v-data-table
+                                    :items="items"
+                                    class="elevation-1"
+                                    hide-actions
+                                    :headers="headers"
+                                >
+                                    <template v-slot:items="props">
+                                    </template>
+                            </v-data-table>
+                        </v-flex>
+                        <v-flex sm6 md6 xs12 lg6>
+                            <h2>Tareas asignadas</h2>
+                            <v-data-table
+                                    :items="items"
+                                    class="elevation-1"
+                                    hide-actions
+                                    :headers="headers2"
+                                >
+                                    <template v-slot:items="props">
+                                    </template>
+                            </v-data-table>
+                        </v-flex>
+                </v-layout>
+            </v-container>
         </v-flex>
     </v-layout>
 </template>
 
 <script>
 export default {
-  name: "ExampleIndex",
+  name: "PanelAlumno",
   props: {
       source: String
     },
