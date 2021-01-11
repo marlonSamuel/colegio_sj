@@ -33,10 +33,10 @@ class AsignarCursoProfesor extends Model
 	}
 
 	public function asignaciones(){
-		return $this->hasMany(Asignacion::class,'asignar_curso_profresor_id');
+		return $this->hasMany(Asignacion::class,'asignar_curso_profesor_id');
 	}
 
 	public function secciones(){
-		return $this->hasMany(AsignarCursoProfSec::class,'asignar_curso_profresor_id');
+		return $this->hasMany(AsignarCursoProfSec::class,'asignar_curso_profesor_id');
 	}
 }

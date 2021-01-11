@@ -14,7 +14,7 @@ class AsignacionController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+        //parent::__construct();
     }
 
     /**
@@ -34,7 +34,7 @@ class AsignacionController extends ApiController
     public function store(Request $request)
     {
         $reglas = [
-            'asignar_curso_profresor_id' => 'required|integer',
+            'asignar_curso_profesor_id' => 'required|integer',
             'cuestionario' => 'required',
             'descripcion' => 'required|string',
             'titulo' => 'required|string',
@@ -51,15 +51,15 @@ class AsignacionController extends ApiController
 
         $asignacion = Asignacion::create($data);
 
-        if(!is_null($request->file) && $request->file !== "" && $request->file !== null){
-            $folder = 'asignaciones_'.$request->asignar_curso_profresor_id;
+        if(!is_null($request->file) && $request->file !== "" && $request->file !== "null"){
+            $folder = 'asignaciones_'.$request->asignar_curso_profesor_id;
             $name = $asignacion->id.'-'.$request->file->getClientOriginalName();
 
             $asignacion->adjunto = $request->file->storeAs($folder, $name);
             $asignacion->save();
         }
 
-        $profesor_curso = AsignarCursoProfesor::where('id',$request->asignar_curso_profresor_id)->with('curso_grado_nivel')->first();
+        $profesor_curso = AsignarCursoProfesor::where('id',$request->asignar_curso_profesor_id)->with('curso_grado_nivel')->first();
         $secciones = $profesor_curso->secciones;
 
         $inscripciones = Inscripcion::where([['grado_nivel_educativo_id',$profesor_curso->curso_grado_nivel->grado_nivel_educativo_id],
@@ -79,7 +79,8 @@ class AsignacionController extends ApiController
         foreach ($inscripciones_filter as $i) {
             AsignacionAlumno::create([
                 'inscripcion_id'=>$i->id,
-                'asignacion_id'=>$asignacion->id
+                'asignacion_id'=>$asignacion->id,
+                'nota'=>0
             ]);
         }
 
@@ -134,7 +135,7 @@ class AsignacionController extends ApiController
 
         if(!is_null($request->file) && $request->file !== "" && $request->file !== null){
 
-            $folder = 'asignaciones_'.$asignacione->asignar_curso_profresor_id;
+            $folder = 'asignaciones_'.$asignacione->asignar_curso_profesor_id;
             $name = $asignacione->id.'-'.$request->file->getClientOriginalName();
 
             if($request->file_name != $name){

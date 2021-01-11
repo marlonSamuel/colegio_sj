@@ -98,6 +98,19 @@ class UserSeeder extends Seeder
         $data_alumno->alumno_id = 1;
         $data_alumno->save();
 
+        //alumno 2
+        $data = new User();
+        $data->email = "pedro@gmail.com";
+        $data->password = bcrypt("secret");
+        $data->codigo = "1-2020-001";
+        $data->rol_id = 6;
+        $data->save();
+
+        $data_alumno = new UsuarioAlumno;
+        $data_alumno->user_id = $data->id;
+        $data_alumno->alumno_id = 2;
+        $data_alumno->save();
+
         //ususario representante
         $data = new User();
         $data->email = "faustino@gmail.com";

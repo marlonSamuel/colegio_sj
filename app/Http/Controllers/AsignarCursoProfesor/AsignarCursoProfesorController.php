@@ -69,7 +69,7 @@ class AsignarCursoProfesorController extends ApiController
         $curso_nivel = AsignarCursoProfesor::create($data);
         foreach ($request->secciones as $seccion) {
             $curso_prof_secc = AsignarCursoProfSec::create([
-                'asignar_curso_profersor_id'=>$curso_nivel->id,
+                'asignar_curso_profesor_id'=>$curso_nivel->id,
                 'seccion_id'=>$seccion
             ]);
         }
