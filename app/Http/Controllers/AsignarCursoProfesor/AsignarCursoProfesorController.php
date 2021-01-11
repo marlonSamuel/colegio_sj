@@ -23,24 +23,21 @@ class AsignarCursoProfesorController extends ApiController
         $curso_niveles = AsignarCursoProfesor::all();
         return $this->showAll($curso_niveles);
     }
-<<<<<<< HEAD
     public function getAll($idProfesor,$ciclo_id)
     {
         $curso_niveles = AsignarCursoProfesor::where([['empleado_id',$idProfesor],['ciclo_id',$ciclo_id]])
         ->with('curso_grado_nivel','curso_grado_nivel.grado_nivel_educativo.nivelEducativo','curso_grado_nivel.grado_nivel_educativo.grado','curso_grado_nivel.curso')
         ->get();
         $curso_niveles = $this->infoProfesor($curso_niveles);
-=======
-
-    public function getAll($idProfesor)
+    }
+    /*public function getAll($idProfesor)
     {
         $curso_niveles = AsignarCursoProfesor::where('empleado_id',$idProfesor)
                                               ->with('curso_grado_nivel.curso',
                                                      'curso_grado_nivel.grado_nivel_educativo.grado',
                                                      'curso_grado_nivel.grado_nivel_educativo.nivelEducativo')->get();
->>>>>>> 959beb0d739c03c2f2d08c14186ff0ea63fca9ed
         return $this->showAll($curso_niveles);
-    }
+    }*/
 
     public function cursoGradoNivel(){
         $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo','grado_nivel_educativo.nivelEducativo','grado_nivel_educativo.grado','curso')->get();
@@ -94,6 +91,7 @@ class AsignarCursoProfesorController extends ApiController
         foreach ($request->secciones as $seccion) {
             $curso_prof_secc = AsignarCursoProfSec::create([
                 'asignar_curso_profresor_id'=>$curso_nivel->id,
+                'asignar_curso_profesor_id'=>$curso_nivel->id,
                 'seccion_id'=>$seccion
             ]);
         }
@@ -101,7 +99,7 @@ class AsignarCursoProfesorController extends ApiController
         return $this->showOne($curso_nivel,201);
     }
 
-    /**
+    /* *
         obtener asignaciones por cursos y profesores
      */
     public function show(AsignarCursoProfesor $asignar_cursos_profesore)

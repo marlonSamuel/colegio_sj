@@ -12,12 +12,12 @@ class AsignarCursoProfSec extends Model
 	protected $table = 'asignar_curso_prof_sec';
 
     protected $fillable = [
-		'asignar_curso_profresor_id',
+		'asignar_curso_profesor_id',
         'seccion_id'
 	];
 
     public function curso_profesor(){
-        return $this->belongsTo(AsignarCursoProfesor::class,'asignar_curso_profresor_id');
+        return $this->belongsTo(AsignarCursoProfesor::class,'asignar_curso_profesor_id');
     }
 	public function seccion()
 	{

@@ -11,7 +11,7 @@ class Asignacion extends Model
     protected $table = "asignacions";
 
     protected $fillable = [
-    	'asignar_curso_profresor_id',
+    	'asignar_curso_profesor_id',
     	'cuestionario',
     	'nota',
         'titulo',
@@ -20,7 +20,8 @@ class Asignacion extends Model
     	'fecha_habilitacion',
     	'tiempo',
     	'entrega_tarde',
-    	'adjunto'
+    	'adjunto',
+        'flag_tiempo'
     ];
 
     public function asignar_curso_profesor(){

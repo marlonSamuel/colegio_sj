@@ -98,6 +98,30 @@
                                             ></v-switch>
                                         </v-flex>
 
+                                        <v-flex xs12 sm5 md5>
+                                            <v-tooltip top>
+                                                <template v-slot:activator="{ on }">
+                                                    <v-switch
+                                                        v-on="on"
+                                                        v-model="form.flag_tiempo"
+                                                        :label="`Asignar examen con tiempo (minutos): ${form.flag_tiempo === 0 ?'No':'Si'}`"
+                                                    ></v-switch>
+                                                </template>
+                                                <span>Asignar examen con tiempo en minutos, 
+                                                    dentro del tiempo designado, los estudiantes deberán resolver el examenes</span>
+                                            </v-tooltip>
+                                        </v-flex>
+
+                                        <v-flex xs12 sm3 md3>
+                                            <v-text-field v-model="form.tiempo" v-if="form.flag_tiempo"
+                                                label="Tiempo (minutos)"
+                                                v-validate="'required|integer'"
+                                                type="text"
+                                                data-vv-name="tiempo"
+                                                :error-messages="errors.collect('tiempo')">
+                                            </v-text-field>
+                                        </v-flex>
+
                                         <v-flex xs12 sm9 md9>
                                             <v-textarea v-model="form.descripcion" 
                                                 label="Descripción"
@@ -116,7 +140,7 @@
                                                         </template>
                                                         <span>Adjuntar documento pdf</span>
                                                     </v-tooltip>
-                                                    <input  v-show="false" @change="selectedDocumento" ref="file" class="input-file hidden" type="file" accept="application/pdf"/>
+                                                <input  v-show="false" @change="selectedDocumento" ref="file" class="input-file hidden" type="file" accept="application/pdf"/>
                                                 
                                                 </div>
                                         </v-flex>
@@ -150,6 +174,12 @@
                                         <td class="text-xs-left">{{props.item.fecha_entrega | moment('DD/MM/YYYY')}}</td>
                                         <td class="text-xs-left">{{props.item.nota}} pts</td>
                                         <td class="text-xs-left">
+                                            <v-tooltip top v-if="props.item.flag_tiempo">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon color="blue" @click="" v-on="on"> question_answer</v-icon>
+                                                </template>
+                                                <span>Configurar series, preguntas y respuestas de cuestionario</span>
+                                            </v-tooltip>
                                             <v-tooltip top v-if="!props.item.responsable">
                                                 <template v-slot:activator="{ on }">
                                                     <v-icon color="green" @click="" v-on="on"> note_add</v-icon>
@@ -244,14 +274,15 @@ export default {
         ],
         form:{
             id: null,
-            asignar_curso_profresor_id: null,
+            asignar_curso_profesor_id: null,
             cuestionario: null,
             nota: null,
             titulo: '',
             descripcion: '',
             fecha_entrega: null,
             fecha_habilitacion: null,
-            tiempo: '',
+            tiempo: 0,
+            flag_tiempo: 0,
             entrega_tarde: 0,
             adjunto: '',
             file: null,
@@ -373,8 +404,14 @@ export default {
       let self = this
       this.$validator.validateAll().then((result) => {
           if (result) {
-              self.form.asignar_curso_profresor_id = self.$route.params.id
+              self.form.asignar_curso_profesor_id = self.$route.params.id
               self.form.entrega_tarde ? self.form.entrega_tarde = 1 : 0
+              self.form.flag_tiempo ? self.form.flag_tiempo = 1 : 0
+
+              if(!self.form.flag_tiempo){
+                  self.form.tiempo = 0
+              }
+
               if(self.form.id > 0 && self.form.id !== null){
                 self.update()
               }else{
@@ -436,7 +473,9 @@ export default {
 
     getNameFile(adjunto){
         let self = this
-        return adjunto.split("/")[1]
+        if(adjunto !== null){
+            return adjunto.split("/")[1]
+        }
     }
   },
 

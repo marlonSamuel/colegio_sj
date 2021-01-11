@@ -15,19 +15,6 @@ class AlumnoSeeder extends Seeder
      */
     public function run()
     {
-        $data = new Alumno();
-        $data->codigo = "1-2020-001";
-        $data->primer_nombre = "Marlon";
-        $data->segundo_nombre = "Samuel";
-        $data->tercer_nombre = "";
-        $data->primer_apellido = "Gonzalez";
-        $data->segundo_apellido = "Flores";
-        $data->fecha_nac = "1995-03-25";
-        $data->genero = "M";
-        $data->telefono = "58421615";
-        $data->email = "marlon@gmail.com";
-        $data->direccion = "Colonia los conacastes chiquimulilla";
-        $data->save();
 
         $data_p = new Apoderado();
         $data_p->cui = "5568978987999";
@@ -49,6 +36,42 @@ class AlumnoSeeder extends Seeder
             'telefono' => "55776655",
             'apoderado_id' => $data_p->id
         ]);
+
+        $data = new Alumno();
+        $data->codigo = "1-2020-001";
+        $data->primer_nombre = "Marlon";
+        $data->segundo_nombre = "Samuel";
+        $data->tercer_nombre = "";
+        $data->primer_apellido = "Gonzalez";
+        $data->segundo_apellido = "Flores";
+        $data->fecha_nac = "1995-03-25";
+        $data->genero = "M";
+        $data->telefono = "58421615";
+        $data->email = "marlon@gmail.com";
+        $data->direccion = "Colonia los conacastes chiquimulilla";
+        $data->save();
+
+        ApoderadoAlumno::create([
+            'apoderado_id' => $data_p->id,
+            'alumno_id' => $data->id,
+            'responsable' => true,
+            'tipo_apoderado' => 'P'
+        ]);
+
+        $data = new Alumno();
+        $data->codigo = "2-2020-001";
+        $data->primer_nombre = "Juan";
+        $data->segundo_nombre = "Pedro";
+        $data->tercer_nombre = "";
+        $data->primer_apellido = "Gonzalez";
+        $data->segundo_apellido = "Flores";
+        $data->fecha_nac = "1998-04-25";
+        $data->genero = "M";
+        $data->telefono = "58421616";
+        $data->email = "juan@gmail.com";
+        $data->direccion = "Colonia los conacastes chiquimulilla";
+        $data->save();
+
 
         ApoderadoAlumno::create([
             'apoderado_id' => $data_p->id,
