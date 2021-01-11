@@ -31,9 +31,10 @@ import EmpleadoService from '../services/EmpleadoService'
 import CargoService from '../services/CargoService'
 import AsignacionSeccionService from '../services/AsignacionSeccionService'
 import AsignacionCursoProfesorService from '../services/AsignacionCursoProfesor'
+import PeriodoAcademicoService from '../services/PeriodoAcademicoService'
 
-let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
-//let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
+//let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
+let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
 let token_data = $cookies.get('token_data')
 
 // Axios Configuration

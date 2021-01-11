@@ -7,9 +7,9 @@ class AsignacionCursoProfesorService {
         this.baseUrl = `${baseUrl}asignar_cursos_profesores`
     }
 
-    getAll(idProfesor) {
+    getAll(idProfesor,idCiclo) {
         let self = this;
-        return self.axios.get(`${self.baseUrl}_get_all/${idProfesor}`);
+        return self.axios.get(`${self.baseUrl}_get_all/${idProfesor}/${idCiclo}`);
     }
 
     get(id) {

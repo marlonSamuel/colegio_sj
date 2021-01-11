@@ -23,9 +23,12 @@ class AsignarCursoProfesorController extends ApiController
         $curso_niveles = AsignarCursoProfesor::all();
         return $this->showAll($curso_niveles);
     }
-    public function getAll($idProfesor)
+    public function getAll($idProfesor,$ciclo_id)
     {
-        $curso_niveles = AsignarCursoProfesor::where('empleado_id',$idProfesor)->get();
+        $curso_niveles = AsignarCursoProfesor::where([['empleado_id',$idProfesor],['ciclo_id',$ciclo_id]])
+        ->with('curso_grado_nivel','curso_grado_nivel.grado_nivel_educativo.nivelEducativo','curso_grado_nivel.grado_nivel_educativo.grado','curso_grado_nivel.curso')
+        ->get();
+        $curso_niveles = $this->infoProfesor($curso_niveles);
         return $this->showAll($curso_niveles);
     }
 
@@ -34,6 +37,21 @@ class AsignarCursoProfesorController extends ApiController
 
         $data = $this->prepareData($curso_niveles);
         return $this->showQuery($data);
+    }
+
+    public function infoProfesor($curso_niveles){
+        $data = collect();
+        foreach ($curso_niveles as $key => $value) {
+            $info = collect([
+                'id' => $value->id,
+                'empleado_id'=> $value->empleado_id,
+                'ciclo_id'=> $value->ciclo_id,
+                'curso_grad_niv_edu_id' => $value->curso_grad_niv_edu_id,
+                'nombre'=>$value->curso_grado_nivel->grado_nivel_educativo->nivelEducativo->nombre .'/'.$value->curso_grado_nivel->grado_nivel_educativo->grado->nombre.'/'.$value->curso_grado_nivel->curso->nombre
+            ]);
+            $data->push($info);
+        }
+        return $data;
     }
 
     public function prepareData($curso_niveles){
@@ -65,7 +83,7 @@ class AsignarCursoProfesorController extends ApiController
         $curso_nivel = AsignarCursoProfesor::create($data);
         foreach ($request->secciones as $seccion) {
             $curso_prof_secc = AsignarCursoProfSec::create([
-                'asignar_curso_profersor_id'=>$curso_nivel->id,
+                'asignar_curso_profresor_id'=>$curso_nivel->id,
                 'seccion_id'=>$seccion
             ]);
         }

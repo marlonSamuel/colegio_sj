@@ -24,7 +24,7 @@ const state = {
     client_id: 2,
     //base_url: 'https://167.172.158.187/colegio-san-pablo/',
     base_url: 'http://www.san-pablo.com/',
-    client_secret: 'VrVxOdFrwrtco4wEu8s6KskLbqMJvYHHQW4NOE4K'
+    client_secret: 'dOkpChnKsJHMWnI4vEHGqqwnjw7ip1ow15mQ4KFt'
 }
 
 const mutations = {
