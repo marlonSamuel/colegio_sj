@@ -111,4 +111,8 @@ class AsignacionSeccionController extends ApiController
         return $this->showOne($asignacion_seccione);
     }
 
+    public function destroy(){
+        
+    }
+
 }

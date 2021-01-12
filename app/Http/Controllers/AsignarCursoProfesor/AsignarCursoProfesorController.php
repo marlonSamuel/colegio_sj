@@ -23,50 +23,70 @@ class AsignarCursoProfesorController extends ApiController
         $curso_niveles = AsignarCursoProfesor::all();
         return $this->showAll($curso_niveles);
     }
-    public function getAll($idProfesor,$ciclo_id)
+    public function getAll($idProfesor, $ciclo_id)
     {
-        $curso_niveles = AsignarCursoProfesor::where([['empleado_id',$idProfesor],['ciclo_id',$ciclo_id]])
-        ->with('curso_grado_nivel','curso_grado_nivel.grado_nivel_educativo.nivelEducativo','curso_grado_nivel.grado_nivel_educativo.grado','curso_grado_nivel.curso')
-        ->get();
-        $curso_niveles = $this->infoProfesor($curso_niveles);
-    }
-    /*public function getAll($idProfesor)
-    {
-        $curso_niveles = AsignarCursoProfesor::where('empleado_id',$idProfesor)
-                                              ->with('curso_grado_nivel.curso',
-                                                     'curso_grado_nivel.grado_nivel_educativo.grado',
-                                                     'curso_grado_nivel.grado_nivel_educativo.nivelEducativo')->get();
+        $curso_niveles = AsignarCursoProfesor::where([['empleado_id', $idProfesor], ['ciclo_id', $ciclo_id]])
+            ->get();
+        //$curso_niveles = $this->infoProfesor($curso_niveles);
         return $this->showAll($curso_niveles);
-    }*/
-
-    public function cursoGradoNivel(){
-        $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo','grado_nivel_educativo.nivelEducativo','grado_nivel_educativo.grado','curso')->get();
+    }
+    public function getInfoProfesor($idProfesor, $ciclo_id)
+    {
+        $curso_niveles = AsignarCursoProfesor::where([['empleado_id', $idProfesor], ['ciclo_id', $ciclo_id]])
+            ->with(
+                'curso_grado_nivel',
+                'curso_grado_nivel.grado_nivel_educativo.nivelEducativo',
+                'curso_grado_nivel.grado_nivel_educativo.grado',
+                'curso_grado_nivel.curso',
+                'secciones',
+                'secciones.seccion'
+            )
+            ->get();
+        $curso_niveles = $this->infoProfesor($curso_niveles);
+        return $this->showAll($curso_niveles);
+    }
+    public function cursoGradoNivel()
+    {
+        $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo', 'grado_nivel_educativo.nivelEducativo', 'grado_nivel_educativo.grado', 'curso')->get();
 
         $data = $this->prepareData($curso_niveles);
         return $this->showQuery($data);
     }
 
-    public function infoProfesor($curso_niveles){
+    public function infoProfesor($curso_niveles)
+    {
         $data = collect();
         foreach ($curso_niveles as $key => $value) {
+
             $info = collect([
                 'id' => $value->id,
-                'empleado_id'=> $value->empleado_id,
-                'ciclo_id'=> $value->ciclo_id,
+                'empleado_id' => $value->empleado_id,
+                'ciclo_id' => $value->ciclo_id,
                 'curso_grad_niv_edu_id' => $value->curso_grad_niv_edu_id,
-                'nombre'=>$value->curso_grado_nivel->grado_nivel_educativo->nivelEducativo->nombre .'/'.$value->curso_grado_nivel->grado_nivel_educativo->grado->nombre.'/'.$value->curso_grado_nivel->curso->nombre
+                'nombre' => $value->curso_grado_nivel->grado_nivel_educativo->nivelEducativo->nombre . '/' . $value->curso_grado_nivel->grado_nivel_educativo->grado->nombre . '/' . $value->curso_grado_nivel->curso->nombre
             ]);
+            $secciones_col = collect();
+            foreach ($value->secciones as $key2 => $value2) {
+                $seccion = collect([
+                    'id' => $value2->id,
+                    'seccion' => $value2->seccion->seccion
+                ]);
+                $secciones_col->push($seccion);
+            }
+            $info['secciones'] = $secciones_col;
+
             $data->push($info);
         }
         return $data;
     }
 
-    public function prepareData($curso_niveles){
+    public function prepareData($curso_niveles)
+    {
         $data = collect();
         foreach ($curso_niveles as $key => $value) {
             $info = collect([
                 'id' => $value->id,
-                'nombre'=>$value->grado_nivel_educativo->nivelEducativo->nombre .'/'.$value->grado_nivel_educativo->grado->nombre.'/'.$value->curso->nombre
+                'nombre' => $value->grado_nivel_educativo->nivelEducativo->nombre . '/' . $value->grado_nivel_educativo->grado->nombre . '/' . $value->curso->nombre
             ]);
             $data->push($info);
         }
@@ -81,22 +101,22 @@ class AsignarCursoProfesorController extends ApiController
         $reglas = [
             'empleado_id' => 'required|integer',
             'ciclo_id' => 'required|integer',
-            'curso_grad_niv_edu_id'=>'required|integer'
+            'curso_grad_niv_edu_id' => 'required|integer'
         ];
-        
+
         $this->validate($request, $reglas);
         DB::beginTransaction();
         $data = $request->all();
         $curso_nivel = AsignarCursoProfesor::create($data);
         foreach ($request->secciones as $seccion) {
             $curso_prof_secc = AsignarCursoProfSec::create([
-                'asignar_curso_profresor_id'=>$curso_nivel->id,
-                'asignar_curso_profesor_id'=>$curso_nivel->id,
-                'seccion_id'=>$seccion
+                'asignar_curso_profresor_id' => $curso_nivel->id,
+                'asignar_curso_profesor_id' => $curso_nivel->id,
+                'seccion_id' => $seccion
             ]);
         }
         DB::commit();
-        return $this->showOne($curso_nivel,201);
+        return $this->showOne($curso_nivel, 201);
     }
 
     /* *
@@ -110,20 +130,26 @@ class AsignarCursoProfesorController extends ApiController
 
     /**
      */
-    public function update(Request $request, Curso $curso)
+    public function update(Request $request, AsignarCursoProfesor $asignarCursoProfesor)
     {
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Curso  $curso
+     * @param  \App\AsignarCursoProfesor  $asignarCursoProfesor
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AsignarCursoProfesor $asignarCursoProfesor)
-    {
-        $asignarCursoProfesor->delete();
-
+    public function destroy($id)
+    {       
+        $asignarCursoProfesor = AsignarCursoProfesor::where('id',$id)->firstOrFail();
+        DB::beginTransaction();
+            $secciones = AsignarCursoProfSec::where('asignar_curso_profesor_id',$asignarCursoProfesor->id)->get();
+            foreach ($secciones as $key => $value) {
+                $value->delete();
+            }
+            $asignarCursoProfesor->delete();
+        DB::commit();
         return $this->showOne($asignarCursoProfesor);
     }
 }

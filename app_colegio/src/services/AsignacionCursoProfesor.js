@@ -12,9 +12,9 @@ class AsignacionCursoProfesorService {
         return self.axios.get(`${self.baseUrl}_get_all/${idProfesor}/${idCiclo}`);
     }
 
-    get(id) {
+    get(idProfesor,idCiclo) {
         let self = this;
-        return self.axios.get(`${self.baseUrl}/${id}`);
+        return self.axios.get(`${self.baseUrl}_show_info/${idProfesor}/${idCiclo}`);
     }
 
     getInfo(){
@@ -33,6 +33,7 @@ class AsignacionCursoProfesorService {
     }
 
     destroy(data){
+        console.log(data);
         let self = this;
         return self.axios.delete(`${self.baseUrl}/${data.id}`);
     }

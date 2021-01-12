@@ -76,7 +76,33 @@
 
             <v-card-text>
               <v-container grid-list-md>
-                <v-layout wrap> </v-layout>
+                <v-layout wrap> 
+                    <v-flex xs12 md12 sm12>
+                    <template>
+                      <v-list dense>
+                        <v-subheader>Asignaciones</v-subheader>
+                        <v-list-tile
+                          v-for="(item, i) in asignaciones"
+                          :key="i"
+                        >
+                          <v-list-tile-action>
+                            <v-icon
+                              color="error"
+                              fab
+                              dark
+                              @click="destroy(item)"
+                              >delete</v-icon
+                            >
+                          </v-list-tile-action>
+                          <v-list-tile-title
+                            v-text="item.nombre"
+                          ></v-list-tile-title>
+                        </v-list-tile>
+                      </v-list>
+                    </template>
+                  </v-flex>
+
+                </v-layout>
               </v-container>
             </v-card-text>
 
@@ -157,6 +183,7 @@ export default {
       items: [],
       info: [],
       niv_grad_curso: [],
+      asignaciones:[],
       secciones: [],
       headers: [
         { text: "Nombre", value: "primer_nombre" },
@@ -175,6 +202,7 @@ export default {
         curso_grad_niv_edu_id: null,
         secciones: [],
       },
+      profesor_id:null,
     };
   },
 
@@ -193,6 +221,17 @@ export default {
         .then((r) => {
           self.loading = false;
           self.niv_grad_curso = r.data;
+        })
+        .catch((r) => {});
+    },
+    get(idProfesor, idCiclo) {
+      let self = this;
+      self.loading = true;
+      self.$store.state.services.asignacionProfesorService
+        .get(idProfesor, idCiclo)
+        .then((r) => {
+          self.loading = false;
+          self.asignaciones = r.data;
         })
         .catch((r) => {});
     },
@@ -239,7 +278,7 @@ export default {
         .then((r) => {
           self.loading = false;
           self.info = r.data.data
-          //self.RemoveAsignados(r.data.data);
+          self.RemoveAsignados(r.data.data);
         })
         .catch((r) => {});
     },
@@ -273,7 +312,7 @@ export default {
             return;
           }
           this.$toastr.success("registro agregado con éxito", "éxito");
-          self.getAll(self.form.empleado_id, this.$store.state.ciclo.id);
+          self.getAll(self.profesor_id, this.$store.state.ciclo.id);
           self.getInfo();
           self.clearData();
         })
@@ -304,17 +343,17 @@ export default {
     destroy(data) {
       let self = this;
       self
-        .$confirm("Seguro que desea eliminar grado " + data.codigo + "?")
+        .$confirm("Seguro que desea eliminar " + data.nombre + "?")
         .then((res) => {
           self.loading = true;
-          self.$store.state.services.empleadoService
+          self.$store.state.services.asignacionProfesorService
             .destroy(data)
             .then((r) => {
               self.loading = false;
               if (self.$store.state.global.captureError(r)) {
                 return;
               }
-              self.getAll();
+              self.get(self.profesor_id, this.$store.state.ciclo.id);
               this.$toastr.success("registro eliminado con exito", "exito");
               self.clearData();
             })
@@ -343,7 +382,7 @@ export default {
       this.dialog = true;
       self.getAll(data.id, this.$store.state.ciclo.id);
       self.getInfo();
-      self.form.empleado_id = data.id;
+      self.profesor_id = data.id;
       self.form.ciclo_id = this.$store.state.ciclo.id;
       //self.mapData(data);
     },
@@ -351,7 +390,9 @@ export default {
     edit(data) {
       let self = this;
       this.dialog2 = true;
-      //self.mapData(data);
+      self.get(data.id, this.$store.state.ciclo.id);
+      self.profesor_id = data.id;
+      self.form.ciclo_id = this.$store.state.ciclo.id;
     },
     //mapear datos a formulario
     mapData(data) {
