@@ -97,7 +97,7 @@ class AsignacionController extends ApiController
      */
     public function show(Asignacion $asignacione)
     {
-        //
+        return $this->showOne($asignacione);
     }
 
     /**

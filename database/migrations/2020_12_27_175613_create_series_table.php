@@ -17,7 +17,7 @@ class CreateSeriesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('asignacion_id');
             $table->string('descripcion',500);
-            $table->char('tipo_serie',1);
+            $table->char('tipo_serie',2);
             $table->decimal('nota',5,2);
             $table->timestamps();
 

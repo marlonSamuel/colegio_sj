@@ -33,6 +33,7 @@ import HistorialPagos from '@/components/inscripciones/Alumno/HistorialPagos'
 import HistorialAcademico from '@/components/inscripciones/Alumno/HistorialAcademico'
 import AsignarCursoProfesor from '@/components/administracion/AsignarCursoProfesor'
 import AsignacionIndex from '@/components/profesores/Asignacion/Index'
+import Serie from '@/components/profesores/Asignacion/cuestionarios/Serie'
 
 Vue.use(Router)
 
@@ -85,6 +86,7 @@ const routes = [
     { path: '/historial_academico/:id', name: 'HistorialAcademico', component: HistorialAcademico, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/asignar_profesores', name: 'AsignarProfesores', component: AsignarCursoProfesor, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/asignacion_index/:id', name: 'AsignacionIndex', component: AsignacionIndex, beforeEnter: multiguard([isLoggedIn]) },
+    { path: '/serie/:curso_id/asignacion/:id', name: 'Serie', component: Serie, beforeEnter: multiguard([isLoggedIn]) },
 ]
 
 
