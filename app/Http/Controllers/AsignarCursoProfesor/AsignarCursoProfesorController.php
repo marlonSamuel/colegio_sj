@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AsignarCursoProfesor;
 use App\CursoGradNivEd;
 use App\AsignarCursoProfesor;
 use App\AsignarCursoProfSec;
+use App\Inscripcion;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
@@ -31,6 +32,27 @@ class AsignarCursoProfesorController extends ApiController
                                                      'curso_grado_nivel.grado_nivel_educativo.grado',
                                                      'curso_grado_nivel.grado_nivel_educativo.nivelEducativo')->get();
         return $this->showAll($curso_niveles);
+    }
+
+    //obtener alumnos
+    public function getAlumnos($id){
+        $profesor_curso = AsignarCursoProfesor::where('id',$id)->with('curso_grado_nivel')->first();
+        $secciones = $profesor_curso->secciones;
+
+        $inscripciones = Inscripcion::where([['grado_nivel_educativo_id',$profesor_curso->curso_grado_nivel->grado_nivel_educativo_id],
+                                             ['ciclo_id',$profesor_curso->ciclo_id]])
+                                            ->with('seccion','alumno')
+                                            ->get();
+
+        $inscripciones_filter = $inscripciones->filter(function ($inscripcion) use($secciones) {
+            foreach ($secciones as $s) {
+                if($s->seccion_id == $inscripcion->seccion->seccion_id){
+                    return $inscripcion;
+                }
+            }
+        });
+
+        return $this->showAll($inscripciones_filter);
     }
 
     public function cursoGradoNivel(){

@@ -34,6 +34,18 @@
                                                 </template>
                                                 <span>asignar tareas o cuestionarios</span>
                                             </v-tooltip>
+                                            <v-tooltip top>
+                                             <template v-slot:activator="{ on }">
+                                                 <v-btn flat small v-on="on" color="blue" 
+                                                    @click="$router.push('view_alumnos/'+props.item.id)">
+                                                    <v-icon
+                                                    fab
+                                                    dark
+                                                    >person_pin</v-icon
+                                                    > alumnos</v-btn>
+                                                </template>
+                                                <span>Lista de alumnos asignados a este curso</span>
+                                            </v-tooltip>
                                        </td>
                                     </template>
                             </v-data-table>

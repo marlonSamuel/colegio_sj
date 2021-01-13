@@ -22,6 +22,11 @@ class AsignacionCursoProfesorService {
         return self.axios.get(`${self.baseUrl}_get_one/${id}`);
     }
 
+    getAlumnos(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_get_alumnos/${id}`);
+    }
+
     getInfo(){
         let self = this;
         return self.axios.get(`${self.baseUrl}_info`);
