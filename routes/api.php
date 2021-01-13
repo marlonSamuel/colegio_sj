@@ -99,4 +99,7 @@ Route::resource('asignaciones.series', 'Asignacion\AsignacionSerieController', [
 
 Route::resource('series', 'Serie\SerieController', ['except' => ['create', 'edit']]);
 
+Route::resource('asignaciones_alumnos', 'AsignacionAlumno\AsignacionAlumnoController', ['except' => ['create', 'edit']]);
+Route::name('asignaciones_alumnos_asignaciones')->get('asignaciones_alumnos_asignaciones/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getAsignaciones');
+Route::name('asignaciones_alumnos_cursos')->get('asignaciones_alumnos_cursos/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getCursos');
 //Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);

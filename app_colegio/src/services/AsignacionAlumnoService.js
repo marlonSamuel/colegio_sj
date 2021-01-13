@@ -1,0 +1,51 @@
+class AsignacionAlumnoService {
+    axios
+    baseUrl
+
+    constructor(axios, baseUrl) {
+        this.axios = axios
+        this.baseUrl = `${baseUrl}asignaciones_alumnos`
+    }
+
+    getAll() {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_get_all/${idProfesor}/${idCiclo}`);
+    }
+
+    get(idAsignacion) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}/${idAsignacion}`);
+    }
+
+    getAsignacion(idAlumno,idCiclo) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_asignaciones/${idAlumno}/${idCiclo}`);
+    }
+    getCurso(idAlumno,idCiclo) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_cursos/${idAlumno}/${idCiclo}`);
+    }
+
+    getInfo(){
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_info`);
+    }
+
+    create(data) {
+        let self = this;
+        return self.axios.post(`${self.baseUrl}`, data);
+    }
+
+    update(data) {
+        let self = this;
+        return self.axios.put(`${self.baseUrl}/${data.id}`,data);
+    }
+
+    destroy(data){
+        console.log(data);
+        let self = this;
+        return self.axios.delete(`${self.baseUrl}/${data.id}`);
+    }
+}
+
+export default AsignacionAlumnoService
