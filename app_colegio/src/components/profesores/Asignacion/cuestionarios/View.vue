@@ -55,7 +55,7 @@
                                                 <br />
                                             </b>
 
-                                            <v-container>
+                                            <v-container fluid grid-list-md>
                                                 <v-layout wrap>
                                                     <v-flex xs12 md12 lg12 v-for="(pregunta, index_p) in serie.preguntas" :key="pregunta.id">
                                                         <b>{{index_p+1}}) {{pregunta.pregunta}} ({{pregunta.nota}} pts)</b>
