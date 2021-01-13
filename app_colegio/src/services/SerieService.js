@@ -17,6 +17,11 @@ class SerieService {
         return self.axios.get(`${self.baseUrl}/${id}`);
     }
 
+    getPreguntas(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}/${id}/preguntas`);
+    }
+
     create(data) {
         let self = this;
         return self.axios.post(`${self.baseUrl}`, data);

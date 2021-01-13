@@ -17,6 +17,11 @@ class AsignacionCursoProfesorService {
         return self.axios.get(`${self.baseUrl}_show_info/${idProfesor}/${idCiclo}`);
     }
 
+    getOne(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_get_one/${id}`);
+    }
+
     getInfo(){
         let self = this;
         return self.axios.get(`${self.baseUrl}_info`);

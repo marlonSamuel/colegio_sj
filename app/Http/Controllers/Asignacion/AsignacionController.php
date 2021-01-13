@@ -97,6 +97,7 @@ class AsignacionController extends ApiController
      */
     public function show(Asignacion $asignacione)
     {
+        $asignacione = Asignacion::where('id',$asignacione->id)->with('series.preguntas.respuestas')->first();
         return $this->showOne($asignacione);
     }
 
