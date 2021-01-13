@@ -497,7 +497,7 @@ export default {
 
     getNameFile(adjunto){
         let self = this
-        if(adjunto !== null){
+        if(adjunto !== null && adjunto !== "" && adjunto !== undefined){
             return adjunto.split("/")[1]
         }
     }
