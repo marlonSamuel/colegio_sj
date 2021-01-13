@@ -82,8 +82,8 @@ export default {
         ],
 
          itemsProfesor: [
-            { title: 'Mis grados y cursos',icon:"file_copy", path: '/' },
-            { title: 'Lista alumnos',icon:"account_circle", path: '/' }
+            { title: 'Inicio',icon:"home", path: '/' },
+            { title: 'Mis cursos',icon:"file_copy", path: '/' }
         ],
 
          itemsApoderado: [

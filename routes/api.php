@@ -90,6 +90,8 @@ Route::name('asignar_cursos_profesores_show_info')->get('asignar_cursos_profesor
 
 Route::name('asignar_cursos_profesores_get_one')->get('asignar_cursos_profesores_get_one/{id}','AsignarCursoProfesor\AsignarCursoProfesorController@getOne');
 
+Route::name('asignar_cursos_profesores_get_alumnos')->get('asignar_cursos_profesores_get_alumnos/{id}','AsignarCursoProfesor\AsignarCursoProfesorController@getAlumnos');
+
 Route::resource('asignacion_secciones', 'Inscripcion\AsignacionSeccionController', ['except' => ['create', 'edit']]);
 Route::name('asignacion_secciones_get_all')->get('asignacion_secciones_get_all/{ciclo_id}/{grado_nivel_educativo_id}', 'Inscripcion\AsignacionSeccionController@getAll');
 
