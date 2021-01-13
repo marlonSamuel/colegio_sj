@@ -5,7 +5,6 @@ import auth from '../auth'
 import moment from 'moment'
 import { isNullOrUndefined } from 'util';
 
-import exampleService from '../services/ExampleService'
 import LoginService from '../services/LoginService'
 import CursoService from '../services/CursoService'
 import UsuarioService from '../services/UsuarioService'
@@ -34,6 +33,7 @@ import AsignacionCursoProfesorService from '../services/AsignacionCursoProfesor'
 import PeriodoAcademicoService from '../services/PeriodoAcademicoService'
 import AsignacionService from '../services/AsignacionService'
 import SerieService from '../services/SerieService'
+import PreguntaService from '../services/PreguntaService'
 
 //let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
 let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
@@ -87,7 +87,6 @@ instance.interceptors.response.use(response => {
 
 
 export default {
-    exampleService: new exampleService(Axios),
     loginService: new LoginService(Axios, baseUrl),
     cursoService: new CursoService(Axios, baseUrl),
     usuarioService: new UsuarioService(Axios, baseUrl),
@@ -115,5 +114,6 @@ export default {
     asignacionSeccionService: new AsignacionSeccionService(Axios, baseUrl),
     asignacionProfesorService:new AsignacionCursoProfesorService(Axios,baseUrl),
     asignacionService: new AsignacionService(Axios,baseUrl),
-    serieService: new SerieService(Axios,baseUrl)
+    serieService: new SerieService(Axios,baseUrl),
+    preguntaService: new PreguntaService(Axios,baseUrl)
 }

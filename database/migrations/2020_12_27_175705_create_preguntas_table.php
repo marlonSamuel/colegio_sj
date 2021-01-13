@@ -17,7 +17,6 @@ class CreatePreguntasTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('serie_id');
             $table->string('pregunta',250);
-            $table->char('tipo_pregunta',1);
             $table->decimal('nota',5,2);
             $table->timestamps();
 

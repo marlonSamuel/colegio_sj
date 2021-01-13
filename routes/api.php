@@ -86,6 +86,8 @@ Route::name('asignar_cursos_profesores_info')->get('asignar_cursos_profesores_in
 
 Route::name('asignar_cursos_profesores_get_all')->get('asignar_cursos_profesores_get_all/{profesor_id}','AsignarCursoProfesor\AsignarCursoProfesorController@getAll');
 
+Route::name('asignar_cursos_profesores_get_one')->get('asignar_cursos_profesores_get_one/{id}','AsignarCursoProfesor\AsignarCursoProfesorController@getOne');
+
 Route::resource('asignacion_secciones', 'Inscripcion\AsignacionSeccionController', ['except' => ['create', 'edit']]);
 Route::name('asignacion_secciones_get_all')->get('asignacion_secciones_get_all/{ciclo_id}/{grado_nivel_educativo_id}', 'Inscripcion\AsignacionSeccionController@getAll');
 
@@ -98,5 +100,7 @@ Route::name('asignaciones_update')->post('asignaciones_update/{id}', 'Asignacion
 Route::resource('asignaciones.series', 'Asignacion\AsignacionSerieController', ['except' => ['create', 'edit']]);
 
 Route::resource('series', 'Serie\SerieController', ['except' => ['create', 'edit']]);
+Route::resource('series.preguntas', 'Serie\SeriePreguntaController', ['except' => ['create', 'edit']]);
+Route::resource('preguntas', 'Serie\PreguntaController', ['except' => ['create', 'edit']]);
 
 //Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);

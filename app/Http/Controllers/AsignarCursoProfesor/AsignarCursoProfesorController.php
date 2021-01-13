@@ -86,6 +86,15 @@ class AsignarCursoProfesorController extends ApiController
         return $this->showAll($asignaciones);
     }
 
+    //obtener uno
+    public function getOne($id){
+        $data = AsignarCursoProfesor::where('id',$id)
+                                            ->with('curso_grado_nivel.grado_nivel_educativo.grado',
+                                                'curso_grado_nivel.grado_nivel_educativo.nivelEducativo',
+                                                'curso_grado_nivel.curso')->first();
+        return $this->showOne($data);
+    }
+
     /**
      */
     public function update(Request $request, Curso $curso)

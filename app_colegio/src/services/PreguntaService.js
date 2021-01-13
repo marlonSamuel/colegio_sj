@@ -1,10 +1,10 @@
-class SerieService {
+class PreguntaService {
     axios
     baseUrl
 
     constructor(axios, baseUrl) {
         this.axios = axios
-        this.baseUrl = `${baseUrl}series`
+        this.baseUrl = `${baseUrl}preguntas`
     }
 
     getAll() {
@@ -12,14 +12,9 @@ class SerieService {
         return self.axios.get(`${self.baseUrl}`);
     }
 
-    get(id) {
+    get(cui) {
         let self = this;
-        return self.axios.get(`${self.baseUrl}/${id}`);
-    }
-
-    getPreguntas(id) {
-        let self = this;
-        return self.axios.get(`${self.baseUrl}/${id}/preguntas`);
+        return self.axios.get(`${self.baseUrl}/${cui}`);
     }
 
     create(data) {
@@ -29,13 +24,13 @@ class SerieService {
 
     update(data) {
         let self = this;
-        return self.axios.put(`${self.baseUrl}/${data.id}`, data);
+        return self.axios.put(`${self.baseUrl}/${data.id}`,data);
     }
 
-    destroy(data) {
+    destroy(data){
         let self = this;
         return self.axios.delete(`${self.baseUrl}/${data.id}`);
     }
 }
 
-export default SerieService
+export default PreguntaService

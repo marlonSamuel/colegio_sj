@@ -4,27 +4,14 @@
             <v-container
             fluid
             grid-list-md>
+            <v-card>
+                
                 <v-layout row wrap>
                     <v-flex sm12 md12 xs12 lg12>
                          <v-toolbar flat color="white">
-                            <v-toolbar-title>ASIGNACIONES </v-toolbar-title>
-                            <v-divider
-                            class="mx-2"
-                            inset
-                            vertical
-                            ></v-divider><v-spacer></v-spacer>
+                          <v-toolbar-title> <v-icon color="blue">note_add</v-icon> Asignaciones </v-toolbar-title>
+                            <v-spacer></v-spacer>
                             
-                            <v-flex>
-                                <v-autocomplete
-                                    v-model="ciclo_id"
-                                    append-icon="filter_list"
-                                    label="Filtrar por ciclo"
-                                    single-line
-                                    :items="ciclos"
-                                    hide-details
-                                    >
-                                </v-autocomplete>
-                            </v-flex>
                             <v-spacer></v-spacer>
                             <v-dialog v-model="dialog" max-width="1300px" persistent>
                             <template v-slot:activator="{ on }">
@@ -156,6 +143,15 @@
                             </v-card>
                             </v-dialog>
                         </v-toolbar>
+                        <v-flex>
+                              <h5 v-if="curso !== null">
+                                 <hr />
+                                NIVEL EDUCATIVO: {{curso.curso_grado_nivel.grado_nivel_educativo.nivel_educativo.nombre | uppercase}} <br />
+                                GRADO: {{curso.curso_grado_nivel.grado_nivel_educativo.grado.nombre | uppercase}} <br />
+                                CURSO: {{curso.curso_grado_nivel.curso.nombre | uppercase}}
+                            </h5>
+                            
+                        </v-flex>
                         <v-data-table
                                 :headers="headers"
                                 :items="items"
@@ -174,6 +170,12 @@
                                         <td class="text-xs-left">{{props.item.fecha_entrega | moment('DD/MM/YYYY')}}</td>
                                         <td class="text-xs-left">{{props.item.nota}} pts</td>
                                         <td class="text-xs-left">
+                                            <v-tooltip top v-if="props.item.flag_tiempo">
+                                                <template v-slot:activator="{ on }">
+                                                    <v-icon color="blue" @click="$router.push(`/view_asignacion/curso/`+curso_id+'/asignacion/'+props.item.id)" v-on="on"> visibility</v-icon>
+                                                </template>
+                                                <span>Visualizar cuestionario</span>
+                                            </v-tooltip>
                                             <v-tooltip top v-if="props.item.flag_tiempo">
                                                 <template v-slot:activator="{ on }">
                                                     <v-icon color="blue" @click="$router.push(`/serie/`+curso_id+'/asignacion/'+props.item.id)" v-on="on"> question_answer</v-icon>
@@ -242,6 +244,7 @@
                             </v-data-table>
                     </v-flex>
                 </v-layout>
+            </v-card>
             </v-container>
         </v-flex>
     </v-layout>
@@ -261,6 +264,7 @@ export default {
         ciclos: [],
         ciclo_id: null,
         curso_id: null,
+        curso: null,
         items: [],
         headers: [
             {text: 'Titulo',value: '',sortable: false},
@@ -296,6 +300,7 @@ export default {
     let self = this
     self.curso_id = self.$route.params.id
     self.getAll(self.$route.params.id)
+    self.get(self.$route.params.id)
   },
 
   methods: {
@@ -310,6 +315,23 @@ export default {
                     return
                 }
                 self.items = r.data
+            }).catch(e => {
+
+            })
+      },
+
+     //obtener registro
+      get(id){
+          let self = this
+            self.loading = true
+            self.$store.state.services.asignacionProfesorService
+            .getOne(id)
+            .then(r => {
+                self.loading = false
+                if (self.$store.state.global.captureError(r)) {
+                    return
+                }
+                self.curso = r.data
             }).catch(e => {
 
             })
