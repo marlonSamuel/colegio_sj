@@ -184,7 +184,7 @@
                                             </v-tooltip>
                                             <v-tooltip top v-if="!props.item.responsable">
                                                 <template v-slot:activator="{ on }">
-                                                    <v-icon color="green" @click="" v-on="on"> note_add</v-icon>
+                                                    <v-icon color="green" @click="$router.push(`/asignacion_nota/`+curso_id+'/asignacion/'+props.item.id)" v-on="on"> note_add</v-icon>
                                                 </template>
                                                 <span>Asignar nota </span>
                                             </v-tooltip>
@@ -207,7 +207,7 @@
                                     <v-card flat>
                                     <v-card-text>
                                         <hr /><hr />
-                                        <v-container>
+                                        <v-container fluid grid-list-md>
                                             <v-layout wrap>
                                                 <v-flex xs12 md12 lg12>
                                                     <h3>Información de la asignación</h3>
@@ -429,8 +429,8 @@ export default {
       this.$validator.validateAll().then((result) => {
           if (result) {
               self.form.asignar_curso_profesor_id = self.$route.params.id
-              self.form.entrega_tarde ? self.form.entrega_tarde = 1 : 0
-              self.form.flag_tiempo ? self.form.flag_tiempo = 1 : 0
+              self.form.entrega_tarde  = self.form.entrega_tarde  ? 1 : 0
+              self.form.flag_tiempo = self.form.flag_tiempo ? 1 : 0
 
               if(!self.form.flag_tiempo){
                   self.form.tiempo = 0

@@ -33,6 +33,7 @@ import HistorialPagos from '@/components/inscripciones/Alumno/HistorialPagos'
 import HistorialAcademico from '@/components/inscripciones/Alumno/HistorialAcademico'
 import AsignarCursoProfesor from '@/components/administracion/AsignarCursoProfesor'
 import AsignacionIndex from '@/components/profesores/Asignacion/Index'
+import AsignarNota from '@/components/profesores/Asignacion/AsignarNota'
 import Serie from '@/components/profesores/Asignacion/cuestionarios/Serie'
 import Pregunta from '@/components/profesores/Asignacion/cuestionarios/Pregunta'
 import ViewAsignacion from '@/components/profesores/Asignacion/cuestionarios/View'
@@ -93,6 +94,7 @@ const routes = [
     { path: '/pregunta/:curso_id/asignacion/:asignacion_id/serie/:id', name: 'Pregunta', component: Pregunta, beforeEnter: multiguard([isLoggedIn]) },
     { path: '/view_asignacion/curso/:curso_id/asignacion/:asignacion_id', name: 'ViewAsignacion', component: ViewAsignacion, beforeEnter: multiguard([isLoggedIn]) },
     { path: '/view_alumnos/:id', name: 'ViewAlumnos', component: ViewAlumnos, beforeEnter: multiguard([isLoggedIn]) },
+    { path: '/asignacion_nota/:curso_id/asignacion/:id', name: 'AsignarNota', component: AsignarNota, beforeEnter: multiguard([isLoggedIn]) }
 ]
 
 

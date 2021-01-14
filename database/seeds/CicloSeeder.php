@@ -13,10 +13,10 @@ class CicloSeeder extends Seeder
     public function run()
     {
         $data = new Ciclo();
-        $data->ciclo = 2019;
+        $data->ciclo = 2021;
         $data->actual = true;
-        $data->inicio = '2019-01-08';
-        $data->fin = '2019-10-24';
+        $data->inicio = '2021-01-08';
+        $data->fin = '2021-10-24';
         $data->save();
     }
 }

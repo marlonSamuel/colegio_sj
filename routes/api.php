@@ -100,6 +100,7 @@ Route::name('asignacion_secciones_get_all_without_section')->get('asignacion_sec
 Route::resource('asignaciones', 'Asignacion\AsignacionController', ['except' => ['create', 'edit']]);
 Route::name('asignaciones_update')->post('asignaciones_update/{id}', 'Asignacion\AsignacionController@updateData');
 Route::resource('asignaciones.series', 'Asignacion\AsignacionSerieController', ['except' => ['create', 'edit']]);
+Route::resource('asignaciones.alumnos', 'Asignacion\AsignacionAlumnoController', ['except' => ['create', 'edit']]);
 
 Route::resource('series', 'Serie\SerieController', ['except' => ['create', 'edit']]);
 Route::resource('series.preguntas', 'Serie\SeriePreguntaController', ['except' => ['create', 'edit']]);
