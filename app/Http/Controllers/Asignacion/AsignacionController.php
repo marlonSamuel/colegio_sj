@@ -6,6 +6,7 @@ use App\Asignacion;
 use App\AsignacionAlumno;
 use App\Inscripcion;
 use App\AsignarCursoProfesor;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
@@ -139,13 +140,7 @@ class AsignacionController extends ApiController
             $name = $asignacione->id.'-'.$request->file->getClientOriginalName();
             
             if($request->file_name != $name){
-
-                if(!is_null($asignacione->adjunto) && $asignacione->adjunto !== "" && $asignacione->adjunto !== "null"){
-                    $path = public_path()."/documentos/".$request->file_name;
-                    chown($path, 666);
-                    unlink($path);
-                }
-
+                Storage::delete($asignacione->adjunto);
                 $asignacione->adjunto = $request->file->storeAs($folder, $name);
             }
         }
@@ -167,9 +162,7 @@ class AsignacionController extends ApiController
      */
     public function destroy(Asignacion $asignacione)
     {
-        $path = public_path()."/documentos/".$asignacione->adjunto;
-        chown($path, 666);
-        unlink($path);
+        Storage::delete($asignacione->adjunto);
         $asignacione->delete();
         return $this->showOne($asignacione,201);
     }
