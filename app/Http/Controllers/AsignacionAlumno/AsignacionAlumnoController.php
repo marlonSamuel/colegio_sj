@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\AsignarCursoProfesor;
+namespace App\Http\Controllers\AsignacionAlumno;
 
-use App\CursoGradNivEd;
-use App\AsignarCursoProfesor;
-use App\AsignarCursoProfSec;
+use App\Alumno;
 use App\Inscripcion;
+use App\Asignacion;
+use App\AsignacionAlumno;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\DB;
 
-class AsignarCursoProfesorController extends ApiController
+class AsignacionAlumnoController extends ApiController
 {
     public function __construct()
     {
@@ -21,15 +21,27 @@ class AsignarCursoProfesorController extends ApiController
 
     public function index()
     {
-        $curso_niveles = AsignarCursoProfesor::all();
+        $curso_niveles = AsignacionAlumno::all();
         return $this->showAll($curso_niveles);
     }
-    public function getAll($idProfesor, $ciclo_id)
+    //tareas o examenes pendientes de resolver
+    public function getAsignaciones($idAlumno,$ciclo_id)
     {
-        $curso_niveles = AsignarCursoProfesor::where([['empleado_id', $idProfesor], ['ciclo_id', $ciclo_id]])
-                        ->with('curso_grado_nivel.curso',
-                        'curso_grado_nivel.grado_nivel_educativo.grado',
-                        'curso_grado_nivel.grado_nivel_educativo.nivelEducativo')->get();
+        $asignaciones = AsignacionAlumno::where([['inscripcion_id', $idAlumno]])
+                        ->with('asignacion',
+                        'asignacion.asignar_curso_profesor.curso_grado_nivel.curso',
+                        'inscripcion')->get();
+        $asignaciones = $asignaciones->where('inscripcion.ciclo_id',$ciclo_id);
+        return $this->showAll($asignaciones);
+    }
+    public function getCursos($idAlumno,$ciclo_id)
+    {
+        $curso_niveles = Inscripcion::where([['id', $idAlumno],['ciclo_id',$ciclo_id]])
+                        ->with('grado_nivel_educativo',
+                        'grado_nivel_educativo.cursos',
+                        'grado_nivel_educativo.cursos.curso',
+                        'ciclo')->get();
+        $curso_niveles = $this->prepareData($curso_niveles);
         return $this->showAll($curso_niveles);
     }
     public function getInfoProfesor($idProfesor, $ciclo_id)
@@ -47,29 +59,9 @@ class AsignarCursoProfesorController extends ApiController
         $curso_niveles = $this->infoProfesor($curso_niveles);
         return $this->showAll($curso_niveles);
     }
-    //obtener alumnos
-    public function getAlumnos($id){
-        $profesor_curso = AsignarCursoProfesor::where('id',$id)->with('curso_grado_nivel')->first();
-        $secciones = $profesor_curso->secciones;
-
-        $inscripciones = Inscripcion::where([['grado_nivel_educativo_id',$profesor_curso->curso_grado_nivel->grado_nivel_educativo_id],
-                                             ['ciclo_id',$profesor_curso->ciclo_id]])
-                                            ->with('seccion','alumno')
-                                            ->get();
-
-        $inscripciones_filter = $inscripciones->filter(function ($inscripcion) use($secciones) {
-            foreach ($secciones as $s) {
-                if($s->seccion_id == $inscripcion->seccion->seccion_id){
-                    return $inscripcion;
-                }
-            }
-        });
-
-        return $this->showAll($inscripciones_filter);
-    }
-
-    public function cursoGradoNivel(){
-        $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo','grado_nivel_educativo.nivelEducativo','grado_nivel_educativo.grado','curso')->get();
+    public function cursoGradoNivel()
+    {
+        $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo', 'grado_nivel_educativo.nivelEducativo', 'grado_nivel_educativo.grado', 'curso')->get();
 
         $data = $this->prepareData($curso_niveles);
         return $this->showQuery($data);
@@ -106,10 +98,15 @@ class AsignarCursoProfesorController extends ApiController
     {
         $data = collect();
         foreach ($curso_niveles as $key => $value) {
-            $info = collect([
-                'id' => $value->id,
-                'nombre' => $value->grado_nivel_educativo->nivelEducativo->nombre . '/' . $value->grado_nivel_educativo->grado->nombre . '/' . $value->curso->nombre
+            $info = collect();
+            foreach ($value->grado_nivel_educativo->cursos as $key2 => $value2) {
+                $curso = collect([
+                'ciclo' => $value->ciclo->ciclo,
+                'nombre' => $value2->curso->nombre 
             ]);
+                $info->push($curso);
+            }
+            
             $data->push($info);
         }
         return $data;
@@ -148,15 +145,6 @@ class AsignarCursoProfesorController extends ApiController
     {
         $asignaciones = $asignar_cursos_profesore->asignaciones;
         return $this->showAll($asignaciones);
-    }
-
-    //obtener uno
-    public function getOne($id){
-        $data = AsignarCursoProfesor::where('id',$id)
-                                            ->with('curso_grado_nivel.grado_nivel_educativo.grado',
-                                                'curso_grado_nivel.grado_nivel_educativo.nivelEducativo',
-                                                'curso_grado_nivel.curso')->first();
-        return $this->showOne($data);
     }
 
     /**

@@ -112,7 +112,7 @@ export default {
       let self = this;
       self.loading = true;
       self.$store.state.services.asignacionProfesorService
-        .getAll(id)
+        .getAll(id,this.$store.state.ciclo.id)
         .then(r => {
           self.loading = false
           self.items = r.data

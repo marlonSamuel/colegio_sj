@@ -1,30 +1,29 @@
-class AsignacionCursoProfesorService {
+class AsignacionAlumnoService {
     axios
     baseUrl
 
     constructor(axios, baseUrl) {
         this.axios = axios
-        this.baseUrl = `${baseUrl}asignar_cursos_profesores`
+        this.baseUrl = `${baseUrl}asignaciones_alumnos`
     }
 
-    getAll(idProfesor,idCiclo) {
+    getAll() {
         let self = this;
         return self.axios.get(`${self.baseUrl}_get_all/${idProfesor}/${idCiclo}`);
     }
 
-    get(idProfesor,idCiclo) {
+    get(idAsignacion) {
         let self = this;
-        return self.axios.get(`${self.baseUrl}_show_info/${idProfesor}/${idCiclo}`);
+        return self.axios.get(`${self.baseUrl}/${idAsignacion}`);
     }
 
-    getOne(id) {
+    getAsignacion(idAlumno,idCiclo) {
         let self = this;
-        return self.axios.get(`${self.baseUrl}_get_one/${id}`);
+        return self.axios.get(`${self.baseUrl}_asignaciones/${idAlumno}/${idCiclo}`);
     }
-
-    getAlumnos(id) {
+    getCurso(idAlumno,idCiclo) {
         let self = this;
-        return self.axios.get(`${self.baseUrl}_get_alumnos/${id}`);
+        return self.axios.get(`${self.baseUrl}_cursos/${idAlumno}/${idCiclo}`);
     }
 
     getInfo(){
@@ -49,4 +48,4 @@ class AsignacionCursoProfesorService {
     }
 }
 
-export default AsignacionCursoProfesorService
+export default AsignacionAlumnoService

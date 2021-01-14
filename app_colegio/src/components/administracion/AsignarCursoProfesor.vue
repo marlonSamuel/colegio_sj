@@ -24,23 +24,16 @@
                   <v-flex xs12 sm8 md8>
                     <v-autocomplete
                       v-model="form.curso_grad_niv_edu_id"
+                      v-validate="'required'"
                       label="Nivel Educativo/Grado/Curso"
                       placeholder="Nivel Educativo / Grado / Curso"
                       :items="info"
                       item-text="nombre"
                       item-value="id"
+                      data-vv-name="curso-grado"
+                      :error-messages="errors.collect('curso-grado')"
                     >
                     </v-autocomplete>
-                  </v-flex>
-                  <v-flex md2>
-                    <v-btn
-                      @click="createOrEdit"
-                      small
-                      color="primary"
-                      dark
-                      class="mb-2"
-                      ><v-icon> add</v-icon></v-btn
-                    >
                   </v-flex>
                   <v-flex xs12 md6>
                     <span class="headline">Asignar Secciones</span>
@@ -60,6 +53,55 @@
                       </v-flex>
                     </v-layout>
                   </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" flat @click="close">Volver</v-btn>
+              <v-btn flat @click="createOrEdit" color="blue darken-1"
+                >Guardar</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialog2" max-width="1000px">
+          <v-card>
+            <v-card-title>
+              <span class="headline"
+                >Nivel Educativo/Grado/Curso asignados a
+              </span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap> 
+                    <v-flex xs12 md12 sm12>
+                    <template>
+                      <v-list dense>
+                        <v-subheader>Asignaciones</v-subheader>
+                        <v-list-tile
+                          v-for="(item, i) in asignaciones"
+                          :key="i"
+                        >
+                          <v-list-tile-action>
+                            <v-icon
+                              color="error"
+                              fab
+                              dark
+                              @click="destroy(item)"
+                              >delete</v-icon
+                            >
+                          </v-list-tile-action>
+                          <v-list-tile-title
+                            v-text="item.nombre"
+                          ></v-list-tile-title>
+                        </v-list-tile>
+                      </v-list>
+                    </template>
+                  </v-flex>
+
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -91,15 +133,29 @@
               <template v-slot:activator="{ on }">
                 <v-icon
                   v-on="on"
-                  color="warning"
+                  color="primary"
                   fab
                   dark
-                  @click="edit(props.item)"
+                  @click="config(props.item)"
                 >
                   settings</v-icon
                 >
               </template>
               <span>Configurar Nivel Educativo-Grado-Cursos</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  v-on="on"
+                  color="warning"
+                  fab
+                  dark
+                  @click="edit(props.item)"
+                >
+                  edit</v-icon
+                >
+              </template>
+              <span>Editar Nivel Educativo-Grado-Cursos asignados</span>
             </v-tooltip>
           </td>
         </template>
@@ -121,11 +177,13 @@ export default {
   data() {
     return {
       dialog: false,
+      dialog2:false,
       search: "",
       loading: false,
       items: [],
       info: [],
       niv_grad_curso: [],
+      asignaciones:[],
       secciones: [],
       headers: [
         { text: "Nombre", value: "primer_nombre" },
@@ -144,6 +202,7 @@ export default {
         curso_grad_niv_edu_id: null,
         secciones: [],
       },
+      profesor_id:null,
     };
   },
 
@@ -154,24 +213,43 @@ export default {
   },
 
   methods: {
-    getAll(idProfesor) {
+    getAll(idProfesor, idCiclo) {
       let self = this;
       self.loading = true;
       self.$store.state.services.asignacionProfesorService
-        .getAll(idProfesor)
+        .getAll(idProfesor, idCiclo)
         .then((r) => {
           self.loading = false;
           self.niv_grad_curso = r.data;
         })
         .catch((r) => {});
     },
+    get(idProfesor, idCiclo) {
+      let self = this;
+      self.loading = true;
+      self.$store.state.services.asignacionProfesorService
+        .get(idProfesor, idCiclo)
+        .then((r) => {
+          self.loading = false;
+          self.asignaciones = r.data;
+        })
+        .catch((r) => {});
+    },
     RemoveAsignados(arr) {
-        let self = this;
-      self.niv_grad_curso.forEach(function (element) {
-        self.info = arr.filter(function (ele) {
-          return ele.id != element.curso_grad_niv_edu_id;
+      let self = this;
+      console.log(self.niv_grad_curso.length);
+      if (self.niv_grad_curso.length < 1) {
+        self.info = arr;
+      } else {
+        self.niv_grad_curso.forEach(function (element) {
+          arr.forEach(function (item) {
+            if (element.curso_grad_niv_edu_id === item.id) {
+              arr.splice(arr.indexOf(item), 1);
+            }
+          });
         });
-      });
+        self.info = arr;
+      }
     },
     getProfesores() {
       let self = this;
@@ -182,7 +260,7 @@ export default {
           self.loading = false;
           self.items = [];
           r.data.forEach(function (element) {
-            if (element.cargo.id === 1) {
+            if (element.cargo.nombre.toLowerCase() === "profesor") {
               self.items.push(element);
             }
           });
@@ -200,7 +278,7 @@ export default {
         .then((r) => {
           self.loading = false;
           self.info = r.data.data
-          //self.RemoveAsignados(r.data.data);
+          self.RemoveAsignados(r.data.data);
         })
         .catch((r) => {});
     },
@@ -221,7 +299,11 @@ export default {
       let self = this;
       self.loading = true;
       let data = self.form;
-      console.log(data);
+      if (data.secciones.length === 0) {
+        self.loading = false;
+        this.$toastr.error("Debe Seleccionar al menos una sección", "error");
+        return;
+      }
       self.$store.state.services.asignacionProfesorService
         .create(data)
         .then((r) => {
@@ -230,7 +312,7 @@ export default {
             return;
           }
           this.$toastr.success("registro agregado con éxito", "éxito");
-          self.getAll(self.form.empleado_id);
+          self.getAll(self.profesor_id, this.$store.state.ciclo.id);
           self.getInfo();
           self.clearData();
         })
@@ -261,17 +343,17 @@ export default {
     destroy(data) {
       let self = this;
       self
-        .$confirm("Seguro que desea eliminar grado " + data.codigo + "?")
+        .$confirm("Seguro que desea eliminar " + data.nombre + "?")
         .then((res) => {
           self.loading = true;
-          self.$store.state.services.empleadoService
+          self.$store.state.services.asignacionProfesorService
             .destroy(data)
             .then((r) => {
               self.loading = false;
               if (self.$store.state.global.captureError(r)) {
                 return;
               }
-              self.getAll();
+              self.get(self.profesor_id, this.$store.state.ciclo.id);
               this.$toastr.success("registro eliminado con exito", "exito");
               self.clearData();
             })
@@ -290,19 +372,28 @@ export default {
         else if (typeof self.form[key] === "number") self.form[key] = null;
       });
       self.form.secciones = [];
+      //self.niv_grad_curso = [];
       self.$validator.reset();
     },
 
-    //editar registro
-    edit(data) {
+    //asignar cursos
+    config(data) {
       let self = this;
-      this.dialog = true;     
-      self.getAll(data.id);
+      this.dialog = true;
+      self.getAll(data.id, this.$store.state.ciclo.id);
       self.getInfo();
-      self.form.empleado_id = data.id;
+      self.profesor_id = data.id;
+      self.form.ciclo_id = this.$store.state.ciclo.id;
       //self.mapData(data);
     },
-
+    //editar
+    edit(data) {
+      let self = this;
+      this.dialog2 = true;
+      self.get(data.id, this.$store.state.ciclo.id);
+      self.profesor_id = data.id;
+      self.form.ciclo_id = this.$store.state.ciclo.id;
+    },
     //mapear datos a formulario
     mapData(data) {
       let self = this;
@@ -333,6 +424,7 @@ export default {
     close() {
       let self = this;
       self.dialog = false;
+      self.dialog2 = false;
       self.clearData();
       self.setCodigo();
     },

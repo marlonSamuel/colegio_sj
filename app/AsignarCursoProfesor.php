@@ -19,6 +19,7 @@ class AsignarCursoProfesor extends Model
         'curso_grad_niv_edu_id'
 	];
 
+	
     public function profesor(){
         return $this->belongsTo(Empleado::class);
     }

@@ -84,7 +84,9 @@ Route::resource('periodos_academicos', 'PeriodoAcademico\PeriodoAcademicoControl
 Route::resource('asignar_cursos_profesores', 'AsignarCursoProfesor\AsignarCursoProfesorController', ['except' => ['create', 'edit']]);
 Route::name('asignar_cursos_profesores_info')->get('asignar_cursos_profesores_info','AsignarCursoProfesor\AsignarCursoProfesorController@cursoGradoNivel');
 
-Route::name('asignar_cursos_profesores_get_all')->get('asignar_cursos_profesores_get_all/{profesor_id}','AsignarCursoProfesor\AsignarCursoProfesorController@getAll');
+Route::name('asignar_cursos_profesores_get_all')->get('asignar_cursos_profesores_get_all/{profesor_id}/{ciclo_id}','AsignarCursoProfesor\AsignarCursoProfesorController@getAll');
+Route::name('asignar_cursos_profesores_show_info')->get('asignar_cursos_profesores_show_info/{profesor_id}/{ciclo_id}','AsignarCursoProfesor\AsignarCursoProfesorController@getInfoProfesor');
+//Route::name('asignar_cursos_profesores_get_all')->get('asignar_cursos_profesores_get_all/{profesor_id}','AsignarCursoProfesor\AsignarCursoProfesorController@getAll');
 
 Route::name('asignar_cursos_profesores_get_one')->get('asignar_cursos_profesores_get_one/{id}','AsignarCursoProfesor\AsignarCursoProfesorController@getOne');
 
@@ -106,4 +108,7 @@ Route::resource('series', 'Serie\SerieController', ['except' => ['create', 'edit
 Route::resource('series.preguntas', 'Serie\SeriePreguntaController', ['except' => ['create', 'edit']]);
 Route::resource('preguntas', 'Serie\PreguntaController', ['except' => ['create', 'edit']]);
 
+Route::resource('asignaciones_alumnos', 'AsignacionAlumno\AsignacionAlumnoController', ['except' => ['create', 'edit']]);
+Route::name('asignaciones_alumnos_asignaciones')->get('asignaciones_alumnos_asignaciones/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getAsignaciones');
+Route::name('asignaciones_alumnos_cursos')->get('asignaciones_alumnos_cursos/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getCursos');
 //Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);

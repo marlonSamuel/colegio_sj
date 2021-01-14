@@ -17,7 +17,7 @@ class AsignarCursoProfSec extends Model
 	];
 
     public function curso_profesor(){
-        return $this->belongsTo(AsignarCursoProfesor::class);
+        return $this->belongsTo(AsignarCursoProfesor::class,'asignar_curso_profesor_id');
     }
 	public function seccion()
 	{
