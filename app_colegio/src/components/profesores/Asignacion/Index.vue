@@ -308,7 +308,7 @@ export default {
           let self = this
             self.loading = true
             self.$store.state.services.asignacionProfesorService
-            .get(id)
+            .getAsignaciones(id)
             .then(r => {
                 self.loading = false
                 if (self.$store.state.global.captureError(r)) {
