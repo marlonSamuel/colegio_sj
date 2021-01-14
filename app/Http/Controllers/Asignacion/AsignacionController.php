@@ -142,6 +142,7 @@ class AsignacionController extends ApiController
 
                 if(!is_null($asignacione->adjunto) && $asignacione->adjunto !== "" && $asignacione->adjunto !== "null"){
                     $path = public_path()."/documentos/".$request->file_name;
+                    chown($path, 666);
                     unlink($path);
                 }
 
@@ -167,6 +168,7 @@ class AsignacionController extends ApiController
     public function destroy(Asignacion $asignacione)
     {
         $path = public_path()."/documentos/".$asignacione->adjunto;
+        chown($path, 666);
         unlink($path);
         $asignacione->delete();
         return $this->showOne($asignacione,201);
