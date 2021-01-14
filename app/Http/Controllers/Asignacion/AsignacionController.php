@@ -135,18 +135,16 @@ class AsignacionController extends ApiController
         $asignacione->entrega_tarde = $request->entrega_tarde;
 
         if(!is_null($request->file) && $request->file !== "" && $request->file !== "null"){
-
-            if(!is_null($asignacione->adjunto) && $asignacione->adjunto !== ""){
-                $path = public_path()."/documentos/".$request->file_name;
-                unlink($path);
-            }
-
             $folder = 'asignaciones_'.$asignacione->asignar_curso_profesor_id;
             $name = $asignacione->id.'-'.$request->file->getClientOriginalName();
             
             if($request->file_name != $name){
-                $path = public_path()."/documentos/".$request->file_name;
-                unlink($path);
+
+                if(!is_null($asignacione->adjunto) && $asignacione->adjunto !== "" && $asignacione->adjunto !== "null"){
+                    $path = public_path()."/documentos/".$request->file_name;
+                    unlink($path);
+                }
+
                 $asignacione->adjunto = $request->file->storeAs($folder, $name);
             }
         }
