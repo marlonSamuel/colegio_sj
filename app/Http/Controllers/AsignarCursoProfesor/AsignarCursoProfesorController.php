@@ -30,6 +30,7 @@ class AsignarCursoProfesorController extends ApiController
                         ->with('curso_grado_nivel.curso',
                         'curso_grado_nivel.grado_nivel_educativo.grado',
                         'curso_grado_nivel.grado_nivel_educativo.nivelEducativo')->get();
+                        
         return $this->showAll($curso_niveles);
     }
     public function getInfoProfesor($idProfesor, $ciclo_id)

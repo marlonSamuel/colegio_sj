@@ -108,11 +108,11 @@ export default {
     },
 
     //obtener cursos de profesores
-    get(id) {
+    get(id,id_ciclo) {
       let self = this;
       self.loading = true;
       self.$store.state.services.asignacionProfesorService
-        .getAll(id,this.$store.state.ciclo.id)
+        .getAll(id, id_ciclo)
         .then(r => {
           self.loading = false
           self.items = r.data
@@ -128,7 +128,7 @@ export default {
             let self = this
             let user = self.$store.state.usuario
             if(user.user_info !== null && user.user_info !== undefined){
-                self.get(user.user_info.id)
+                self.get(user.user_info.id,self.$store.state.ciclo.id)
             }
             return true
         }
