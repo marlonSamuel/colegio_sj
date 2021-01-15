@@ -41,6 +41,11 @@ class AsignacionAlumnoService {
         return self.axios.put(`${self.baseUrl}/${data.id}`,data);
     }
 
+    asignarNota(data) {
+        let self = this;
+        return self.axios.put(`${self.baseUrl}_asignar_nota/${data.id}`,data);
+    }
+
     destroy(data){
         console.log(data);
         let self = this;

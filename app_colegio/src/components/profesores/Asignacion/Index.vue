@@ -5,7 +5,15 @@
             fluid
             grid-list-md>
             <v-card>
-                
+                <v-layout row wrap justify-end>
+                    <div>
+                    <v-breadcrumbs :items="itemsB">
+                        <template v-slot:divider>
+                        <v-icon>forward</v-icon>
+                        </template>
+                    </v-breadcrumbs>
+                    </div>
+                </v-layout>
                 <v-layout row wrap>
                     <v-flex sm12 md12 xs12 lg12>
                          <v-toolbar flat color="white">
@@ -507,6 +515,14 @@ export default {
     setTitle(){
       let self = this
       return self.form.id !== null ? self.form.nombre : 'Nueva asignación'
+    },
+
+    itemsB(){
+        let self = this
+        return [
+        { text: "CURSOS",disabled: false, href: "#/cursos_index"},
+        { text: "ASIGNACIONES",disabled: true, href: "#"}
+      ]
     }
   },
 };

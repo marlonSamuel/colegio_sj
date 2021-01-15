@@ -1,12 +1,33 @@
 <template>
     <v-layout justify-center>
-        <v-flex xs12 sm12 md12 v-if="event">
+        <v-flex xs12 sm12 md12>
             <v-container
             fluid
             grid-list-md v-loading="loading">
+
                 <v-layout row wrap>
-                        <v-flex sm6 md6 xs12 lg6>
-                            <h2>Grados Cursos actuales</h2>
+                    <v-flex>
+                        <v-toolbar flat color="white">
+                            <v-toolbar-title v-if="ciclo !== null"> <v-icon color="blue">library_books</v-icon> 
+                                    CURSOS ASIGNADOS CICLO ESCOLAR {{ciclo.ciclo}}
+                            </v-toolbar-title>
+                            <v-divider
+                                class="mx-2"
+                                inset
+                                vertical
+                                ></v-divider><v-spacer></v-spacer>
+                                <v-flex>
+                                    <v-select v-model="ciclo_id"
+                                    item-value="id"
+                                    item-text="ciclo"
+                                    append-icon="filter_list"
+                                    @input="selectedCiclo"
+                                    :items="ciclos" label="Filtrar por ciclo">
+                                    </v-select>
+                                </v-flex>
+                            <v-spacer></v-spacer>
+                        </v-toolbar>
+
                             <v-data-table
                                     :items="items"
                                     class="elevation-1"
@@ -32,7 +53,7 @@
                                                     >add</v-icon
                                                     > asignaciones</v-btn>
                                                 </template>
-                                                <span>asignar tareas o cuestionarios</span>
+                                            <span>asignar tareas o cuestionarios</span>
                                             </v-tooltip>
                                             <v-tooltip top>
                                              <template v-slot:activator="{ on }">
@@ -62,19 +83,6 @@
                                     </template>
                             </v-data-table>
                         </v-flex>
-                        <v-flex sm6 md6 xs12 lg6>
-                            <h2>Tareas asignadas</h2>
-                            <v-data-table
-                                    :items="items"
-                                    class="elevation-1"
-                                    hide-actions
-                                    :headers="headers2"
-                                >
-                                    <template v-slot:items="props">
-                                         
-                                    </template>
-                            </v-data-table>
-                        </v-flex>
                 </v-layout>
             </v-container>
         </v-flex>
@@ -91,10 +99,14 @@ export default {
     return {
         loading: false,
         items: [],
+        ciclos: [],
+        user: {},
+        ciclo: null,
+        ciclo_id: null,
         headers: [
             {text: 'Grado',value: '',sortable: false},
             {text: 'Curso', value: '', sortable: false},
-            {text: '', value: '', sortable: false}
+            {text: 'Acciones', value: '', sortable: false}
         ],
         headers2: [
             {text: 'Tarea',value: '',sortable: false},
@@ -105,12 +117,17 @@ export default {
 
   created() {
     let self = this
-    events.$on("teacher_event", self.onEventTeach)
+    self.user = self.$store.state.usuario
+    self.ciclo = self.$store.state.ciclo
+
+    if(self.user.user_info !== null && self.user.user_info !== undefined){
+        self.get(self.user.user_info.id,self.$store.state.ciclo.id)
+    }
+    self.getCiclos()
   },
 
   beforeDestroy() {
     let self = this;
-    events.$off("teacher_event", self.onEventTeach)
   },
 
   methods: {
@@ -130,20 +147,34 @@ export default {
           self.items = r.data
         })
         .catch(r => {});
+    },
+
+     getCiclos(){
+        let self = this
+        self.loading = true
+        self.$store.state.services.cicloService
+        .getAll()
+        .then(r => {
+            self.loading = false
+            if (self.$store.state.global.captureError(r)) {
+              return;
+            }
+            self.ciclos = r.data
+        }).catch(e => {
+
+        })
+    },
+
+    selectedCiclo(id){
+      let self = this
+      self.ciclo = self.ciclos.find(x=>x.id == id)
+      self.get(self.user.user_info.id,id)
     }
 
 
   },
 
     computed: {
-        event(){
-            let self = this
-            let user = self.$store.state.usuario
-            if(user.user_info !== null && user.user_info !== undefined){
-                self.get(user.user_info.id,self.$store.state.ciclo.id)
-            }
-            return true
-        }
-    },
+    }
 };
 </script>

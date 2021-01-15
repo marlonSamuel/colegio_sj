@@ -361,8 +361,9 @@ export default {
     itemsB(){
         let self = this
         return [
-        { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
-        {text: "CUESTIONARIO",disabled: true,href: "#"}
+          { text: "CURSOS",disabled: false, href: "#/cursos_index"},
+          { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
+          {text: "CUESTIONARIO",disabled: true,href: "#"}
       ]
     }
   },

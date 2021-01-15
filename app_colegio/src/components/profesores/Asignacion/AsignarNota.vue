@@ -63,7 +63,9 @@
                                 <br />
                                 NIVEL EDUCATIVO: {{curso.curso_grado_nivel.grado_nivel_educativo.nivel_educativo.nombre | uppercase}} <br />
                                 GRADO: {{curso.curso_grado_nivel.grado_nivel_educativo.grado.nombre | uppercase}} <br />
-                                CURSO: {{curso.curso_grado_nivel.curso.nombre | uppercase}}
+                                CURSO: {{curso.curso_grado_nivel.curso.nombre | uppercase}} <br />
+                                FECHA ENTREGA: {{asignacion.fecha_entrega | moment('DD/MM/YYYY')}}<br />
+                                PUEDE ENTREGARSE TARDE: {{asignacion.entrega_tarde ? 'SI':'NO'}}
                                 <br />
                                 <br />
                                 <hr />
@@ -77,7 +79,10 @@
                         class="elevation-1"
                     >
                         <template v-slot:items="props">
-                            <td class="text-xs-left">{{props.item.inscripcion.alumno.codigo}}</td>
+                            <td class="text-xs-left">
+                                <v-icon @click="props.expanded = !props.expanded">{{!props.expanded ? 'keyboard_arrow_right' : 'keyboard_arrow_down' }} </v-icon>
+                                {{props.item.inscripcion.alumno.codigo}}
+                            </td>
                             <td class="text-xs-left">{{props.item.inscripcion.alumno.primer_nombre}}
                                                      {{props.item.inscripcion.alumno.segundo_nombre}}
                                                      {{props.item.inscripcion.alumno.primer_apellido}}
@@ -113,6 +118,29 @@
                                 </v-tooltip>
                             </td>
                         </template>
+                        <template v-slot:expand="props">
+                                    <v-card flat>
+                                    <v-card-text>
+                                        <hr /><hr />
+                                        <v-container fluid grid-list-md>
+                                            <v-layout wrap>
+                                                <v-flex xs12 md12 lg12>
+                                                    <h3>Información de la asignación</h3>
+                                                                    <hr />
+                                                </v-flex>
+                                                <v-flex xs12 md12 lg12>
+                                                    <b>Nota:</b> {{props.item.nota}} pts <br />
+                                                    <b>Entregado:</b> {{props.item.entregado ? 'SI': 'NO'}} <br />
+                                                    <b>Calificado:</b> {{props.item.calificado ? 'SI': 'NO'}} <br />
+                                                    <b>Observaciones: </b> 
+                                                        <span>{{props.item.observaciones}}</span>
+                                                </v-flex>
+                                            </v-layout>
+                                        </v-container>
+                                        <hr /><hr />
+                                    </v-card-text>
+                                    </v-card>
+                                </template>
                         <template v-slot:no-data>
                             <v-btn color="primary" @click="getAll">Reset</v-btn>
                         </template>
@@ -159,7 +187,6 @@ export default {
 
       form: {
           id: null,
-          asignacion_alumno_id: null,
           nota: null,
           observaciones: ''
       }
@@ -229,8 +256,33 @@ export default {
             })
       },
 
+       //funcion para actualizar registro
+    update(){
+      let self = this
+      self.loading = true
+      let data = self.form
+       
+      self.$store.state.services.asignacionAlumnoService
+        .asignarNota(data)
+        .then(r => {
+          self.loading = false
+          if (self.$store.state.global.captureError(r)) {
+            return;
+          }
+          self.getAll(self.asignacion_id)
+          this.$toastr.success('registro actualizado con éxito', 'éxito')
+          self.close()
+        })
+        .catch(r => {});
+    },
+
       beforeEdit(){
-          let self = this
+        let self = this
+            this.$validator.validateAll().then((result) => {
+            if (result) {
+                self.update()
+            }
+        })
       },
 
       edit(data){
@@ -252,8 +304,9 @@ export default {
       itemsB(){
         let self = this
         return [
-        { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
-        {text: "ASIGNACION NOTAS",disabled: true,href: "#"}
+            { text: "CURSOS",disabled: false, href: "#/cursos_index"},
+            { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
+            {text: "ASIGNACION NOTAS",disabled: true,href: "#"}
       ]
     }
   }
