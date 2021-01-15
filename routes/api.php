@@ -109,6 +109,9 @@ Route::resource('series.preguntas', 'Serie\SeriePreguntaController', ['except' =
 Route::resource('preguntas', 'Serie\PreguntaController', ['except' => ['create', 'edit']]);
 
 Route::resource('asignaciones_alumnos', 'AsignacionAlumno\AsignacionAlumnoController', ['except' => ['create', 'edit']]);
+
 Route::name('asignaciones_alumnos_asignaciones')->get('asignaciones_alumnos_asignaciones/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getAsignaciones');
 Route::name('asignaciones_alumnos_cursos')->get('asignaciones_alumnos_cursos/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getCursos');
+
+Route::name('asignaciones_alumnos_asignar_nota')->put('asignaciones_alumnos_asignar_nota/{alumno_id}','AsignacionAlumno\AsignacionAlumnoController@asignarNota');
 //Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);
