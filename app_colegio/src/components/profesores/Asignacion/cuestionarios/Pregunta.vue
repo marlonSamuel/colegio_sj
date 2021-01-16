@@ -23,13 +23,13 @@
                                     
                                     <span v-if="serie.tipo_serie =='FV'">falso/verdadero</span>
                                     <span v-if="serie.tipo_serie =='RM'">respuesta multiple</span>
-                                    <span v-if="serie.tipo_serie =='PD'">rreguntas directas</span>
+                                    <span v-if="serie.tipo_serie =='PD'">rreguntas directas</span> {{serie.nota}} (pts)
                                 </v-toolbar-title>
                                 
                                 <v-spacer></v-spacer>
                                 <v-dialog v-model="dialog" max-width="1200px" persistent>
                                 <template v-slot:activator="{ on }">
-                                    <v-btn color="primary" small dark class="mb-2" v-on="on" v-if="(serie.nota - totalPoints()) > 0 "><v-icon>add</v-icon> Nuevo</v-btn>
+                                    <v-btn color="primary" small dark class="mb-2" v-on="on" ><v-icon>add</v-icon> Nuevo</v-btn>
                                 </template>
                                 <v-card>
                                     <v-card-title>
@@ -51,7 +51,7 @@
                                         <v-flex xs12 sm2 md2>
                                             <v-text-field v-model="form.nota" 
                                                 label="Nota (pts)"
-                                                v-validate="'required|decimal|min_value:0.5|max_value:500'"
+                                                v-validate="'required|decimal|min_value:0.5|max_value:'+totalPoints()"
                                                 type="text"
                                                 data-vv-name="nota"
                                                 :error-messages="errors.collect('nota')">
@@ -502,10 +502,11 @@ export default {
 
     totalPoints(){
         let self = this
+        let nota = self.serie !== null ? self.serie.nota : 0
         var total = self.items.reduce(function(a, b) {
             return a + parseFloat(b.nota)
         }, 0)
-        return total.toFixed(2);
+        return nota - total.toFixed(2);
     },
 
     //agregar respuestas multiples
@@ -541,9 +542,10 @@ export default {
     itemsB(){
         let self = this
         return [
-        { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
-        {text: "CUESTIONARIO",disabled: false, href: "#/serie/"+self.curso_id+"/asignacion/"+self.asignacion_id},
-        {text: "PREGUNTAS",disabled: true, href: "#"}
+          { text: "CURSOS",disabled: false, href: "#/cursos_index"},
+          { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
+          {text: "CUESTIONARIO",disabled: false, href: "#/serie/"+self.curso_id+"/asignacion/"+self.asignacion_id},
+          {text: "PREGUNTAS",disabled: true, href: "#"}
       ]
     }
   },

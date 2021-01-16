@@ -33,6 +33,7 @@ class AsignacionAlumnoController extends ApiController
                         'asignacion.asignar_curso_profesor.curso_grado_nivel.curso',
                         'inscripcion')->get();
         $asignaciones = $asignaciones->where('inscripcion.ciclo_id',$ciclo_id);
+
         return $this->showAll($asignaciones);
     }
     public function getCursos($idAlumno,$ciclo_id)
@@ -204,6 +205,33 @@ class AsignacionAlumnoController extends ApiController
         DB::commit();
 
         return $this->showOne($asignacion,201);
+    }
+
+
+    //asignar nota
+     /**
+     */
+    public function asignarNota(Request $request, $id)
+    {
+        $asignar_nota = AsignacionAlumno::find($id);
+         $reglas = [
+            'id' => 'required|integer',
+            'nota' => 'required|numeric'
+        ];
+
+        $this->validate($request, $reglas);
+
+        $asignar_nota->nota = $request->nota;
+        $asignar_nota->observaciones = $request->observaciones;
+        $asignar_nota->calificado = true;
+
+        if (!$asignar_nota->isDirty()) {
+            return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
+        }
+
+        $asignar_nota->save();
+
+        return $this->showOne($asignar_nota,201);
     }
 
     /**

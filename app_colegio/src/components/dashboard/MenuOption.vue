@@ -83,7 +83,7 @@ export default {
 
          itemsProfesor: [
             { title: 'Inicio',icon:"home", path: '/' },
-            { title: 'Mis cursos',icon:"file_copy", path: '/' }
+            { title: 'Mis cursos',icon:"file_copy", path: '/cursos_index' }
         ],
 
          itemsApoderado: [

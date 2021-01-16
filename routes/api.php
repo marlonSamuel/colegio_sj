@@ -102,13 +102,17 @@ Route::name('asignacion_secciones_get_all_without_section')->get('asignacion_sec
 Route::resource('asignaciones', 'Asignacion\AsignacionController', ['except' => ['create', 'edit']]);
 Route::name('asignaciones_update')->post('asignaciones_update/{id}', 'Asignacion\AsignacionController@updateData');
 Route::resource('asignaciones.series', 'Asignacion\AsignacionSerieController', ['except' => ['create', 'edit']]);
+Route::resource('asignaciones.alumnos', 'Asignacion\AsignacionAlumnoController', ['except' => ['create', 'edit']]);
 
 Route::resource('series', 'Serie\SerieController', ['except' => ['create', 'edit']]);
 Route::resource('series.preguntas', 'Serie\SeriePreguntaController', ['except' => ['create', 'edit']]);
 Route::resource('preguntas', 'Serie\PreguntaController', ['except' => ['create', 'edit']]);
 
 Route::resource('asignaciones_alumnos', 'AsignacionAlumno\AsignacionAlumnoController', ['except' => ['create', 'edit']]);
+
 Route::name('asignaciones_alumnos_asignaciones')->get('asignaciones_alumnos_asignaciones/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getAsignaciones');
 Route::name('asignaciones_alumnos_cursos')->get('asignaciones_alumnos_cursos/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getCursos');
 Route::name('asignaciones_alumnos_update')->post('asignaciones_alumnos_update/{id}', 'AsignacionAlumno\AsignacionAlumnoController@updateData');
+
+Route::name('asignaciones_alumnos_asignar_nota')->put('asignaciones_alumnos_asignar_nota/{alumno_id}','AsignacionAlumno\AsignacionAlumnoController@asignarNota');
 //Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);

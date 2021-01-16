@@ -4,6 +4,7 @@ namespace App;
 
 use App\Serie;
 use App\AsignarCursoProfesor;
+use App\AsignacionAlumno;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,7 +23,8 @@ class Asignacion extends Model
     	'tiempo',
     	'entrega_tarde',
     	'adjunto',
-        'flag_tiempo'
+        'flag_tiempo',
+        ''
     ];
 
     public function asignar_curso_profesor(){
@@ -31,5 +33,9 @@ class Asignacion extends Model
 
     public function series(){
         return $this->hasMany(Serie::class);
+    }
+
+    public function alumnos(){
+        return $this->hasMany(AsignacionAlumno::class);
     }
 }

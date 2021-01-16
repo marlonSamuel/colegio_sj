@@ -50,6 +50,11 @@ class AsignacionAlumnoService {
         )
     }
 
+    asignarNota(data) {
+        let self = this;
+        return self.axios.put(`${self.baseUrl}_asignar_nota/${data.id}`,data);
+    }
+
     destroy(data){
         console.log(data);
         let self = this;

@@ -6,6 +6,7 @@ use App\Asignacion;
 use App\AsignacionAlumno;
 use App\Inscripcion;
 use App\AsignarCursoProfesor;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
@@ -75,6 +76,10 @@ class AsignacionController extends ApiController
             }
         });
 
+        if(count($inscripciones_filter) == 0){
+            return $this->errorResponse('no se puede agregar asignación, no existe ningun alumno inscrito a este curso y grado',422);
+        }
+
         //asignar tareas a alumnos en el grado y secciones asignados
         foreach ($inscripciones_filter as $i) {
             AsignacionAlumno::create([
@@ -134,14 +139,12 @@ class AsignacionController extends ApiController
         $asignacione->nota = $request->nota;
         $asignacione->entrega_tarde = $request->entrega_tarde;
 
-        if(!is_null($request->file) && $request->file !== "" && $request->file !== null){
-
+        if(!is_null($request->file) && $request->file !== "" && $request->file !== "null"){
             $folder = 'asignaciones_'.$asignacione->asignar_curso_profesor_id;
             $name = $asignacione->id.'-'.$request->file->getClientOriginalName();
-
+            
             if($request->file_name != $name){
-                $path = public_path()."/documentos/".$request->file_name;
-                unlink($path);
+                Storage::delete($asignacione->adjunto);
                 $asignacione->adjunto = $request->file->storeAs($folder, $name);
             }
         }
@@ -163,8 +166,7 @@ class AsignacionController extends ApiController
      */
     public function destroy(Asignacion $asignacione)
     {
-        $path = public_path()."/documentos/".$asignacione->adjunto;
-        unlink($path);
+        Storage::delete($asignacione->adjunto);
         $asignacione->delete();
         return $this->showOne($asignacione,201);
     }

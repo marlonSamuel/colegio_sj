@@ -25,6 +25,7 @@ class CreateAsignacionsTable extends Migration
             $table->integer('tiempo')->default(0);
             $table->boolean('entrega_tarde')->default(0);
             $table->string('adjunto',100)->nullable();
+            $table->boolean('flag_tiempo')->default(0);
 
             $table->foreign('asignar_curso_profesor_id')->references('id')->on('asignar_curso_profesor')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

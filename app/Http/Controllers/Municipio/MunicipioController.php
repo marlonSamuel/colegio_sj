@@ -51,7 +51,7 @@ class MunicipioController extends ApiController
         $municipio->nombre = $request->nombre;
         $municipio->departamento_id = $request->departamento_id;
 
-         if (!$municipio->isDirty()) {
+        if (!$municipio->isDirty()) {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
         }
 

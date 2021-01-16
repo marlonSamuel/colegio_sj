@@ -33,12 +33,14 @@ import HistorialPagos from '@/components/inscripciones/Alumno/HistorialPagos'
 import HistorialAcademico from '@/components/inscripciones/Alumno/HistorialAcademico'
 import AsignarCursoProfesor from '@/components/administracion/AsignarCursoProfesor'
 import AsignacionIndex from '@/components/profesores/Asignacion/Index'
+import AsignarNota from '@/components/profesores/Asignacion/AsignarNota'
 import Serie from '@/components/profesores/Asignacion/cuestionarios/Serie'
 import AsignacionAlumno from '@/components/inscripciones/Alumno/asignacion/Index'
 import Pregunta from '@/components/profesores/Asignacion/cuestionarios/Pregunta'
 import ViewAsignacion from '@/components/profesores/Asignacion/cuestionarios/View'
 import ViewAlumnos from '@/components/profesores/alumnos/Index'
 import EntregaAsignacion from '@/components/inscripciones/Alumno/asignacion/EntregaAsignacion'
+import CursosIndex from '@/components/profesores/cursos/Index'
 
 Vue.use(Router)
 
@@ -97,6 +99,8 @@ const routes = [
     { path: '/view_asignacion/curso/:curso_id/asignacion/:asignacion_id', name: 'ViewAsignacion', component: ViewAsignacion, beforeEnter: multiguard([isLoggedIn]) },
     { path: '/view_alumnos/:id', name: 'ViewAlumnos', component: ViewAlumnos, beforeEnter: multiguard([isLoggedIn]) },
     { path: '/entrega_asignacion/:id', name: 'EntregaAsignacion', component: EntregaAsignacion, beforeEnter: multiguard([isLoggedIn]) },
+    { path: '/asignacion_nota/:curso_id/asignacion/:id', name: 'AsignarNota', component: AsignarNota, beforeEnter: multiguard([isLoggedIn]) },
+    { path: '/cursos_index', name: 'CursosIndex', component: CursosIndex, beforeEnter: multiguard([isLoggedIn]) },
 ]
 
 

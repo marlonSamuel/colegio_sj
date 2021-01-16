@@ -23,6 +23,9 @@ class CreateAsignacionAlumnosTable extends Migration
             $table->string('adjunto',100)->nullable();
             $table->boolean('entregado')->default(0);
             $table->boolean('calificado')->default(0);
+            $table->string('observaciones',500)->nullable();
+            $table->datetime('hora_inicio_cuestionario')->nullable();
+            $table->datetime('hora_finalizo_cuestionario')->nullable();
             $table->timestamps();
 
             $table->foreign('asignacion_id')->references('id')->on('asignacions')->onUpdate('cascade')->onDelete('cascade');

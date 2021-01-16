@@ -20,14 +20,17 @@ class AsignacionAlumno extends Model
     	'entrega_tarde',
     	'adjunto',
     	'calificado',
-    	'entregado'
+    	'entregado',
+        'observaciones',
+        'hora_inicio_cuestionario',
+        'hora_finalizo_cuestionario'
     ];
 
     public function asignacion(){
     	return $this->belongsTo(Asignacion::class,'asignacion_id');
-	}
-	
-	public function inscripcion(){
-		return $this->belongsTo(Inscripcion::class,'inscripcion_id');
-	}
+    }
+
+    public function inscripcion(){
+        return $this->belongsTo(Inscripcion::class,'inscripcion_id');
+    }
 }

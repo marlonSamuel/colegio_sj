@@ -21,7 +21,7 @@
               
           <v-toolbar flat color="white">
             <v-toolbar-title v-if="asignacion !== null">
-              <v-icon color="blue">settings</v-icon> Configurar series {{asignacion.titulo | lowercase}}</v-toolbar-title>
+              <v-icon color="blue">settings</v-icon> Configurar series {{asignacion.titulo | lowercase}} {{asignacion.nota}} (pts)</v-toolbar-title>
            
             <v-spacer></v-spacer>
             <v-dialog v-model="dialog" max-width="800px">
@@ -48,7 +48,7 @@
                       <v-flex xs12 sm6 md6>
                         <v-text-field v-model="form.nota" 
                             label="Nota"
-                            v-validate="'required'"
+                            v-validate="'required|decimal|min_value:0.5|max_value:'+totalPoints"
                             type="text"
                             data-vv-name="nota"
                             :error-messages="errors.collect('nota')">
@@ -361,10 +361,20 @@ export default {
     itemsB(){
         let self = this
         return [
-        { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
-        {text: "CUESTIONARIO",disabled: true,href: "#"}
+          { text: "CURSOS",disabled: false, href: "#/cursos_index"},
+          { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
+          {text: "CUESTIONARIO",disabled: true,href: "#"}
       ]
-    }
+    },
+
+    totalPoints(){
+      let self = this
+      let nota = self.asignacion !== null ? self.asignacion.nota : 0
+      var total = self.items.reduce(function(a, b) {
+          return a + parseFloat(b.nota)
+      }, 0)
+      return parseFloat(nota - total.toFixed(2));
+    },
   },
 };
 </script>
