@@ -35,6 +35,7 @@ class AsignacionAlumnoController extends ApiController
 
         return $this->showAll($asignaciones);
     }
+
     public function getCursos($idAlumno,$ciclo_id)
     {
         $curso_niveles = Inscripcion::where([['id', $idAlumno],['ciclo_id',$ciclo_id]])
@@ -45,6 +46,7 @@ class AsignacionAlumnoController extends ApiController
         $curso_niveles = $this->prepareData($curso_niveles);
         return $this->showAll($curso_niveles);
     }
+
     public function getInfoProfesor($idProfesor, $ciclo_id)
     {
         $curso_niveles = AsignarCursoProfesor::where([['empleado_id', $idProfesor], ['ciclo_id', $ciclo_id]])
@@ -60,6 +62,7 @@ class AsignacionAlumnoController extends ApiController
         $curso_niveles = $this->infoProfesor($curso_niveles);
         return $this->showAll($curso_niveles);
     }
+
     public function cursoGradoNivel()
     {
         $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo', 'grado_nivel_educativo.nivelEducativo', 'grado_nivel_educativo.grado', 'curso')->get();
@@ -146,6 +149,19 @@ class AsignacionAlumnoController extends ApiController
     {
         $asignaciones = $asignar_cursos_profesore->asignaciones;
         return $this->showAll($asignaciones);
+    }
+
+
+    //obtener asignacion alumno para cuestioanrios
+    public function cuestionario($id)
+    {
+        $asignacion_alumno = AsignacionAlumno::where('id',$id)
+                                    ->with('series.serie','series.preguntas.pregunta','series.preguntas.respuestas.respuesta')->first();
+
+
+        if(is_null($asignacion_alumno)) return $this->errorResponse('no se ha encontrado asignacion para examen',404);
+
+        return $this->showOne($asignacion_alumno);
     }
 
     /**

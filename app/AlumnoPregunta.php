@@ -2,7 +2,8 @@
 
 namespace App;
 use App\AlumnoSerie;
-use App\AlumnoPregunta;
+use App\Pregunta;
+use App\AlumnoRespuesta;
 use Illuminate\Database\Eloquent\Model;
 
 class AlumnoPregunta extends Model
@@ -21,6 +22,10 @@ class AlumnoPregunta extends Model
 
     public function pregunta(){
     	return $this->belongsTo(Pregunta::class);
+    }
+
+    public function respuestas(){
+    	return $this->hasMany(AlumnoRespuesta::class,'alumno_pregunta_id');
     }
 
 }

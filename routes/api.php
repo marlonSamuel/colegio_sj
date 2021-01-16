@@ -112,6 +112,7 @@ Route::resource('asignaciones_alumnos', 'AsignacionAlumno\AsignacionAlumnoContro
 
 Route::name('asignaciones_alumnos_asignaciones')->get('asignaciones_alumnos_asignaciones/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getAsignaciones');
 Route::name('asignaciones_alumnos_cursos')->get('asignaciones_alumnos_cursos/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getCursos');
+Route::name('asignaciones_alumnos_cuestionario')->get('asignaciones_alumnos_cuestionario/{id}','AsignacionAlumno\AsignacionAlumnoController@cuestionario');
 
 Route::name('asignaciones_alumnos_asignar_nota')->put('asignaciones_alumnos_asignar_nota/{alumno_id}','AsignacionAlumno\AsignacionAlumnoController@asignarNota');
 //Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);
