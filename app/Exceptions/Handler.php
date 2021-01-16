@@ -100,11 +100,11 @@ class Handler extends ExceptionHandler
                 return $this->errorResponse('No se puede eliminar de forma permamente el recurso porque está relacionado con algún otro.', 409);
             }
         }
-
+        
         if ($exception instanceof TokenMismatchException) {
             return redirect()->back()->withInput($request->input());
         }
-
+        
         return $this->errorResponse($exception->getMessage(), 500);
     }
 

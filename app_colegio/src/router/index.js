@@ -38,6 +38,7 @@ import AsignacionAlumno from '@/components/inscripciones/Alumno/asignacion/Index
 import Pregunta from '@/components/profesores/Asignacion/cuestionarios/Pregunta'
 import ViewAsignacion from '@/components/profesores/Asignacion/cuestionarios/View'
 import ViewAlumnos from '@/components/profesores/alumnos/Index'
+import EntregaAsignacion from '@/components/inscripciones/Alumno/asignacion/EntregaAsignacion'
 
 Vue.use(Router)
 
@@ -95,6 +96,7 @@ const routes = [
     { path: '/pregunta/:curso_id/asignacion/:asignacion_id/serie/:id', name: 'Pregunta', component: Pregunta, beforeEnter: multiguard([isLoggedIn]) },
     { path: '/view_asignacion/curso/:curso_id/asignacion/:asignacion_id', name: 'ViewAsignacion', component: ViewAsignacion, beforeEnter: multiguard([isLoggedIn]) },
     { path: '/view_alumnos/:id', name: 'ViewAlumnos', component: ViewAlumnos, beforeEnter: multiguard([isLoggedIn]) },
+    { path: '/entrega_asignacion/:id', name: 'EntregaAsignacion', component: EntregaAsignacion, beforeEnter: multiguard([isLoggedIn]) },
 ]
 
 
