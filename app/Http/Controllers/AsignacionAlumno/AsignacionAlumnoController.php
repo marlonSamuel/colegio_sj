@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class AsignacionAlumnoController extends ApiController
 {
@@ -145,10 +146,11 @@ class AsignacionAlumnoController extends ApiController
     /* *
         obtener asignaciones por cursos y profesores
      */
-    public function show(AsignarCursoProfesor $asignar_cursos_profesore)
+    public function show($id)
     {
-        $asignaciones = $asignar_cursos_profesore->asignaciones;
-        return $this->showAll($asignaciones);
+        //dd("llego".$id);
+        $asignacion_alumno = AsignacionAlumno::where('id',$id)->firstOrFail();
+        return $this->showOne($asignacion_alumno);
     }
 
 
@@ -168,6 +170,57 @@ class AsignacionAlumnoController extends ApiController
      */
     public function update(Request $request, AsignarCursoProfesor $asignarCursoProfesor)
     {
+        
+    }
+  /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\AsignacionAlumno  $asignacion
+     * @return \Illuminate\Http\Response
+     */
+    public function updateData(Request $request,$id)
+    {
+        $asignacion = AsignacionAlumno::find($id);
+
+        $reglas = [
+            'asignacion_id' => 'required',
+            'fecha_entrega' => 'required',
+            'entrega_tarde' => 'required',
+            'entregado' => 'required'
+        ];
+
+        $this->validate($request, $reglas);
+
+        DB::beginTransaction();
+        $asignacion->fecha_entrega = $request->fecha_entrega;
+        $asignacion->entrega_tarde = $request->entrega_tarde;
+        $asignacion->entregado = $request->entregado;
+        if ($request->adjunto == "" || $request->adjunto =="null" || $request->adjunto == null) {
+           if(!is_null($request->file) && $request->file !== "" && $request->file !== "null"){
+            $folder = 'entrega_asignacion_'.$request->asignacion_id;
+            $name = $asignacion->id.'-'.$request->file->getClientOriginalName();
+
+            $asignacion->adjunto = $request->file->storeAs($folder, $name);
+            $asignacion->save();
+        }
+        }else{
+          if(!is_null($request->file) && $request->file !== "" && $request->file !== null){
+
+            $folder = 'entrega_asignacion_'.$asignacion->asignacion_id;
+            $name = $asignacion->id.'-'.$request->file->getClientOriginalName();
+
+            if($request->file_name != $name){
+                Storage::delete($asignacion->adjunto);
+                $asignacion->adjunto = $request->file->storeAs($folder, $name);
+            }
+        }  
+        }
+
+        $asignacion->save();
+        DB::commit();
+
+        return $this->showOne($asignacion,201);
     }
 
 

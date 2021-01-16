@@ -53,7 +53,7 @@
                         v-on="on"
                         color="primary"
                         @click="
-                          $router.push('asignacion_alumno')
+                          $router.push(!props.item.asignacion.flag_tiempo?'entrega_asignacion/'+props.item.id:'')
                         "
                       >
                         <v-icon fab dark>edit</v-icon> responder</v-btn

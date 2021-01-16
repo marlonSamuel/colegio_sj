@@ -40,6 +40,15 @@ class AsignacionAlumnoService {
         let self = this;
         return self.axios.put(`${self.baseUrl}/${data.id}`,data);
     }
+    
+    updateData(id,data) {
+        let self = this;
+        return self.axios.post(`${self.baseUrl}_update/${id}`,data,
+            { headers: 
+                {'Content-Type': 'multipart/form-data' }
+            }
+        )
+    }
 
     asignarNota(data) {
         let self = this;

@@ -74,9 +74,8 @@
                                 color="error"
                                 v-on="on"
                                 @click="descargarAdjunto(form.adjunto)"
-                              >file_download_off
-                                </v-icon
-                              >
+                                >file_download_off
+                              </v-icon>
                             </template>
                             <span>Descargar Instrucciones</span>
                           </v-tooltip>
@@ -152,7 +151,13 @@
                         small
                         v-on="on"
                         color="primary"
-                        @click="edit(props.item)"
+                        @click="
+                          $router.push(
+                            !props.item.asignacion.flag_tiempo
+                              ? 'entrega_asignacion/' + props.item.id
+                              : ''
+                          )
+                        "
                       >
                         <v-icon fab dark>edit</v-icon> responder</v-btn
                       >
@@ -311,7 +316,7 @@ export default {
       self.form.descripcion = data.asignacion.descripcion;
       self.form.nota = data.asignacion.nota;
       self.form.fecha_entrega = data.asignacion.fecha_entrega;
-      self.form.file_name = data.asignacion.adjunto;
+      self.form.adjunto = data.asignacion.adjunto;
       console.log(self.form);
     },
     close() {
@@ -330,12 +335,12 @@ export default {
 
       self.$validator.reset();
     },
-    descargarAdjunto(documento){
-        console.log(documento);
-      let self = this
-      var url = self.$store.state.base_url+'documentos/'+documento
-      window.open(url, '_blank');
-    }
+    descargarAdjunto(documento) {
+      console.log(documento);
+      let self = this;
+      var url = self.$store.state.base_url + "documentos/" + documento;
+      window.open(url, "_blank");
+    },
   },
 
   computed: {},
