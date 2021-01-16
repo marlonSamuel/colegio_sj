@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Serie;
 
 use App\Serie;
+use App\Asignacion;
+use App\AlumnoSerie;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use Illuminate\Support\Facades\DB;
 
 class SerieController extends ApiController
 {
@@ -36,9 +39,24 @@ class SerieController extends ApiController
         ];
         
         $this->validate($request, $reglas);
+
+        DB::beginTransaction();
+
         $data = $request->all();
         $serie = Serie::create($data);
 
+        $asignacion = Asignacion::where('id',$serie->asignacion_id)->with('alumnos')->first();
+
+        if(!is_null($asignacion)){
+            foreach ($asignacion->alumnos as $a) {
+                AlumnoSerie::create([
+                    'asignacion_alumno_id' => $serie->asignacion_id,
+                    'serie_id' => $serie->id
+                ]);
+            }
+        }
+
+        DB::commit();
         return $this->showOne($serie,201);
     }
 

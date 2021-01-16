@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAsignacionsTable extends Migration
+class CreateMaterialApoyosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,13 @@ class CreateAsignacionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('asignacions', function (Blueprint $table) {
+        Schema::create('material_apoyos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('asignar_curso_profesor_id');
-            $table->boolean('cuestionario')->default(0);
-            $table->decimal('nota',5,2);
-            $table->string('titulo',50);
             $table->string('descripcion',500);
-            $table->date('fecha_entrega');
-            $table->date('fecha_habilitacion');
-            $table->integer('tiempo')->default(0);
-            $table->boolean('entrega_tarde')->default(0);
             $table->string('adjunto',100)->nullable();
-            $table->boolean('flag_tiempo')->default(0);
+            $table->boolean('link')->default(0);
+            $table->string('url',100)->nullable();
 
             $table->foreign('asignar_curso_profesor_id')->references('id')->on('asignar_curso_profesor')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
@@ -39,6 +33,6 @@ class CreateAsignacionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asignacions');
+        Schema::dropIfExists('material_apoyos');
     }
 }

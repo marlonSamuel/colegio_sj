@@ -23,7 +23,8 @@ class Asignacion extends Model
     	'tiempo',
     	'entrega_tarde',
     	'adjunto',
-        'flag_tiempo'
+        'flag_tiempo',
+        ''
     ];
 
     public function asignar_curso_profesor(){

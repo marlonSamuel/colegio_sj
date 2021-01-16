@@ -76,6 +76,10 @@ class AsignacionController extends ApiController
             }
         });
 
+        if(count($inscripciones_filter) == 0){
+            return $this->errorResponse('no se puede agregar asignación, no existe ningun alumno inscrito a este curso y grado',422);
+        }
+
         //asignar tareas a alumnos en el grado y secciones asignados
         foreach ($inscripciones_filter as $i) {
             AsignacionAlumno::create([

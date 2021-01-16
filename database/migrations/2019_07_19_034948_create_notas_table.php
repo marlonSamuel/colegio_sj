@@ -16,13 +16,13 @@ class CreateNotasTable extends Migration
         Schema::create('notas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('inscripcion_id');
-            $table->unsignedBigInteger('periodo_academico_id');
-            $table->unsignedBigInteger('curso_id');
-            $table->decimal('nota',4,2);
+            $table->unsignedBigInteger('ciclo_periodo_academico_id');
+            $table->unsignedBigInteger('asignar_curso_profesor_id');
+            $table->decimal('nota',5,2);
 
             $table->foreign('inscripcion_id')->references('id')->on('inscripciones');
-            $table->foreign('periodo_academico_id')->references('id')->on('periodos_academicos');
-            $table->foreign('curso_id')->references('id')->on('cursos');
+            $table->foreign('ciclo_periodo_academico_id')->references('id')->on('ciclo_periodo_academicos');
+            $table->foreign('asignar_curso_profesor_id')->references('id')->on('asignar_curso_profesor');
             $table->timestamps();
         });
     }

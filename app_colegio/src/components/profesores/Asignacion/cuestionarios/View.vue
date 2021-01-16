@@ -60,7 +60,10 @@
                                                     <v-flex xs12 md12 lg12 v-for="(pregunta, index_p) in serie.preguntas" :key="pregunta.id">
                                                         <b>{{index_p+1}}) {{pregunta.pregunta}} ({{pregunta.nota}} pts)</b>
                                                             <div v-if="serie.tipo_serie == 'FV'">
-                                                                <v-radio-group row readonly :value="pregunta.respuestas[0].correcta ? 'V' : 'F'">
+                                                                <v-radio-group row readonly 
+                                                                :value="pregunta.respuestas[0].correcta ? 'F' : 'V'"
+                                                                >
+
                                                                     <v-radio label="Falso" value="F"></v-radio>
                                                                     <v-radio label="Verdadero" value="V"></v-radio>
                                                                 </v-radio-group>

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Asignacion;
 use App\Pregunta;
+use App\AlumnoSerie;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,5 +25,9 @@ class Serie extends Model
 
     public function preguntas(){
     	return $this->hasMany(Pregunta::class,'serie_id');
+    }
+
+    public function alumno_series(){
+        return $this->hasMany(AlumnoSerie::class,'serie_id');
     }
 }

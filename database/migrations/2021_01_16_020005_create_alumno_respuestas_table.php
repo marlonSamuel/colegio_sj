@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRespuestaAlumnosTable extends Migration
+class CreateAlumnoRespuestasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateRespuestaAlumnosTable extends Migration
      */
     public function up()
     {
-        Schema::create('respuesta_alumnos', function (Blueprint $table) {
+        Schema::create('alumno_respuestas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('asignacion_alumno_id');
+            $table->unsignedBigInteger('alumno_pregunta_id');
             $table->unsignedBigInteger('respuesta_id');
-            $table->boolean('correcto');
-            $table->decimal('resultado',5,2);
-            $table->string('descripcion',500);
+            $table->boolean('correcto')->default(0);
+            $table->decimal('nota',5,2)->default(0);
+            $table->string('respuesta',500)->nullable();
             $table->timestamps();
 
-            $table->foreign('asignacion_alumno_id')->references('id')->on('asignacion_alumnos')->onUpdate('cascade');
+            $table->foreign('alumno_pregunta_id')->references('id')->on('alumno_preguntas')->onDelete('cascade');
             $table->foreign('respuesta_id')->references('id')->on('respuestas')->onUpdate('cascade');
         });
     }
@@ -34,6 +34,6 @@ class CreateRespuestaAlumnosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('respuesta_alumnos');
+        Schema::dropIfExists('alumno_respuestas');
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Serie;
 use App\Pregunta;
 use App\Respuesta;
 use App\Serie;
+use App\AlumnoPregunta;
+use App\AlumnoRespuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\ApiController;
@@ -60,13 +62,32 @@ class PreguntaController extends ApiController
             return $this->errorResponse('serie de preguntas directas no puede contener mas de una posible respuesta',422);
         }
 
-        //ingrando respuestas
-        foreach ($request->respuestas as $res) {
-            Respuesta::create([
-                "pregunta_id" => $pregunta->id,
-                "respuesta" => $res['respuesta'],
-                "correcta" => $res['correcta']
+        //registrando preguntas a alumnos
+        $alumno_series = $serie->alumno_series;
+        foreach ($alumno_series as $as) {
+            AlumnoPregunta::create([
+                'alumno_serie_id' => $as->id,
+                'pregunta_id' => $pregunta->id
             ]);
+        }
+
+        //ingresando respuestas
+        foreach ($request->respuestas as $res) {
+            $respuesta = Respuesta::create([
+                            "pregunta_id" => $pregunta->id,
+                            "respuesta" => $res['respuesta'],
+                            "correcta" => $res['correcta']
+                        ]);
+
+            $alumno_preguntas = $pregunta->alumno_preguntas;
+
+            //registrando respuestas
+            foreach ($alumno_preguntas as $ap) {
+                AlumnoRespuesta::create([
+                    'alumno_pregunta_id' => $ap->id,
+                    'respuesta_id' => $respuesta->id
+                ]);
+            }
         }
 
         DB::commit();
@@ -127,11 +148,21 @@ class PreguntaController extends ApiController
 
         //ingrando respuestas
         foreach ($request->respuestas as $res) {
-            Respuesta::create([
-                "pregunta_id" => $pregunta->id,
-                "respuesta" => $res['respuesta'],
-                "correcta" => $res['correcta']
-            ]);
+            $respuesta = Respuesta::create([
+                            "pregunta_id" => $pregunta->id,
+                            "respuesta" => $res['respuesta'],
+                            "correcta" => $res['correcta']
+                        ]);
+
+            $alumno_preguntas = $pregunta->alumno_preguntas;
+
+            //registrando respuestas
+            foreach ($alumno_preguntas as $ap) {
+                AlumnoRespuesta::create([
+                    'alumno_pregunta_id' => $ap->id,
+                    'respuesta_id' => $respuesta->id
+                ]);
+            }
         }
 
         $pregunta->save();

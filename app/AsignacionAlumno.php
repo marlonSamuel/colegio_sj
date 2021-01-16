@@ -21,7 +21,9 @@ class AsignacionAlumno extends Model
     	'adjunto',
     	'calificado',
     	'entregado',
-        'observaciones'
+        'observaciones',
+        'hora_inicio_cuestionario',
+        'hora_finalizo_cuestionario'
     ];
 
     public function asignacion(){
