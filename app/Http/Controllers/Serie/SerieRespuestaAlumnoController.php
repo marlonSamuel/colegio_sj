@@ -48,8 +48,9 @@ class SerieRespuestaAlumnoController extends ApiController
      * @param  \App\serie  $serie
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AlumnoSerie $alumno_serie)
+    public function update(Request $request, AlumnoSerie $serie_respuesta_alumno)
     {
+
         $reglas = [
             'id' => 'required|integer',
             'nota' => 'required'
@@ -59,9 +60,9 @@ class SerieRespuestaAlumnoController extends ApiController
 
         DB::beginTransaction();
 
-        $alumno_serie->nota = $request->nota;
-        $alumno_serie->respondida = true;
-        $alumno_serie->save();
+        $serie_respuesta_alumno->nota = $request->nota;
+        $serie_respuesta_alumno->respondida = true;
+        $serie_respuesta_alumno->save();
 
         foreach ($request->preguntas as $p) {
             $alumno_pregunta = AlumnoPregunta::find($p['id']);
@@ -71,14 +72,16 @@ class SerieRespuestaAlumnoController extends ApiController
             foreach ($p['respuestas'] as $r) {
                 $alumno_respuesta = AlumnoRespuesta::find($r['id']);
                 $alumno_respuesta->nota = $r['nota'];
-                $alumno_respuesta->correcto = $r['correcta'];
+                $alumno_respuesta->correcto = $r['correcto'];
                 $alumno_respuesta->respuesta = $r['respuesta'];
+                $alumno_respuesta->correcto_alumno = $r['correcto_alumno'];
+
                 $alumno_respuesta->save();
             }
         }
 
         DB::commit();
-        return $this->showOne($alumno_serie,201);
+        return $this->showOne($serie_respuesta_alumno,201);
     }
 
     /**

@@ -14,6 +14,7 @@ class AlumnoRespuesta extends Model
     	'respuesta_id',
     	'nota',
     	'correcto',
+        'correcto_alumno', //respuesta que el alumno considera correcta
     	'respuesta'
     ];
 
@@ -21,7 +22,7 @@ class AlumnoRespuesta extends Model
     	return $this->belongsTo(AlumnoPregunta::class);
     }
 
-    public function respuesta(){
-    	return $this->belongsTo(Respuesta::class);
+    public function respuesta_a(){
+    	return $this->belongsTo(Respuesta::class,'respuesta_id');
     }
 }

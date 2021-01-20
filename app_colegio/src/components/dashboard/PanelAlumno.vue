@@ -52,14 +52,11 @@
                         small
                         v-on="on"
                         color="primary"
-                        @click="
-                          $router.push(!props.item.asignacion.flag_tiempo?'entrega_asignacion/'+props.item.id:'')
-                        "
+                        @click="navigateTo(props.item)"
                       >
-                        <v-icon fab dark>edit</v-icon> responder</v-btn
-                      >
+                        <v-icon fab dark>edit</v-icon> {{props.item.entregado && props.item.asignacion.flag_tiempo ? 'Ver' : (props.item.entregado ? 'Reenviar' : 'Responder')}}</v-btn>
                     </template>
-                    <span>Responder</span>
+                    <span>{{props.item.entregado && props.item.asignacion.flag_tiempo ? 'Ver' : (props.item.entregado ? 'Reenviar' : 'Responder')}}</span>
                   </v-tooltip>
                 </td>
               </template>
@@ -131,6 +128,19 @@ export default {
         })
         .catch((r) => {});
     },
+
+    navigateTo(data){
+      let self = this
+      if(!data.asignacion.flag_tiempo){
+        self.$router.push('entrega_asignacion/'+data.id)
+      }else{
+        if(!data.entregado){
+          self.$router.push('cuestionario/curso/'+data.asignacion.asignar_curso_profesor_id+'/asignacion_alumno/'+data.id)
+        }else{
+          self.$router.push('view_cuestionario/curso/'+data.asignacion.asignar_curso_profesor_id+'/asignacion_alumno/'+data.id)
+        }
+      }
+    }
   },
 
   computed: {},

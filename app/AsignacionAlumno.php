@@ -23,8 +23,7 @@ class AsignacionAlumno extends Model
     	'calificado',
     	'entregado',
         'observaciones',
-        'hora_inicio_cuestionario',
-        'hora_finalizo_cuestionario'
+        'hora_inicio_cuestionario'
     ];
 
     public function asignacion(){
@@ -37,6 +36,6 @@ class AsignacionAlumno extends Model
 
     public function series()
     {
-        return $this->hasMany(AlumnoSerie::class,'serie_id');
+        return $this->hasMany(AlumnoSerie::class,'asignacion_alumno_id');
     }
 }

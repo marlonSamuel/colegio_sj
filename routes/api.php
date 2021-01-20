@@ -112,11 +112,14 @@ Route::resource('asignaciones_alumnos', 'AsignacionAlumno\AsignacionAlumnoContro
 
 Route::name('asignaciones_alumnos_asignaciones')->get('asignaciones_alumnos_asignaciones/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getAsignaciones');
 Route::name('asignaciones_alumnos_cursos')->get('asignaciones_alumnos_cursos/{alumno_id}/{ciclo_id}','AsignacionAlumno\AsignacionAlumnoController@getCursos');
-<<<<<<< HEAD
+
 Route::name('asignaciones_alumnos_cuestionario')->get('asignaciones_alumnos_cuestionario/{id}','AsignacionAlumno\AsignacionAlumnoController@cuestionario');
-=======
+
 Route::name('asignaciones_alumnos_update')->post('asignaciones_alumnos_update/{id}', 'AsignacionAlumno\AsignacionAlumnoController@updateData');
->>>>>>> 95d0e8031ea68e79ca118f96a747080661a61590
+Route::name('asignaciones_alumnos_start')->put('asignaciones_alumnos_start/{id}', 'AsignacionAlumno\AsignacionAlumnoController@iniciarCuestionario');
+Route::name('asignaciones_alumnos_finish')->put('asignaciones_alumnos_finish/{id}', 'AsignacionAlumno\AsignacionAlumnoController@terminarCuestionario');
 
 Route::name('asignaciones_alumnos_asignar_nota')->put('asignaciones_alumnos_asignar_nota/{alumno_id}','AsignacionAlumno\AsignacionAlumnoController@asignarNota');
-//Route::resource('rols.menus', 'Rol\RolMenuController', ['except' => ['create', 'edit']]);
+
+Route::resource('serie_respuesta_alumnos', 'Serie\SerieRespuestaAlumnoController', ['except' => ['create', 'edit']]);
+

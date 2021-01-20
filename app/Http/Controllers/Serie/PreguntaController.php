@@ -64,6 +64,7 @@ class PreguntaController extends ApiController
 
         //registrando preguntas a alumnos
         $alumno_series = $serie->alumno_series;
+
         foreach ($alumno_series as $as) {
             AlumnoPregunta::create([
                 'alumno_serie_id' => $as->id,
@@ -83,9 +84,11 @@ class PreguntaController extends ApiController
 
             //registrando respuestas
             foreach ($alumno_preguntas as $ap) {
+                $respuesta = $serie->tipo_serie == "RM" ? $res['respuesta'] : null;
                 AlumnoRespuesta::create([
                     'alumno_pregunta_id' => $ap->id,
-                    'respuesta_id' => $respuesta->id
+                    'respuesta_id' => $respuesta->id,
+                    'respuesta' => $respuesta
                 ]);
             }
         }

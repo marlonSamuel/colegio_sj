@@ -50,7 +50,7 @@ class SerieController extends ApiController
         if(!is_null($asignacion)){
             foreach ($asignacion->alumnos as $a) {
                 AlumnoSerie::create([
-                    'asignacion_alumno_id' => $serie->asignacion_id,
+                    'asignacion_alumno_id' => $serie->id,
                     'serie_id' => $serie->id
                 ]);
             }

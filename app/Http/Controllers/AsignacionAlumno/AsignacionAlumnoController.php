@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AsignacionAlumno;
 
+use Carbon\Carbon;
 use App\Alumno;
 use App\Inscripcion;
 use App\Asignacion;
@@ -158,13 +159,14 @@ class AsignacionAlumnoController extends ApiController
     public function cuestionario($id)
     {
         $asignacion_alumno = AsignacionAlumno::where('id',$id)
-                                    ->with('series.serie','series.preguntas.pregunta','series.preguntas.respuestas.respuesta')->first();
+                                    ->with('asignacion','series.serie','series.preguntas.pregunta','series.preguntas.respuestas.respuesta_a')->first();
 
 
         if(is_null($asignacion_alumno)) return $this->errorResponse('no se ha encontrado asignacion para examen',404);
 
         return $this->showOne($asignacion_alumno);
     }
+
 
     /**
      */
@@ -248,6 +250,30 @@ class AsignacionAlumnoController extends ApiController
         $asignar_nota->save();
 
         return $this->showOne($asignar_nota,201);
+    }
+
+        //iniciar examen
+    public function iniciarCuestionario(Request $request, $id)
+    {
+        $asignacion = AsignacionAlumno::find($id);
+
+        $asignacion->hora_inicio_cuestionario = $request->hora;
+        $asignacion->save();
+
+        return $this->showOne($asignacion,201);
+
+    }
+
+         //iniciar examen
+    public function terminarCuestionario(Request $request, $id)
+    {
+        $asignacion = AsignacionAlumno::find($id);
+        $asignacion->fecha_entrega = $request->hora;
+        $asignacion->entregado = true;
+        $asignacion->save();
+
+        return $this->showOne($asignacion,201);
+
     }
 
     /**
