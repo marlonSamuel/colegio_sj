@@ -32,7 +32,7 @@ class Asignacion extends Model
     }
 
     public function series(){
-        return $this->hasMany(Serie::class,);
+        return $this->hasMany(Serie::class);
     }
 
     public function alumnos(){
