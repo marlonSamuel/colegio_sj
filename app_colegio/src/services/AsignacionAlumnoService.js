@@ -21,6 +21,23 @@ class AsignacionAlumnoService {
         let self = this;
         return self.axios.get(`${self.baseUrl}_asignaciones/${idAlumno}/${idCiclo}`);
     }
+
+    getCuestionario(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_cuestionario/${id}`);
+    }
+
+    iniciar(data) {
+        let self = this;
+        return self.axios.put(`${self.baseUrl}_start/${data.id}`,data);
+    }
+
+    terminar(data) {
+        let self = this;
+        return self.axios.put(`${self.baseUrl}_finish/${data.id}`,data);
+    }
+
+
     getCurso(idAlumno,idCiclo) {
         let self = this;
         return self.axios.get(`${self.baseUrl}_cursos/${idAlumno}/${idCiclo}`);

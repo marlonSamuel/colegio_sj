@@ -36,6 +36,6 @@ class Asignacion extends Model
     }
 
     public function alumnos(){
-        return $this->hasMany(AsignacionAlumno::class);
+        return $this->hasMany(AsignacionAlumno::class,'asignacion_id');
     }
 }

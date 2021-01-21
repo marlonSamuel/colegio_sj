@@ -57,7 +57,7 @@
                                 </v-card>
                                 </v-dialog>
                         </v-toolbar>
-                        <v-flex>
+                        <v-flex v-if="asignacion !== null">
                             <h4 v-if="curso !== null">
                                 <hr />
                                 <br />
@@ -103,7 +103,7 @@
                                 </v-tooltip>
                                 <v-tooltip top v-if="asignacion !== null && asignacion.flag_tiempo">
                                         <template v-slot:activator="{ on }">
-                                            <v-icon color="blue" @click="" v-on="on"> visibility</v-icon>
+                                            <v-icon color="blue" @click="$router.push('/view_cuestionario/curso/'+curso_id+'/asignacion_alumno/'+props.item.id)" v-on="on"> visibility</v-icon>
                                         </template>
                                         <span>Ver resultados y calificar</span>
                                 </v-tooltip>

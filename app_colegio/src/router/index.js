@@ -43,6 +43,8 @@ import EntregaAsignacion from '@/components/inscripciones/Alumno/asignacion/Entr
 import CursosIndex from '@/components/profesores/cursos/Index'
 import MaterialApoyo from '@/components/profesores/materiales/Index'
 import Nota from '@/components/profesores/notas/Index'
+import Cuestionario from '@/components/inscripciones/Alumno/asignacion/Cuestionario'
+import ViewCuestionario from '@/components/inscripciones/Alumno/asignacion/ViewCuestionario'
 
 Vue.use(Router)
 
@@ -104,7 +106,9 @@ const routes = [
     { path: '/asignacion_nota/:curso_id/asignacion/:id', name: 'AsignarNota', component: AsignarNota, beforeEnter: multiguard([isLoggedIn]) },
     { path: '/cursos_index', name: 'CursosIndex', component: CursosIndex, beforeEnter: multiguard([isLoggedIn]) },
     { path: '/materiales_index/:id', name: 'Material', component: MaterialApoyo, beforeEnter: multiguard([isLoggedIn]) },
-    { path: '/notas_index/:id', name: 'Notas', component:Nota, beforeEnter: multiguard([isLoggedIn])}
+    { path: '/notas_index/:id', name: 'Notas', component:Nota, beforeEnter: multiguard([isLoggedIn])},
+    { path: '/cuestionario/curso/:curso_id/asignacion_alumno/:asignacion_alumno_id', name: 'Cuestionario', component: Cuestionario, beforeEnter: multiguard([isLoggedIn]) },
+    { path: '/view_cuestionario/curso/:curso_id/asignacion_alumno/:id', name: 'ViewCuestionario', component: ViewCuestionario, beforeEnter: multiguard([isLoggedIn]) },
 ]
 
 

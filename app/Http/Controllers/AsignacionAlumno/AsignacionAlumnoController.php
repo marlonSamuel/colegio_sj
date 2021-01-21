@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\AsignacionAlumno;
 
+use Carbon\Carbon;
 use App\Alumno;
 use App\Inscripcion;
 use App\Asignacion;
 use App\AsignacionAlumno;
+use App\AlumnoSerie;
+use App\AlumnoPregunta;
+use App\AlumnoRespuesta;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
@@ -36,6 +40,7 @@ class AsignacionAlumnoController extends ApiController
 
         return $this->showAll($asignaciones);
     }
+
     public function getCursos($idAlumno,$ciclo_id)
     {
         $curso_niveles = Inscripcion::where([['id', $idAlumno],['ciclo_id',$ciclo_id]])
@@ -46,6 +51,7 @@ class AsignacionAlumnoController extends ApiController
         $curso_niveles = $this->prepareData($curso_niveles);
         return $this->showAll($curso_niveles);
     }
+
     public function getInfoProfesor($idProfesor, $ciclo_id)
     {
         $curso_niveles = AsignarCursoProfesor::where([['empleado_id', $idProfesor], ['ciclo_id', $ciclo_id]])
@@ -61,6 +67,7 @@ class AsignacionAlumnoController extends ApiController
         $curso_niveles = $this->infoProfesor($curso_niveles);
         return $this->showAll($curso_niveles);
     }
+
     public function cursoGradoNivel()
     {
         $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo', 'grado_nivel_educativo.nivelEducativo', 'grado_nivel_educativo.grado', 'curso')->get();
@@ -150,6 +157,20 @@ class AsignacionAlumnoController extends ApiController
         return $this->showOne($asignacion_alumno);
     }
 
+
+    //obtener asignacion alumno para cuestioanrios
+    public function cuestionario($id)
+    {
+        $asignacion_alumno = AsignacionAlumno::where('id',$id)
+                                    ->with('inscripcion.alumno','asignacion','series.serie','series.preguntas.pregunta','series.preguntas.respuestas.respuesta_a')->first();
+
+
+        if(is_null($asignacion_alumno)) return $this->errorResponse('no se ha encontrado asignacion para examen',404);
+
+        return $this->showOne($asignacion_alumno);
+    }
+
+
     /**
      */
     public function update(Request $request, AsignarCursoProfesor $asignarCursoProfesor)
@@ -221,17 +242,59 @@ class AsignacionAlumnoController extends ApiController
 
         $this->validate($request, $reglas);
 
+        DB::beginTransaction();
         $asignar_nota->nota = $request->nota;
         $asignar_nota->observaciones = $request->observaciones;
         $asignar_nota->calificado = true;
+
+        if($request->exists("serie")){
+            $serie = AlumnoSerie::find($request->serie['id']);
+            $serie->nota = $request->serie['nota'];
+            $serie->save();
+
+            foreach ($request->serie['preguntas'] as $p) {
+                $preg = AlumnoPregunta::find($p['id']);
+                $preg->nota = $p['nota'];
+                $preg->save();
+
+                $res = AlumnoRespuesta::find($p['respuestas'][0]['id']);
+                $res->nota = $p['respuestas'][0]['nota'];
+                $res->save();
+            }
+        }
 
         if (!$asignar_nota->isDirty()) {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
         }
 
         $asignar_nota->save();
+        DB::commit();
 
         return $this->showOne($asignar_nota,201);
+    }
+
+        //iniciar examen
+    public function iniciarCuestionario(Request $request, $id)
+    {
+        $asignacion = AsignacionAlumno::find($id);
+
+        $asignacion->hora_inicio_cuestionario = $request->hora;
+        $asignacion->save();
+
+        return $this->showOne($asignacion,201);
+
+    }
+
+         //iniciar examen
+    public function terminarCuestionario(Request $request, $id)
+    {
+        $asignacion = AsignacionAlumno::find($id);
+        $asignacion->fecha_entrega = $request->hora;
+        $asignacion->entregado = true;
+        $asignacion->save();
+
+        return $this->showOne($asignacion,201);
+
     }
 
     /**

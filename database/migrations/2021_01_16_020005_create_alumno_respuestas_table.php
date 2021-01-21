@@ -7,7 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 class CreateAlumnoRespuestasTable extends Migration
 {
     /**
-     * Run the migrations.
+     * Run the migrations. respuesta_alumno
      *
      * @return void
      */
@@ -18,6 +18,7 @@ class CreateAlumnoRespuestasTable extends Migration
             $table->unsignedBigInteger('alumno_pregunta_id');
             $table->unsignedBigInteger('respuesta_id');
             $table->boolean('correcto')->default(0);
+            $table->boolean('correcto_alumno')->default(0); //respuesta que el alumno considera correcta
             $table->decimal('nota',5,2)->default(0);
             $table->string('respuesta',500)->nullable();
             $table->timestamps();

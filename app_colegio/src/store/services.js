@@ -37,9 +37,10 @@ import AsignacionAlumnoService from '../services/AsignacionAlumnoService'
 import PreguntaService from '../services/PreguntaService'
 import MaterialService from '../services/MaterialService'
 import NotaService from '../services/NotaService'
+import AlumnoSerieService from '../services/AlumnoSerieService'
 
-//let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
-let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
+let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
+//let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
 let token_data = $cookies.get('token_data')
 
 // Axios Configuration
@@ -121,5 +122,6 @@ export default {
     asignacionAlumnoService:new AsignacionAlumnoService(Axios,baseUrl),
     preguntaService: new PreguntaService(Axios,baseUrl),
     materialService: new MaterialService(Axios,baseUrl),
-    notaService: new NotaService(Axios,baseUrl)
+    notaService: new NotaService(Axios,baseUrl),
+    alumnoSerieService: new AlumnoSerieService(Axios,baseUrl)
 }

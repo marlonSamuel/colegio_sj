@@ -4,6 +4,7 @@ namespace App;
 
 use App\Asignacion;
 use App\Inscripcion;
+use App\AlumnoSerie;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,8 +23,7 @@ class AsignacionAlumno extends Model
     	'calificado',
     	'entregado',
         'observaciones',
-        'hora_inicio_cuestionario',
-        'hora_finalizo_cuestionario'
+        'hora_inicio_cuestionario'
     ];
 
     public function asignacion(){
@@ -32,5 +32,10 @@ class AsignacionAlumno extends Model
 
     public function inscripcion(){
         return $this->belongsTo(Inscripcion::class,'inscripcion_id');
+    }
+
+    public function series()
+    {
+        return $this->hasMany(AlumnoSerie::class,'asignacion_alumno_id');
     }
 }

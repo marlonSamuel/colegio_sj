@@ -77,6 +77,9 @@ Vue.use(require('vue-moment'), {
     moment
 })
 
+import VueCountdownTimer from 'vuejs-countdown-timer'
+Vue.use(VueCountdownTimer)
+
 
 
 Vue.use(Element, {

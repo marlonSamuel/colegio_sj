@@ -9234,6 +9234,11 @@ vue@^2.5.2:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.3.tgz#180017ba25b94a9864b2921db8644e1062ea82a0"
   integrity sha512-yftjtahz4UTAtOlXXuw7UaYD86fWrMDAAzqTdqJJx2FIBqcPmBN6kPBHiBJFGaQELVblb5ijbFMXsx0i0F7q3g==
 
+vuejs-countdown-timer@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/vuejs-countdown-timer/-/vuejs-countdown-timer-2.1.3.tgz#a98ff71e8563ba2ed1aff301c82f7c1beff8f218"
+  integrity sha512-PbKIwiC9jrwYRfcVOYLcownqFYdKG6K9dTE+c+PSkPqM7exmmstKuI73x4vxbogxL5UYGmvjRQVjjE5ENqVvDQ==
+
 vuejs-loading-plugin@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/vuejs-loading-plugin/-/vuejs-loading-plugin-1.0.4.tgz#441f60d6a0b06671520e1e154128651410043b0a"
