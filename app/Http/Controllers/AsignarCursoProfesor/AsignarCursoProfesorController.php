@@ -71,7 +71,6 @@ class AsignarCursoProfesorController extends ApiController
 
     public function cursoGradoNivel(){
         $curso_niveles = CursoGradNivEd::with('grado_nivel_educativo','grado_nivel_educativo.nivelEducativo','grado_nivel_educativo.grado','curso')->get();
-
         $data = $this->prepareData($curso_niveles);
         return $this->showQuery($data);
     }

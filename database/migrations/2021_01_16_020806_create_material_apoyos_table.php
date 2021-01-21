@@ -19,7 +19,7 @@ class CreateMaterialApoyosTable extends Migration
             $table->string('descripcion',500);
             $table->string('adjunto',100)->nullable();
             $table->boolean('link')->default(0);
-            $table->string('url',100)->nullable();
+            $table->string('url',200)->nullable();
 
             $table->foreign('asignar_curso_profesor_id')->references('id')->on('asignar_curso_profesor')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();

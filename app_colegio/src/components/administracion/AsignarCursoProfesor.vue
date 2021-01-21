@@ -221,6 +221,7 @@ export default {
         .then((r) => {
           self.loading = false;
           self.niv_grad_curso = r.data;
+          self.getInfo();
         })
         .catch((r) => {});
     },
@@ -243,6 +244,8 @@ export default {
       } else {
         self.niv_grad_curso.forEach(function (element) {
           arr.forEach(function (item) {
+            console.log(element.curso_grad_niv_edu_id);
+            console.log(item.id);
             if (element.curso_grad_niv_edu_id === item.id) {
               arr.splice(arr.indexOf(item), 1);
             }
@@ -304,6 +307,7 @@ export default {
         this.$toastr.error("Debe Seleccionar al menos una sección", "error");
         return;
       }
+      console.log(data);
       self.$store.state.services.asignacionProfesorService
         .create(data)
         .then((r) => {
@@ -313,7 +317,6 @@ export default {
           }
           this.$toastr.success("registro agregado con éxito", "éxito");
           self.getAll(self.profesor_id, this.$store.state.ciclo.id);
-          self.getInfo();
           self.clearData();
         })
         .catch((r) => {});
@@ -381,8 +384,9 @@ export default {
       let self = this;
       this.dialog = true;
       self.getAll(data.id, this.$store.state.ciclo.id);
-      self.getInfo();
+      
       self.profesor_id = data.id;
+      self.form.empleado_id = data.id;
       self.form.ciclo_id = this.$store.state.ciclo.id;
       //self.mapData(data);
     },
@@ -392,6 +396,7 @@ export default {
       this.dialog2 = true;
       self.get(data.id, this.$store.state.ciclo.id);
       self.profesor_id = data.id;
+      self.form.empleado_id = data.id;
       self.form.ciclo_id = this.$store.state.ciclo.id;
     },
     //mapear datos a formulario

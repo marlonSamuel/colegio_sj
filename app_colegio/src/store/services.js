@@ -35,6 +35,8 @@ import AsignacionService from '../services/AsignacionService'
 import SerieService from '../services/SerieService'
 import AsignacionAlumnoService from '../services/AsignacionAlumnoService'
 import PreguntaService from '../services/PreguntaService'
+import MaterialService from '../services/MaterialService'
+import NotaService from '../services/NotaService'
 
 //let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
 let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
@@ -117,5 +119,7 @@ export default {
     asignacionService: new AsignacionService(Axios,baseUrl),
     serieService: new SerieService(Axios,baseUrl),
     asignacionAlumnoService:new AsignacionAlumnoService(Axios,baseUrl),
-    preguntaService: new PreguntaService(Axios,baseUrl)
+    preguntaService: new PreguntaService(Axios,baseUrl),
+    materialService: new MaterialService(Axios,baseUrl),
+    notaService: new NotaService(Axios,baseUrl)
 }

@@ -13,7 +13,8 @@ class CicloPeriodoAcademico extends Model
         'periodo_academico_id',
         'inicio',
         'fin',
-        'actual'
+        'actual',
+        'nota'
     ];
 
     public function ciclo()

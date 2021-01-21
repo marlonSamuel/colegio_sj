@@ -57,7 +57,8 @@ class CicloController extends ApiController
                     'periodo_academico_id'=>$value['periodo_academico_id'],
                     'inicio'=>$value['inicio'],
                     'fin'=> $value['fin'],
-                    'actual'=> $value['periodo_academico_id'] == 1 ? true : false
+                    'actual'=> $value['periodo_academico_id'] == 1 ? true : false,
+                    'nota'=> $value['nota']
                 ]);
             }
         DB::commit();
@@ -90,7 +91,7 @@ class CicloController extends ApiController
         $ciclo->ciclo = $request->ciclo;
         $ciclo->inicio = $request->inicio;
         $ciclo->fin = $request->fin;
-        $ciclo->actual = $request->actual;
+        $ciclo->actual = $request->actual == 1 ? true : false;
 
         $periodos_academicos = $request->periodos_academicos;
         if($request->actual){
@@ -101,19 +102,33 @@ class CicloController extends ApiController
             }
         }
         foreach ($periodos_academicos as $key => $value) {
-            $periodo = CicloPeriodoAcademico::where('id',$value['id'])->firstOrFail();
-            $periodo->inicio = $value['inicio'];
-            $periodo->fin = $value['fin'];
-            $periodo->actual = $value['actual'];
-            //$periodo->periodo_academico_id = $value->periodo_academico_id;
-            //$periodo->ciclo_id = $value->ciclo_id;
-            $periodo->save();
+            
+            if ($value['id'] != null) {
+                $periodo = CicloPeriodoAcademico::where('id',$value['id'])->firstOrFail();
+                $periodo->inicio = $value['inicio'];
+                $periodo->fin = $value['fin'];
+                $periodo->actual = $value['actual'];
+                $periodo->nota = $value['nota'];
+                //$periodo->periodo_academico_id = $value->periodo_academico_id;
+                //$periodo->ciclo_id = $value->ciclo_id;
+                $periodo->save();
+            }else{
+                $periodos = CicloPeriodoAcademico::create([
+                    'ciclo_id'=> $ciclo->id,
+                    'periodo_academico_id'=>$value['periodo_academico_id'],
+                    'inicio'=>$value['inicio'],
+                    'fin'=> $value['fin'],
+                    'actual'=> $value['periodo_academico_id'] == 1 ? true : false,
+                    'nota'=> $value['nota']
+                ]);
+            }
+            
         }
         
 
-        if (!$ciclo->isDirty()) {
-            return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
-        }
+        //if (!$ciclo->isDirty()) {
+          //  return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
+        //}
 
         $ciclo->save();
         DB::commit();

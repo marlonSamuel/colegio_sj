@@ -1,13 +1,23 @@
 <template>
-  <v-layout wrap v-loading="loading">
+  <v-layout wrap v-loading="loading"> 
     <v-flex xs12 sm12 md12>
       <v-card>
+        <v-layout row wrap justify-end>
+        <div>
+          <v-breadcrumbs :items="itemsB">
+            <template v-slot:divider>
+              <v-icon>forward</v-icon>
+            </template>
+          </v-breadcrumbs>
+        </div>
+      </v-layout>
         <v-card-title>
-          <span class="headline"></span>
+          <span class="headline">Entrega Asignacion {{ asignacion.titulo }}</span>
         </v-card-title>
-        <span class="headline">Entrega Asignacion {{ asignacion.titulo }}</span>
+        
 
         <v-card-text>
+
           <v-container fluid grid-list-md>
             <v-layout wrap>
               <v-flex xs12 sm10 md10>
@@ -108,7 +118,7 @@
           <v-btn
             color="red darken-1"
             flat
-            @click="$router.push('asignacion_alumno')"
+            @click="$router.push(`/asignacion_alumno`)"
             >Volver</v-btn
           >
           <v-btn color="blue darken-1" flat @click="update">Guardar</v-btn>
@@ -126,6 +136,18 @@ export default {
   },
   data() {
     return {
+      itemsB: [
+        {
+          text: "Asignaciones",
+          disabled: false,
+          href: "#/asignacion_alumno"
+        },
+        {
+          text: "Entrega Asignacion",
+          disabled: true,
+          href: "#"
+        }
+      ],
       loading: false,
       asignacion: {},
       form: {

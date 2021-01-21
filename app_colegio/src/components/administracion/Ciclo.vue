@@ -64,13 +64,13 @@
                       :label="`Actual: ${form.actual.toString() === 'false' ?'No':'Si'}`"
                     ></v-switch> -->
                 </v-layout>
-                
+
                 <v-layout
                   v-for="f in form.periodos_academicos"
                   :key="f.id"
                   wrap
                 >
-                  <v-flex xs12 sm4 md4>
+                  <v-flex xs12 sm3 md3>
                     <v-text-field
                       v-model="f.nombre"
                       label="Nombre"
@@ -83,7 +83,7 @@
                     >
                     </v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm4 md4>
+                  <v-flex xs12 sm3 md3>
                     <v-text-field
                       v-model="f.inicio"
                       label="Fecha Inicio"
@@ -94,7 +94,7 @@
                     >
                     </v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm4 md4>
+                  <v-flex xs12 sm3 md3>
                     <v-text-field
                       v-model="f.fin"
                       label="Fecha fin"
@@ -102,6 +102,17 @@
                       type="date"
                       data-vv-name="fin_bimestre"
                       :error-messages="errors.collect('fin_bimestre')"
+                    >
+                    </v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm3 md3>
+                    <v-text-field
+                      v-model="f.nota"
+                      label="Nota"
+                      v-validate="'required'"
+                      type="number"
+                      data-vv-name="nota"
+                      :error-messages="errors.collect('nota')"
                     >
                     </v-text-field>
                   </v-flex>
@@ -266,6 +277,10 @@ export default {
         this.$toastr.error("ciclo ya fue agregado", "error");
         return;
       }
+      if (self.validSumNotas(self.form.periodos_academicos)) {
+        this.$toastr.error("Configure correctamente las notas por bimestres no suma 100 puntos", "error");
+        return;
+      }
 
       let estado = data.actual === false ? 0 : 1;
       data.actual = estado;
@@ -283,7 +298,20 @@ export default {
         })
         .catch((r) => {});
     },
+    validSumNotas(bimestres) {
+      var sum = 0;
+      var valid = false;
+      for (var i = 0; i < bimestres.length; i++) {
+        sum += parseFloat(bimestres[i].nota);
+      }
 
+      if (sum < 100) {
+        valid = true;
+      }if (sum > 100) {
+       valid = true; 
+      }
+      return valid;
+    },
     //funcion para actualizar registro
     update() {
       let self = this;
@@ -297,6 +325,10 @@ export default {
 
       if (!data.actual && items_filter.filter((x) => x.actual).length == 0) {
         this.$toastr.error("debe haber al menos un ciclo activo", "error");
+        return;
+      }
+      if (self.validSumNotas(self.form.periodos_academicos)) {
+        this.$toastr.error("Configure correctamente las notas por bimestres no suma 100 puntos", "error");
         return;
       }
 
@@ -367,15 +399,17 @@ export default {
     //mapear datos a formulario
     mapData(data) {
       let self = this;
-
+console.log(data);
       self.form.id = data.id;
 
       self.form.ciclo = data.ciclo;
-      //self.form.actual = data.actual === 1 || null ? true : false
+      self.form.actual = data.actual === 1 || null ? true : false;
       self.form.inicio = data.inicio;
       self.form.fin = data.fin;
       this.mapPeriodos(
-        data.periodos_academicos.length > 0 ? data.periodos_academicos : self.periodos
+        data.periodos_academicos.length > 0
+          ? data.periodos_academicos
+          : self.periodos
       );
       console.log(self.form);
     },
@@ -398,7 +432,8 @@ export default {
               : element.periodo_academico.nombre,
           inicio: element.inicio,
           fin: element.fin,
-          actual:true
+          nota: element.nota,
+          actual: true,
         });
       });
     },

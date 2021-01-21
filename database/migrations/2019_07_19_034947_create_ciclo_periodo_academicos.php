@@ -20,6 +20,7 @@ class CreateCicloPeriodoAcademicos extends Migration
             $table->date('inicio');
             $table->date('fin');
             $table->boolean('actual');
+            $table->decimal('nota');
             $table->timestamps();
             $table->foreign('ciclo_id')->references('id')->on('ciclos')->onUpdate('cascade')->onDelete('cascade')->onDelete('cascade');
             $table->foreign('periodo_academico_id')->references('id')->on('periodos_academicos')->onUpdate('cascade')->onDelete('cascade')->onDelete('cascade');
