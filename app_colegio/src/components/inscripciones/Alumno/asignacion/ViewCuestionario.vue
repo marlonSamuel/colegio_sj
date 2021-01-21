@@ -30,13 +30,17 @@
                                Tiempo empleado: {{tiempo()}} minutos
                             </h3>
                         </v-toolbar>
-                        <v-flex>
+                        <v-flex v-if="asignacion !== null">
                             <h4 v-if="curso !== null">
                                 <hr />
                                 <br />
                                 NIVEL EDUCATIVO: {{curso.curso_grado_nivel.grado_nivel_educativo.nivel_educativo.nombre | uppercase}} <br />
                                 GRADO: {{curso.curso_grado_nivel.grado_nivel_educativo.grado.nombre | uppercase}} <br />
-                                CURSO: {{curso.curso_grado_nivel.curso.nombre | uppercase}}
+                                CURSO: {{curso.curso_grado_nivel.curso.nombre | uppercase}}<br />
+                                ALUMNO: {{asignacion.inscripcion.alumno.primer_nombre + 
+                                        ' '+asignacion.inscripcion.alumno.segundo_nombre + 
+                                        ' '+asignacion.inscripcion.alumno.primer_apellido + 
+                                        ' '+asignacion.inscripcion.alumno.segundo_apellido | uppercase}}
                                 <br />
                                 <br />
                                 <hr />
@@ -88,13 +92,26 @@
                                                             <div v-if="serie.serie.tipo_serie == 'PD'">
                                                                 <v-flex>
                                                                     <span>R/ {{pregunta.respuestas[0].respuesta }}</span>
+                                                                    <v-flex xs6 sm1 md1 lg1 v-if="isTeach">
+                                                                            <v-text-field v-model="pregunta.respuestas[0].nota" 
+                                                                                label="Nota"
+                                                                                v-validate="'required|decimal|min_value:0|max_value:'+pregunta.pregunta.nota"
+                                                                                type="text"
+                                                                                :data-vv-name="'nota_pregunta_'+pregunta.id"
+                                                                                :error-messages="errors.collect('nota_pregunta_'+pregunta.id)">
+                                                                            </v-text-field>
+                                                                        </v-flex>
                                                                 </v-flex>
                                                             </div>
                                                     </v-flex>
                                                 </v-layout>
                                             </v-container>
-
                                         </v-list>
+                                        
+                                        <v-flex v-if="isTeach">
+                                            <v-btn small color="success" @click="validate"><v-icon>note_add</v-icon> Asignar nota</v-btn>
+                                        </v-flex>
+
                                     </v-flex>
                                 </v-layout>
                             </v-container>
@@ -122,7 +139,13 @@ export default {
         asignacion_id: null,
         asignacion: null,
         series: [],
-        row: null
+        row: null,
+
+        form: {
+            id: null,
+            nota: 0,
+            serie: null
+        }
     }
   },
 
@@ -170,10 +193,48 @@ export default {
             })
       },
 
-      //respuestas
-    FVResponse(data){
+          //funcion para actualizar registro
+    update(){
+      let self = this
+      self.loading = true
+      let data = self.form
+       
+      self.$store.state.services.asignacionAlumnoService
+        .asignarNota(data)
+        .then(r => {
+          self.loading = false
+          if (self.$store.state.global.captureError(r)) {
+            return;
+          }
+          self.getAsignacion(self.asignacion_id)
+          this.$toastr.success('nota agregada con éxito', 'éxito')
+          self.close()
+        })
+        .catch(r => {});
+    },
+
+    //obtener serie
+    getNoteValue(data){
         let self = this
-        self.row = data.find(x=>x.correcta).respuesta
+        data.preguntas.forEach(p=>{
+            p.nota = p.respuestas[0].nota
+        })
+        data.nota = self.getNote(data.preguntas)
+        return data
+    },
+
+    validate(){
+        let self = this
+        self.$validator.validateAll().then((result) => {
+          if (result) {
+              let serie_pd = self.series.find(x=>x.serie.tipo_serie == "PD")
+              self.form.id = self.asignacion_id
+              self.form.nota = self.nota()
+              self.form.serie = self.getNoteValue(serie_pd)
+              
+              self.update()
+           }
+      })
     },
 
     nota(){
@@ -188,17 +249,48 @@ export default {
         let self = this
         var duration = moment.duration(moment(self.asignacion.fecha_entrega).diff(moment(self.asignacion.hora_inicio_cuestionario)))
         return parseInt(duration.asMinutes())
-    }
+    },
+
+    //obtener nota
+    getNote(data){
+        let self = this
+        var total = data.reduce(function(a, b) {
+            return a + parseFloat(b.nota)
+        }, 0)
+        return total.toFixed(2)
+    },
   },
 
   computed: {
       itemsB(){
         let self = this
-        return [
-            { text: "CURSOS",disabled: false, href: "#/"},
-            { text: "ASIGNACIONES",disabled: false, href: "#/"},
-            {text: "RESULTADO",disabled: true,href: "#"}
-      ]
+        let rol = self.$store.state.usuario.rol
+        console.log(rol)
+        if(rol !== undefined & self.asignacion !== null){
+            if(rol.rol == "profesor"){
+                return [
+                        { text: "CURSOS",disabled: false, href: "#/cursos_index"},
+                        { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
+                        { text: "ASIGNACION NOTAS",disabled: false,href: "#/asignacion_nota/"+self.curso_id+"/asignacion/"+self.asignacion.asignacion_id},
+                        {text: "RESULTADO",disabled: true,href: "#"}
+                ]
+            }
+            return [
+                { text: "CURSOS",disabled: false, href: "#/"},
+                { text: "ASIGNACIONES",disabled: false, href: "#/"},
+                {text: "RESULTADO",disabled: true,href: "#"}
+            ]
+        }
+    },
+
+    isTeach(){
+        let self = this
+        let rol = self.$store.state.usuario.rol
+        
+        if(rol !== undefined && rol.rol == 'profesor'){
+            return true
+        }
+        return false
     }
   },
 };

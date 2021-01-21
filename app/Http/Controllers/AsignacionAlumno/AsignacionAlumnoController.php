@@ -7,6 +7,9 @@ use App\Alumno;
 use App\Inscripcion;
 use App\Asignacion;
 use App\AsignacionAlumno;
+use App\AlumnoSerie;
+use App\AlumnoPregunta;
+use App\AlumnoRespuesta;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
@@ -159,7 +162,7 @@ class AsignacionAlumnoController extends ApiController
     public function cuestionario($id)
     {
         $asignacion_alumno = AsignacionAlumno::where('id',$id)
-                                    ->with('asignacion','series.serie','series.preguntas.pregunta','series.preguntas.respuestas.respuesta_a')->first();
+                                    ->with('inscripcion.alumno','asignacion','series.serie','series.preguntas.pregunta','series.preguntas.respuestas.respuesta_a')->first();
 
 
         if(is_null($asignacion_alumno)) return $this->errorResponse('no se ha encontrado asignacion para examen',404);
@@ -239,15 +242,33 @@ class AsignacionAlumnoController extends ApiController
 
         $this->validate($request, $reglas);
 
+        DB::beginTransaction();
         $asignar_nota->nota = $request->nota;
         $asignar_nota->observaciones = $request->observaciones;
         $asignar_nota->calificado = true;
+
+        if($request->exists("serie")){
+            $serie = AlumnoSerie::find($request->serie['id']);
+            $serie->nota = $request->serie['nota'];
+            $serie->save();
+
+            foreach ($request->serie['preguntas'] as $p) {
+                $preg = AlumnoPregunta::find($p['id']);
+                $preg->nota = $p['nota'];
+                $preg->save();
+
+                $res = AlumnoRespuesta::find($p['respuestas'][0]['id']);
+                $res->nota = $p['respuestas'][0]['nota'];
+                $res->save();
+            }
+        }
 
         if (!$asignar_nota->isDirty()) {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
         }
 
         $asignar_nota->save();
+        DB::commit();
 
         return $this->showOne($asignar_nota,201);
     }
