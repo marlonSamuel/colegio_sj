@@ -5,6 +5,7 @@ namespace App;
 use App\Serie;
 use App\AsignarCursoProfesor;
 use App\AsignacionAlumno;
+use App\CicloPeriodoAcademico;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,7 +25,7 @@ class Asignacion extends Model
     	'entrega_tarde',
     	'adjunto',
         'flag_tiempo',
-        ''
+        'ciclo_periodo_academico_id'
     ];
 
     public function asignar_curso_profesor(){
@@ -37,5 +38,9 @@ class Asignacion extends Model
 
     public function alumnos(){
         return $this->hasMany(AsignacionAlumno::class,'asignacion_id');
+    }
+
+    public function periodo(){
+        return $this->belongsTo(CicloPeriodoAcademico::class,'ciclo_periodo_academico_id');
     }
 }

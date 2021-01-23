@@ -27,7 +27,7 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                <span class="headline">{{setTitle}}</span>
+                                <span class="headline" v-if="periodo !== null">{{setTitle}} {{periodo.periodo_academico.nombre}}</span>
                                 </v-card-title>
                     
                                 <v-card-text>
@@ -152,11 +152,12 @@
                             </v-dialog>
                         </v-toolbar>
                         <v-flex>
-                              <h5 v-if="curso !== null">
+                              <h5 v-if="curso !== null && periodo !== null">
                                  <hr />
                                 NIVEL EDUCATIVO: {{curso.curso_grado_nivel.grado_nivel_educativo.nivel_educativo.nombre | uppercase}} <br />
                                 GRADO: {{curso.curso_grado_nivel.grado_nivel_educativo.grado.nombre | uppercase}} <br />
-                                CURSO: {{curso.curso_grado_nivel.curso.nombre | uppercase}}
+                                CURSO: {{curso.curso_grado_nivel.curso.nombre | uppercase}} <br />
+                                CICLO EN CURSO / CICLO: {{periodo.periodo_academico.nombre | uppercase}} / {{ciclo}}<br />
                             </h5>
                             
                         </v-flex>
@@ -259,6 +260,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 export default {
   name: "PanelProfesor",
   props: {
@@ -269,10 +271,10 @@ export default {
         loading: false,
         dialog: false,
         search: '',
-        ciclos: [],
         ciclo_id: null,
         curso_id: null,
         curso: null,
+        periodo: null,
         items: [],
         headers: [
             {text: 'Titulo',value: '',sortable: false},
@@ -288,6 +290,7 @@ export default {
         form:{
             id: null,
             asignar_curso_profesor_id: null,
+            ciclo_periodo_academico_id: null,
             cuestionario: null,
             nota: null,
             titulo: '',
@@ -309,6 +312,7 @@ export default {
     self.curso_id = self.$route.params.id
     self.getAll(self.$route.params.id)
     self.get(self.$route.params.id)
+    self.getPeriodos()
   },
 
   methods: {
@@ -340,6 +344,28 @@ export default {
                     return
                 }
                 self.curso = r.data
+            }).catch(e => {
+
+            })
+      },
+
+    //obtener bimestre actual
+      getPeriodos(id){
+          let self = this
+            self.loading = true
+            self.$store.state.services.cicloService
+            .getPeriodos(self.$store.state.ciclo.id)
+            .then(r => {
+                self.loading = false
+                if (self.$store.state.global.captureError(r)) {
+                    return
+                }
+                self.periodo = r.data.find(x=>x.actual)
+
+                if(self.periodo == null || self.periodo == undefined){
+                    let now = moment()
+                    self.periodo = r.data.find(x=>moment(now).isBetween(moment(x.inicio), moment(x.fin), undefined,'[]'))
+                }
             }).catch(e => {
 
             })
@@ -439,7 +465,7 @@ export default {
               self.form.asignar_curso_profesor_id = self.$route.params.id
               self.form.entrega_tarde  = self.form.entrega_tarde  ? 1 : 0
               self.form.flag_tiempo = self.form.flag_tiempo ? 1 : 0
-
+              self.form.ciclo_periodo_academico_id = self.periodo.id
               if(!self.form.flag_tiempo){
                   self.form.tiempo = 0
               }
@@ -473,7 +499,6 @@ export default {
         self.form.fecha_entrega = data.fecha_entrega
         self.form.cuestionario = data.cuestionario
         self.form.file_name = data.adjunto
-        console.log(self.form)
     },
 
     //limpiar data de formulario
@@ -515,6 +540,11 @@ export default {
     setTitle(){
       let self = this
       return self.form.id !== null ? self.form.nombre : 'Nueva asignación'
+    },
+
+    ciclo(){
+        let self = this
+        return self.$store.state.ciclo.ciclo
     },
 
     itemsB(){

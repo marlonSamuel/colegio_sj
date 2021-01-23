@@ -18,6 +18,7 @@ class CreatePreguntasTable extends Migration
             $table->unsignedBigInteger('serie_id');
             $table->string('pregunta',250);
             $table->decimal('nota',5,2);
+            $table->string('adjunto',100)->nullable();
             $table->timestamps();
 
             $table->foreign('serie_id')->references('id')->on('series')->onUpdate('cascade')->onDelete('cascade')->onDelete('cascade');

@@ -24,7 +24,7 @@ class CreateAlumnoRespuestasTable extends Migration
             $table->timestamps();
 
             $table->foreign('alumno_pregunta_id')->references('id')->on('alumno_preguntas')->onDelete('cascade');
-            $table->foreign('respuesta_id')->references('id')->on('respuestas')->onUpdate('cascade');
+            $table->foreign('respuesta_id')->references('id')->on('respuestas')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

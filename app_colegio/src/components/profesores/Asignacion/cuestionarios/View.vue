@@ -59,6 +59,16 @@
                                                 <v-layout wrap>
                                                     <v-flex xs12 md12 lg12 v-for="(pregunta, index_p) in serie.preguntas" :key="pregunta.id">
                                                         <b>{{index_p+1}}) {{pregunta.pregunta}} ({{pregunta.nota}} pts)</b>
+                                                        <v-flex xs12 sm6 v-if="pregunta.adjunto !== null" offset-sm3>
+                                                            <enlargeable-image :src="getImage(pregunta.adjunto)" :src_large="getImage(pregunta.adjunto)">
+                                                                  <v-avatar
+                                                                      :tile="true"
+                                                                      size="300"
+                                                                      >
+                                                                      <img :src="getImage(pregunta.adjunto)" />
+                                                                  </v-avatar>
+                                                              </enlargeable-image><br />
+                                                          </v-flex>
                                                             <div v-if="serie.tipo_serie == 'FV'">
                                                                 <v-radio-group row readonly 
                                                                 :value="pregunta.respuestas[0].correcta ? 'F' : 'V'"
@@ -100,10 +110,14 @@
 </template>
 
 <script>
+import EnlargeableImage from '@diracleo/vue-enlargeable-image'
 export default {
   name: "ViewCuestionario",
   props: {
       source: String
+    },
+    components:{
+      EnlargeableImage
     },
   data() {
     return {
@@ -160,6 +174,12 @@ export default {
 
             })
       },
+
+      getImage(foto){
+        let self = this
+        console.log(foto)
+        return foto !== null ? self.$store.state.base_url+'documentos/'+foto : self.$store.state.base_url+'img/user_empty.png'
+        },
 
       //respuestas
     FVResponse(data){

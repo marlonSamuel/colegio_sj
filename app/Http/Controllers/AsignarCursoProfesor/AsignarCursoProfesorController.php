@@ -146,7 +146,7 @@ class AsignarCursoProfesorController extends ApiController
      */
     public function show(AsignarCursoProfesor $asignar_cursos_profesore)
     {
-        $asignaciones = $asignar_cursos_profesore->asignaciones;
+        $asignaciones = $asignar_cursos_profesore->asignaciones()->with('periodo.periodo_academico','periodo.ciclo')->get();
         return $this->showAll($asignaciones);
     }
 

@@ -74,6 +74,8 @@ Route::name('gradoNivelEducativosCiclo')->get('gradoNivelEducativosCiclo/{id}/{c
 
 Route::name('ciclos_get_data')->get('ciclos_get_data/{id}', 'Ciclo\CicloController@getDataCiclo');
 Route::name('ciclos_actual')->get('ciclos_actual', 'Ciclo\CicloController@getCicloActual');
+Route::resource('ciclos.periodos', 'Ciclo\CicloPeriodoAcademicoController', ['except' => ['create', 'edit']]);
+
 Route::name('inscripciones_reporte')->get('inscripciones_reporte/{inicio?}/{fin?}/{grado?}', 'Inscripcion\InscripcionController@getByFechas');
 Route::name('pagos_reporte')->get('pagos_reporte/{inicio?}/{fin?}', 'Pago\PagoController@getByFechas');
 Route::resource('ciclos.inscripciones', 'Ciclo\CicloInscripcionController', ['except' => ['create', 'edit']]);
@@ -107,6 +109,7 @@ Route::resource('asignaciones.alumnos', 'Asignacion\AsignacionAlumnoController',
 Route::resource('series', 'Serie\SerieController', ['except' => ['create', 'edit']]);
 Route::resource('series.preguntas', 'Serie\SeriePreguntaController', ['except' => ['create', 'edit']]);
 Route::resource('preguntas', 'Serie\PreguntaController', ['except' => ['create', 'edit']]);
+Route::name('preguntas_update')->post('preguntas_update/{id}', 'Serie\PreguntaController@updateData');
 
 Route::resource('asignaciones_alumnos', 'AsignacionAlumno\AsignacionAlumnoController', ['except' => ['create', 'edit']]);
 

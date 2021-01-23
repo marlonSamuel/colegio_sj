@@ -21,7 +21,7 @@ class CreateAlumnoPreguntasTable extends Migration
             $table->timestamps();
 
             $table->foreign('alumno_serie_id')->references('id')->on('alumno_series')->onDelete('cascade');
-            $table->foreign('pregunta_id')->references('id')->on('preguntas')->onUpdate('cascade');
+            $table->foreign('pregunta_id')->references('id')->on('preguntas')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

@@ -373,6 +373,11 @@ export default {
       var total = self.items.reduce(function(a, b) {
           return a + parseFloat(b.nota)
       }, 0)
+      
+      if(self.form.id !== null){
+        let nota_e = self.items.find(x=>x.id == self.form.id).nota
+        total = total - nota_e
+      }
       return parseFloat(nota - total.toFixed(2));
     },
   },

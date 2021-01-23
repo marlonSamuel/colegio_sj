@@ -654,6 +654,11 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@diracleo/vue-enlargeable-image@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@diracleo/vue-enlargeable-image/-/vue-enlargeable-image-0.0.7.tgz#d1b9d9519effebb868c3840188a4d867e1507977"
+  integrity sha512-nwrDbNQPDptwj4QRUdhvCwOfHW3ZLitaCZfjx7i+OsF1LiVcbHCgikbzrkORqCXSY3caCu+gPftElNXk37cwoQ==
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"

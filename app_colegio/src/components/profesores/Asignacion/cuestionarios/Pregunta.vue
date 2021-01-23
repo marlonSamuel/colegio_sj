@@ -58,6 +58,20 @@
                                             </v-text-field>
                                         </v-flex>
 
+                                         <v-flex xs12 sm12 md12>
+                                            <div id="uploader">
+                                                <v-tooltip top>
+                                                        <template v-slot:activator="{ on }">
+                                                            <v-icon v-on="on" color="error" @click="$refs.file.click()">attach_file</v-icon>
+                                                            {{form.file == null  ? 'Seleccionar imagen': form.file.name }}
+                                                        </template>
+                                                        <span>Adjuntar imagen</span>
+                                                    </v-tooltip>
+                                                <input  v-show="false" @change="selectedDocumento" ref="file" class="input-file hidden" type="file" accept="image/x-png,image/gif,image/jpeg"/>
+                                                
+                                                </div>
+                                        </v-flex>
+
                                         <div v-if="serie.tipo_serie == 'FV'">
                                             <h4>Respuesta</h4>
                                             <v-flex>
@@ -79,7 +93,7 @@
                                                     </v-btn>
                                                 </v-flex>
 
-                                                <v-flex xs12 sm3 md3 v-for="res in form.respuestas" :key = res.respuesta>
+                                                <v-flex xs12 sm3 md3 v-for="res in form.respuestas_show" :key = res.respuesta>
                                                         <v-checkbox 
                                                             v-model="res.correcta" 
                                                             :label="res.respuesta"></v-checkbox>
@@ -154,6 +168,16 @@
                                                 <v-layout wrap>
                                                     <v-flex xs12 md12 lg12>
                                                         <b>{{ props.index + 1 }}. {{props.item.pregunta}}</b><br /><br />
+                                                        <v-flex xs12 sm6 v-if="props.item.adjunto !== null" offset-sm3>
+                                                            <enlargeable-image :src="getImage(props.item.adjunto)" :src_large="getImage(props.item.adjunto)">
+                                                                  <v-avatar
+                                                                      :tile="true"
+                                                                      size="300"
+                                                                      >
+                                                                      <img :src="getImage(props.item.adjunto)" />
+                                                                  </v-avatar>
+                                                              </enlargeable-image><br />
+                                                          </v-flex>
                                                         <div v-if="serie.tipo_serie == 'FV'">
                                                             <v-radio-group v-model="row" row readonly :value="FVResponse(props.item.respuestas)">
                                                                 <v-radio label="Falso" value="F"></v-radio>
@@ -192,12 +216,16 @@
     </v-flex>
   </v-layout>
 </template>
-
 <script>
+
+import EnlargeableImage from '@diracleo/vue-enlargeable-image'
 export default {
   name: "Pregunta",
   props: {
       source: String
+    },
+    components:{
+      EnlargeableImage
     },
   data() {
     return {
@@ -231,7 +259,11 @@ export default {
         pregunta_id: '',
         nota: null,
         respuestas: [],
-        valuePD: ''
+        respuestas_show: [],
+        valuePD: '',
+        adjunto: '',
+        file: null,
+        file_name: ''
       },
     };
   },
@@ -325,13 +357,19 @@ export default {
         .catch(r => {});
     },
     
+    getFormData(object) {
+        const formData = new FormData()
+        Object.keys(object).forEach(key => formData.append(key, object[key]))
+        return formData;
+    },
 
     //funcion para guardar registro
     create(){
       let self = this
       self.loading = true
-      let data = self.form
+      self.form.respuestas = JSON.stringify(self.form.respuestas_show)
 
+      let data = self.getFormData(self.form)
       self.$store.state.services.preguntaService
         .create(data)
         .then(r => {
@@ -351,10 +389,11 @@ export default {
     update(){
       let self = this
       self.loading = true
-      let data = self.form
+      self.form.respuestas = JSON.stringify(self.form.respuestas_show)
+      let data = self.getFormData(self.form)
        
       self.$store.state.services.preguntaService
-        .update(data)
+        .updateData(self.form.id,data)
         .then(r => {
           self.loading = false
           if (self.$store.state.global.captureError(r)) {
@@ -422,6 +461,7 @@ export default {
         self.form.serie_id = data.serie_id
         self.form.nota = data.nota
         self.form.pregunta = data.pregunta
+        self.form.file_name = data.adjunto
         
         if(self.serie.tipo_serie == "FV"){
             self.valueFV = data.respuestas.find(x=>x.correcta).respuesta
@@ -441,9 +481,9 @@ export default {
               self.form.serie_id = self.serie_id
 
               if(self.serie.tipo_serie !== 'RM'){
-                self.form.respuestas = self.getResponses(self.serie.tipo_serie)
+                self.form.respuestas_show = self.getResponses(self.serie.tipo_serie)
               }else{
-                if(!self.form.respuestas.some(x=>x.correcta)){
+                if(!self.form.respuestas_show.some(x=>x.correcta)){
                     self.$toastr.error("respuesta multiple debe llevar al menos una respuesta correcta","error");
                     return
                 }
@@ -470,6 +510,21 @@ export default {
             responses.push({respuesta: self.form.valuePD, correcta: 1})
         }
         return responses
+    },
+
+    //documento
+    selectedDocumento() {
+      let self = this
+      var input = document.querySelector("#uploader .input-file")
+      var files = input.files
+      self.form.file = files[0]
+      var oFReader = new FileReader();
+      oFReader.readAsDataURL(files[0]);
+
+      /*oFReader.onload = function (oFREvent) {
+          self.form.file_name = oFREvent.target.result
+          console.log(self.form.file.name)
+      }*/
     },
     
 
@@ -506,6 +561,11 @@ export default {
         var total = self.items.reduce(function(a, b) {
             return a + parseFloat(b.nota)
         }, 0)
+
+        if(self.form.id !== null){
+          let nota_e = self.items.find(x=>x.id == self.form.id).nota
+          total = total - nota_e
+        }
         return nota - total.toFixed(2);
     },
 
@@ -522,14 +582,20 @@ export default {
             return
         }
 
-        self.form.respuestas.push({respuesta: self.valueRM, correcta: false})
+        self.form.respuestas_show.push({respuesta: self.valueRM, correcta: false})
         self.valueRM = ""
     },
 
     //remover respuestas multiples
     removeResponse(response){
         let self = this
-        self.form.respuestas.splice(self.form.respuestas.indexOf(response),1)
+        self.form.respuestas_show.splice(self.form.respuestas_show.indexOf(response),1)
+    },
+
+    getImage(foto){
+      let self = this
+      console.log(foto)
+      return foto !== null ? self.$store.state.base_url+'documentos/'+foto : self.$store.state.base_url+'img/user_empty.png'
     }
   },
 

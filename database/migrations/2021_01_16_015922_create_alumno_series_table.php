@@ -22,7 +22,7 @@ class CreateAlumnoSeriesTable extends Migration
             $table->timestamps();
 
             $table->foreign('asignacion_alumno_id')->references('id')->on('asignacion_alumnos')->onDelete('cascade');
-            $table->foreign('serie_id')->references('id')->on('series')->onUpdate('cascade');
+            $table->foreign('serie_id')->references('id')->on('series')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

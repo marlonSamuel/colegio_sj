@@ -15,6 +15,7 @@ class Pregunta extends Model
     protected $fillable = [
     	'serie_id',
         'pregunta',
+        'adjunto',
         'nota'
 	];
 

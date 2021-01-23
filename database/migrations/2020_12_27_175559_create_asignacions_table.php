@@ -16,6 +16,7 @@ class CreateAsignacionsTable extends Migration
         Schema::create('asignacions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('asignar_curso_profesor_id');
+            $table->unsignedBigInteger('ciclo_periodo_academico_id');
             $table->boolean('cuestionario')->default(0);
             $table->decimal('nota',5,2);
             $table->string('titulo',50);
@@ -28,6 +29,8 @@ class CreateAsignacionsTable extends Migration
             $table->boolean('flag_tiempo')->default(0);
 
             $table->foreign('asignar_curso_profesor_id')->references('id')->on('asignar_curso_profesor')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('ciclo_periodo_academico_id')->references('id')->on('ciclo_periodo_academicos');
+
             $table->timestamps();
         });
     }

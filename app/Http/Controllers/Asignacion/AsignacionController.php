@@ -36,6 +36,7 @@ class AsignacionController extends ApiController
     {
         $reglas = [
             'asignar_curso_profesor_id' => 'required|integer',
+            'ciclo_periodo_academico_id' => 'required|integer',
             'cuestionario' => 'required',
             'descripcion' => 'required|string',
             'titulo' => 'required|string',
@@ -118,6 +119,7 @@ class AsignacionController extends ApiController
         $asignacione = Asignacion::find($id);
 
         $reglas = [
+            'ciclo_periodo_academico_id' => 'required|integer',
             'cuestionario' => 'required',
             'descripcion' => 'required|string',
             'titulo' => 'required|string',
