@@ -41,6 +41,18 @@ class AsignacionAlumnoController extends ApiController
         return $this->showAll($asignaciones);
     }
 
+
+    //asignaciones y tareas por curso
+    public function getAsignacionesByCurso($inscripcion_id, $curso_grado_nivel_id)
+    {
+        $asignaciones = AsignacionAlumno::where([['inscripcion_id', $inscripcion_id]])
+                        ->with('asignacion',
+                        'asignacion.asignar_curso_profesor.curso_grado_nivel')->get();
+        $asignaciones = $asignaciones->where('asignacion.asignar_curso_profesor.curso_grad_niv_edu_id',$curso_grado_nivel_id);
+
+        return $this->showAll($asignaciones);
+    }
+
     public function getCursos($idAlumno,$ciclo_id)
     {
         $curso_niveles = Inscripcion::where([['id', $idAlumno],['ciclo_id',$ciclo_id]])
@@ -153,7 +165,7 @@ class AsignacionAlumnoController extends ApiController
     public function show($id)
     {
         //dd("llego".$id);
-        $asignacion_alumno = AsignacionAlumno::where('id',$id)->firstOrFail();
+        $asignacion_alumno = AsignacionAlumno::where('id',$id)->with('asignacion.asignar_curso_profesor')->firstOrFail();
         return $this->showOne($asignacion_alumno);
     }
 
@@ -162,7 +174,7 @@ class AsignacionAlumnoController extends ApiController
     public function cuestionario($id)
     {
         $asignacion_alumno = AsignacionAlumno::where('id',$id)
-                                    ->with('inscripcion.alumno','asignacion','series.serie','series.preguntas.pregunta','series.preguntas.respuestas.respuesta_a')->first();
+                                    ->with('inscripcion.alumno','asignacion.asignar_curso_profesor','series.serie','series.preguntas.pregunta','series.preguntas.respuestas.respuesta_a')->first();
 
 
         if(is_null($asignacion_alumno)) return $this->errorResponse('no se ha encontrado asignacion para examen',404);

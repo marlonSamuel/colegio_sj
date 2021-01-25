@@ -17,6 +17,11 @@ class MaterialService {
         return self.axios.get(`${self.baseUrl}/${id}`);
     }
 
+    getByCicloCurso(ciclo_id, curso_grado_nivel_id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_get_by_curso_ciclo/${ciclo_id}/${curso_grado_nivel_id}`);
+    }
+
     create(data) {
         let self = this;
         return self.axios.post(`${self.baseUrl}`, data,

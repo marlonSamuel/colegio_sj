@@ -157,7 +157,7 @@
                                 NIVEL EDUCATIVO: {{curso.curso_grado_nivel.grado_nivel_educativo.nivel_educativo.nombre | uppercase}} <br />
                                 GRADO: {{curso.curso_grado_nivel.grado_nivel_educativo.grado.nombre | uppercase}} <br />
                                 CURSO: {{curso.curso_grado_nivel.curso.nombre | uppercase}} <br />
-                                CICLO EN CURSO / CICLO: {{periodo.periodo_academico.nombre | uppercase}} / {{ciclo}}<br />
+                                BIMESTRE / CICLO EN CURSO: {{periodo.periodo_academico.nombre | uppercase}} / {{ciclo}}<br />
                             </h5>
                             
                         </v-flex>

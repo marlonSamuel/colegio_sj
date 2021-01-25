@@ -1,6 +1,6 @@
 <template>
   <v-layout wrap v-loading="loading"> 
-    <v-flex xs12 sm12 md12>
+    <v-flex xs12 sm12 md12 v-if="asignacion !== null">
       <v-card>
         <v-layout row wrap justify-end>
         <div>
@@ -12,7 +12,7 @@
         </div>
       </v-layout>
         <v-card-title>
-          <span class="headline">Entrega Asignacion {{ asignacion.titulo }}</span>
+          <span class="headline">Entrega Asignacion {{ asignacion.asignacion.titulo }}</span>
         </v-card-title>
         
 
@@ -22,7 +22,7 @@
             <v-layout wrap>
               <v-flex xs12 sm10 md10>
                 <v-text-field
-                  v-model="asignacion.titulo"
+                  v-model="asignacion.asignacion.titulo"
                   label="Título"
                   readonly
                   v-validate="'required|max:50|min:5'"
@@ -34,7 +34,7 @@
               </v-flex>
               <v-flex xs12 sm10 md10>
                 <v-textarea
-                  v-model="asignacion.descripcion"
+                  v-model="asignacion.asignacion.descripcion"
                   label="Descripción"
                   readonly
                   v-validate="'required|min:5|max:500'"
@@ -46,7 +46,7 @@
               </v-flex>
               <v-flex xs12 sm4 md4>
                 <v-text-field
-                  v-model="asignacion.fecha_entrega"
+                  v-model="asignacion.asignacion.fecha_entrega"
                   label="Fecha entrega"
                   readonly
                   v-validate="'required'"
@@ -59,7 +59,7 @@
 
               <v-flex xs12 sm4 md4>
                 <v-text-field
-                  v-model="asignacion.nota"
+                  v-model="asignacion.asignacion.nota"
                   label="Valor de Tarea (pts)"
                   readonly
                   v-validate="'required|decimal'"
@@ -75,7 +75,7 @@
                     <v-icon
                       color="error"
                       v-on="on"
-                      @click="descargarAdjunto(asignacion.adjunto)"
+                      @click="descargarAdjunto(asignacion.asignacion.adjunto)"
                       >file_download_off
                     </v-icon>
                   </template>
@@ -115,12 +115,6 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="red darken-1"
-            flat
-            @click="$router.push(`/asignacion_alumno`)"
-            >Volver</v-btn
-          >
           <v-btn color="blue darken-1" flat @click="update">Guardar</v-btn>
         </v-card-actions>
       </v-card>
@@ -136,20 +130,8 @@ export default {
   },
   data() {
     return {
-      itemsB: [
-        {
-          text: "Asignaciones",
-          disabled: false,
-          href: "#/asignacion_alumno"
-        },
-        {
-          text: "Entrega Asignacion",
-          disabled: true,
-          href: "#"
-        }
-      ],
       loading: false,
-      asignacion: {},
+      asignacion: null,
       form: {
         id: null,
         asignacion_id: null,
@@ -178,7 +160,8 @@ export default {
         .then((r) => {
           self.loading = false;
           self.mapData(r.data);
-          self.getAsignacion(r.data.asignacion_id);
+          self.asignacion = r.data
+          //self.getAsignacion(r.data.asignacion_id);
         })
         .catch((r) => {});
     },
@@ -224,12 +207,9 @@ export default {
       self.form.file_name = self.form.adjunto;
       self.form.fecha_entrega = moment().format(format);
       self.form.entregado = 1;
-      self.form.entrega_tarde = moment(self.form.fecha_entrega).isAfter(
-        self.asignacion.fecha_entrega
-      )
-        ? 1
-        : 0;
+      self.form.entrega_tarde = moment(self.form.fecha_entrega).isAfter(self.asignacion.asignacion.fecha_entrega)? 1: 0;
     },
+
     mapData(data) {
       let self = this;
       self.form.id = data.id;
@@ -265,5 +245,20 @@ export default {
       }
     },
   },
+
+  computed: {
+    
+      itemsB(){
+        let self = this
+        var user = self.$store.state.usuario
+        if(!_.isEmpty(user) && self.asignacion !== null){
+          return [
+              {text: "GRADO Y CURSOS",disabled: false,href: "#/cursos_alumnos_index/"+user.user_info.id},
+              {text: "ASIGNACIONES",disabled: false, href: "#/info_cursos_alumnos/"+self.asignacion.inscripcion_id+'/curso/'+self.asignacion.asignacion.asignar_curso_profesor.curso_grad_niv_edu_id},
+              {text: "ENTREGA ASIGNACION",disabled: true, href: "#/"}
+            ]
+        }
+      }
+  }
 };
 </script>

@@ -71,6 +71,11 @@ class GradoNivelEducativoService {
         let self = this;
         return self.axios.delete(`${self.baseUrl}Cursos/${data.id}`);
     }
+
+    getCurso(id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}Cursos/${id}`);
+    }
 }
 
 export default GradoNivelEducativoService

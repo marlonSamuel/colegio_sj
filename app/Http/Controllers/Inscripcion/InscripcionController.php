@@ -141,6 +141,7 @@ class InscripcionController extends ApiController
      */
     public function show(Inscripcion $inscripcione)
     {
+        $inscripcione = Inscripcion::where('id',$inscripcione->id)->with('ciclo','alumno','grado_nivel_educativo.grado','grado_nivel_educativo.nivelEducativo')->first();
         return $this->showOne($inscripcione);
     }
 

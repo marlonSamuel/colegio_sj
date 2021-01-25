@@ -129,6 +129,7 @@ export default {
         let self = this
         self.saldo = saldo
     },
+    
     //obtener alumno
     getAlumno(id){
         let self = this
