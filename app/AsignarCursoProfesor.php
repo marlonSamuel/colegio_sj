@@ -16,7 +16,8 @@ class AsignarCursoProfesor extends Model
     protected $fillable = [
 		'empleado_id',
         'ciclo_id',
-        'curso_grad_niv_edu_id'
+        'curso_grad_niv_edu_id',
+        'jornada'
 	];
 
 	

@@ -40,6 +40,7 @@ class MaterialApoyoController extends ApiController
             'asignar_curso_profesor_id' => 'required|integer',
             'descripcion' => 'required|string',
             'link' => 'required',
+            'ciclo_periodo_academico_id'=>'required'
         ];
 
         $this->validate($request, $reglas);
@@ -91,6 +92,7 @@ class MaterialApoyoController extends ApiController
             'asignar_curso_profesor_id' => 'required|integer',
             'descripcion' => 'required|string',
             'link' => 'required',
+            'ciclo_periodo_academico_id'=>'required'
         ];
 
         $this->validate($request, $reglas);

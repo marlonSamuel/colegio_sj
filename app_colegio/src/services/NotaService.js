@@ -25,9 +25,9 @@ class NotaService {
         return self.axios.post(`${self.baseUrl}`, data);
     }
 
-    update(data) {
+    update(id,data) {
         let self = this;
-        return self.axios.put(`${self.baseUrl}/${data.id}`, data);
+        return self.axios.put(`${self.baseUrl}/${id}`, data);
     }
 
     destroy(data) {

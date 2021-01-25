@@ -51,38 +51,77 @@
                   :error-messages="errors.collect('periodo academico')"
                 ></v-select>
               </v-flex>
-              <v-flex xs12 sm6 md6>
-                <v-list dense>
-                  <v-list-tile v-for="(item, i) in alumnos" :key="i">
-                    <v-list-tile-title v-text="item.nombre"></v-list-tile-title>
-                    <v-list-tile-action v-if="alumnos.length >0">
-                      <v-text-field
-                        prepend-icon="money"
-                        v-model="item.nota"
-                        color="primary"
-                        type="number"
-                        data-vv-name="salario"
-                        data-vv-as="salario"
-                        :error-messages="errors.collect('salario')"
-                      ></v-text-field>
-                    </v-list-tile-action>                    
-                  </v-list-tile>
-                </v-list>
-              </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="red darken-1"
-            flat
-            @click="$router.push(`/cursos_index`)"
-            >Volver</v-btn
-          >
-          <v-btn color="blue darken-1" flat @click="update">Guardar</v-btn>
-        </v-card-actions>
       </v-card>
+      <v-dialog v-model="dialog" max-width="800px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">{{ setTitle }}</span>
+          </v-card-title>
+
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm12 md12>
+                  <v-text-field
+                    v-model="form.nota"
+                    label="Nota"
+                    v-validate="'required'"
+                    type="number"
+                    data-vv-name="nota"
+                    :error-messages="errors.collect('nota')"
+                  >
+                  </v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red darken-1" flat @click="close">Volver</v-btn>
+            <v-btn color="blue darken-1" flat @click="createOrEdit"
+              >Guardar</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-data-table
+        :headers="headers"
+        :items="notas"
+        :search="search"
+        class="elevation-1"
+        v-if="notas.length > 0"
+      >
+        <template v-slot:items="props">
+          <td class="text-xs-left">{{ props.item.nombre }}</td>
+          <td class="text-xs-left">{{ props.item.total_tareas }}</td>
+          <td class="text-xs-left">{{ props.item.total_cuestionario }}</td>
+          <td class="text-xs-left">{{ props.item.sub_total }}</td>
+          <td class="text-xs-left">{{ props.item.nota }}</td>
+          <td class="text-xs-left">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  v-on="on"
+                  color="warning"
+                  fab
+                  dark
+                  @click="edit(props.item)"
+                >
+                  edit</v-icon
+                >
+              </template>
+              <span>Agregar Nota Alumno</span>
+            </v-tooltip>
+          </td>
+        </template>
+        <template v-slot:no-data>
+          <v-btn color="primary" @click="getAll">Reset</v-btn>
+        </template>
+      </v-data-table>
     </v-flex>
   </v-layout>
 </template>
@@ -99,11 +138,15 @@ export default {
       dialog: false,
       search: "",
       bimestre: [],
-      notas:[],
-      alumnos:[
-          {inscripcion_id:null},
-          {nombre : ''},
-          {nota:''},
+      notas: [],
+      alumnos: [{ inscripcion_id: null }, { nombre: "" }, { nota: "" }],
+      headers: [
+        { text: "Nombre", value: "nombre" },
+        { text: "Total Tareas", value: "total_tareas" },
+        { text: "Total Cuestionarios", value: "total_cuestionario" },
+        { text: "Sub Total", value: "sub_total" },
+        { text: "Nota", value: "nota" },
+        { text: "Acciones", value: "", sortable: false },
       ],
       idPeriodo: null,
       ciclos: [],
@@ -113,8 +156,12 @@ export default {
       items: [],
       form: {
         id: null,
+        nombre:'',
         asignar_curso_profesor_id: null,
-        ciclo_periodo_academico_id:null,
+        ciclo_periodo_academico_id: null,
+        inscripcion_id: null,
+        nota: null,
+        sub_total:null,
       },
     };
   },
@@ -157,85 +204,37 @@ export default {
         })
         .catch((e) => {});
     },
-    getAlumnos(id) {
-      let self = this;
-      self.loading = true;
-      self.$store.state.services.asignacionProfesorService
-        .getAlumnos(id)
-        .then((r) => {
-          self.loading = false;
-          if (self.$store.state.global.captureError(r)) {
-            return;
-          }
-          self.alumnos = r.data;
-          r.data.forEach(function(item){
-              self.alumnos.push({
-                  inscripcion_id:item.alumno_id,
-                  nombre:item.alumno.codigo+' '+item.alumno.primer_nombre+' '+item.alumno.segundo_nombre+' '+item.alumno.primer_apellido+' '+item.alumno.segundo_apellido,
-                  nota:self.validExist(item)
-              });
-          }); 
-          console.log(self.alumnos);   
-        })
-        .catch((e) => {});
-    },
-    validExist(item) {
-      let self = this;
-      let nota = null;
-      let a = self.notas.find(x => x.inscripcion_id == item.alumno_id && x.ciclo_periodo_academico_id == self.idBimestre);
-      if (a === undefined) {
-        nota = null;
-      } else {
-        nota = a.nota;
-      }
-      return nota;
-    },
     getAll(id) {
       let self = this;
       self.loading = true;
       self.$store.state.services.notaService
-        .getAll(self.curso_id,id)
+        .getAll(self.curso_id, id)
         .then((r) => {
           self.loading = false;
           if (self.$store.state.global.captureError(r)) {
             return;
           }
-          self.nota = r.data;
-          self.getAlumnos(self.curso_id);
-        })
-        .catch((e) => {});
-    },
-
-    //obtener registro
-    get(id) {
-      let self = this;
-      self.loading = true;
-      self.$store.state.services.materialService
-        .get(id)
-        .then((r) => {
-          self.loading = false;
-          if (self.$store.state.global.captureError(r)) {
-            return;
+          self.notas = r.data.data;
+          if (self.notas.length === 0) {
+            this.$toastr.error("Bimestre no habilitado para ingreso de notas", "error");
           }
-          self.mapData(r.data);
         })
         .catch((e) => {});
     },
-
     //funcion para guardar registro
     create() {
       let self = this;
       self.loading = true;
-      let data = self.getFormData(self.form);
-      self.$store.state.services.materialService
+      let data = self.form;
+      self.$store.state.services.notaService
         .create(data)
         .then((r) => {
           self.loading = false;
           if (self.$store.state.global.captureError(r)) {
             return;
           }
-          this.$toastr.success("Material agregado con éxito", "éxito");
-          self.getAll(self.$route.params.id);
+          this.$toastr.success("Nota agregada con éxito", "éxito");
+          self.getAll(self.idPeriodo);
           self.close();
         })
         .catch((r) => {});
@@ -246,72 +245,31 @@ export default {
       let self = this;
       self.loading = true;
       let id = self.form.id;
-      let data = self.getFormData(self.form);
+      let data = self.form;
 
-      self.$store.state.services.materialService
-        .updateData(id, data)
+      self.$store.state.services.notaService
+        .update(id, data)
         .then((r) => {
           self.loading = false;
           if (self.$store.state.global.captureError(r)) {
             return;
           }
-          self.getAll(self.$route.params.id);
-          this.$toastr.success("Material actualizado con éxito", "éxito");
+          self.getAll(self.idPeriodo);
+          this.$toastr.success("Nota actualizada con éxito", "éxito");
           self.close();
         })
         .catch((r) => {});
     },
 
-    //funcion para eliminar registro
-    destroy(data) {
-      let self = this;
-      self
-        .$confirm("Seguro que desea eliminar material de apoyo?")
-        .then((res) => {
-          self.loading = true;
-          self.$store.state.services.materialService
-            .destroy(data)
-            .then((r) => {
-              self.loading = false;
-              if (self.$store.state.global.captureError(r)) {
-                return;
-              }
-              self.getAll(self.$route.params.id);
-              this.$toastr.success("Material eliminado con exito", "exito");
-              self.clearData();
-            })
-            .catch((r) => {});
-        })
-        .catch((cancel) => {});
-    },
-    prepareDataNotas(data) {
-      let self = this;
-      self.form2.turno_id = self.idTurno;
-      data.forEach(function(element) {
-        let a = self.notas.find(x => x.inscripcion_id == element.alumno_id && x.ciclo_periodo_academico_id == self.idBimestre);
-        if (a === undefined && element.salario != null) {
-          self.form2.cargos.push({
-            id: null,
-            cargo_id: element.idCargo,
-            salario: element.salario
-          });
-        } else {
-          if (element.salario != null) {
-            self.form2.cargos.push({
-              id: a.id,
-              cargo_id: a.cargo_id,
-              salario: element.salario
-            });
-          }
-        }
-      });
-    },
     //funcion, validar si se guarda o actualiza
     createOrEdit() {
       let self = this;
       this.$validator.validateAll().then((result) => {
         if (result) {
-          self.form.asignar_curso_profesor_id = self.$route.params.id;
+          if (self.form.nota < self.form.sub_total) {
+            this.$toastr.error("Nota no puede ser menor a la suma de cuestionario y tareas", "error");
+            return false;
+          }
           if (self.form.id > 0 && self.form.id !== null) {
             self.update();
           } else {
@@ -332,13 +290,12 @@ export default {
     mapData(data) {
       let self = this;
       self.form.id = data.id;
-      self.form.descripcion = data.descripcion;
       self.form.asignar_curso_profesor_id = data.asignar_curso_profesor_id;
-      self.form.adjunto = data.adjunto;
-      self.form.link = data.link;
-      self.form.url = data.url;
-      self.form.file_name = data.adjunto;
-      console.log(self.form);
+      self.form.ciclo_periodo_academico_id = data.ciclo_periodo_academico_id;
+      self.form.inscripcion_id = data.inscripcion_id;
+      self.form.nota = data.nota;
+      self.form.sub_total = data.sub_total;
+      self.form.nombre = data.nombre;
     },
 
     //limpiar data de formulario
@@ -365,7 +322,7 @@ export default {
       let self = this;
       return self.form.id !== null
         ? self.form.nombre
-        : "Nuevo material de apoyo";
+        : "Asignar Nota a " +self.form.nombre;
     },
 
     itemsB() {

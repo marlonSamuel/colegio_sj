@@ -123,7 +123,8 @@ class AsignarCursoProfesorController extends ApiController
         $reglas = [
             'empleado_id' => 'required|integer',
             'ciclo_id' => 'required|integer',
-            'curso_grad_niv_edu_id' => 'required|integer'
+            'curso_grad_niv_edu_id' => 'required|integer',
+            'jornada'=>'required'
         ];
 
         $this->validate($request, $reglas);
