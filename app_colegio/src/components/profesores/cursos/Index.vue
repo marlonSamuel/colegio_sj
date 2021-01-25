@@ -84,7 +84,7 @@
                         small
                         v-on="on"
                         color="green"
-                        @click="$router.push('view_alumnos/' + props.item.id)"
+                        @click="$router.push('notas_index/' + props.item.id)"
                       >
                         <v-icon fab dark>file_copy</v-icon> notas</v-btn
                       >

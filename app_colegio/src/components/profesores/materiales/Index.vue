@@ -38,7 +38,7 @@
                             </template>
                             <v-card>
                                 <v-card-title>
-                                <span class="headline">{{setTitle}}</span>
+                                <span class="headline" v-if="periodo !== null">{{setTitle}} {{periodo.periodo_academico.nombre}}</span>
                                 </v-card-title>
                     
                                 <v-card-text>
@@ -167,13 +167,15 @@ export default {
         form:{
             id: null,
             asignar_curso_profesor_id: null,
+            ciclo_periodo_academico_id: null,
             descripcion: '',
             link: 0,
             url: '',
             adjunto: '',
             file: null,
             file_name: ''
-        }
+        },
+        periodo: null,
     }
   },
 
@@ -182,6 +184,7 @@ export default {
     self.curso_id = self.$route.params.id
     self.getAll(self.$route.params.id)
     self.getInfo(self.$route.params.id)
+    self.getPeriodos()
   },
 
   methods: {
@@ -196,6 +199,27 @@ export default {
                     return
                 }
                 self.curso = r.data
+            }).catch(e => {
+
+            })
+      },
+      //obtener bimestre actual
+      getPeriodos(id){
+          let self = this
+            self.loading = true
+            self.$store.state.services.cicloService
+            .getPeriodos(self.$store.state.ciclo.id)
+            .then(r => {
+                self.loading = false
+                if (self.$store.state.global.captureError(r)) {
+                    return
+                }
+                self.periodo = r.data.find(x=>x.actual)
+
+                if(self.periodo == null || self.periodo == undefined){
+                    let now = moment()
+                    self.periodo = r.data.find(x=>moment(now).isBetween(moment(x.inicio), moment(x.fin), undefined,'[]'))
+                }
             }).catch(e => {
 
             })
@@ -325,6 +349,7 @@ export default {
       this.$validator.validateAll().then((result) => {
           if (result) {
               self.form.asignar_curso_profesor_id = self.$route.params.id
+              self.form.ciclo_periodo_academico_id = self.periodo.id
               if(self.form.id > 0 && self.form.id !== null){
                 self.update()
               }else{

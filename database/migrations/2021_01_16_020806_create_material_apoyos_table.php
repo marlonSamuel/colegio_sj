@@ -16,12 +16,14 @@ class CreateMaterialApoyosTable extends Migration
         Schema::create('material_apoyos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('asignar_curso_profesor_id');
+            $table->unsignedBigInteger('ciclo_periodo_academico_id');
             $table->string('descripcion',500);
             $table->string('adjunto',100)->nullable();
             $table->boolean('link')->default(0);
             $table->string('url',200)->nullable();
 
             $table->foreign('asignar_curso_profesor_id')->references('id')->on('asignar_curso_profesor')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('ciclo_periodo_academico_id')->references('id')->on('ciclo_periodo_academicos');
             $table->timestamps();
         });
     }

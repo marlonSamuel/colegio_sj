@@ -35,6 +35,20 @@
                     >
                     </v-autocomplete>
                   </v-flex>
+                  <v-flex xs12 sm4 md4>
+                    <v-select
+                      placeholder="Jornada"
+                      v-model="form.jornada"
+                      v-validate="'required'"
+                      :items="jornadas"
+                      :error-messages="errors.collect('jornada')"
+                      label="Jornada"
+                      item-value="value"
+                      item-text="text"
+                      data-vv-name="jornada"
+                      required
+                    ></v-select>
+                  </v-flex>
                   <v-flex xs12 md6>
                     <span class="headline">Asignar Secciones</span>
                     <v-layout row wrap>
@@ -76,15 +90,12 @@
 
             <v-card-text>
               <v-container grid-list-md>
-                <v-layout wrap> 
-                    <v-flex xs12 md12 sm12>
+                <v-layout wrap>
+                  <v-flex xs12 md12 sm12>
                     <template>
                       <v-list dense>
                         <v-subheader>Asignaciones</v-subheader>
-                        <v-list-tile
-                          v-for="(item, i) in asignaciones"
-                          :key="i"
-                        >
+                        <v-list-tile v-for="(item, i) in asignaciones" :key="i">
                           <v-list-tile-action>
                             <v-icon
                               color="error"
@@ -101,7 +112,6 @@
                       </v-list>
                     </template>
                   </v-flex>
-
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -177,13 +187,13 @@ export default {
   data() {
     return {
       dialog: false,
-      dialog2:false,
+      dialog2: false,
       search: "",
       loading: false,
       items: [],
       info: [],
       niv_grad_curso: [],
-      asignaciones:[],
+      asignaciones: [],
       secciones: [],
       headers: [
         { text: "Nombre", value: "primer_nombre" },
@@ -200,9 +210,15 @@ export default {
         empleado_id: null,
         ciclo_id: this.$store.state.ciclo.id,
         curso_grad_niv_edu_id: null,
+        jornada:null,
         secciones: [],
       },
-      profesor_id:null,
+      profesor_id: null,
+      jornadas: [
+        { text: "Matutina", value: "M" },
+        { text: "Vespertina", value: "V" },
+        { text: "Ambas", value: "A" },
+      ],
     };
   },
 
@@ -280,7 +296,7 @@ export default {
         .getInfo()
         .then((r) => {
           self.loading = false;
-          self.info = r.data.data
+          self.info = r.data.data;
           self.RemoveAsignados(r.data.data);
         })
         .catch((r) => {});
@@ -384,7 +400,7 @@ export default {
       let self = this;
       this.dialog = true;
       self.getAll(data.id, this.$store.state.ciclo.id);
-      
+
       self.profesor_id = data.id;
       self.form.empleado_id = data.id;
       self.form.ciclo_id = this.$store.state.ciclo.id;
