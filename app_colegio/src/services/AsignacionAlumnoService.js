@@ -27,6 +27,11 @@ class AsignacionAlumnoService {
         return self.axios.get(`${self.baseUrl}_cuestionario/${id}`);
     }
 
+    getAsignacionByCurso(inscripcion_id,curso_grado_nivel_id) {
+        let self = this;
+        return self.axios.get(`${self.baseUrl}_asignacion_by_curso/${inscripcion_id}/${curso_grado_nivel_id}`);
+    }
+
     iniciar(data) {
         let self = this;
         return self.axios.put(`${self.baseUrl}_start/${data.id}`,data);

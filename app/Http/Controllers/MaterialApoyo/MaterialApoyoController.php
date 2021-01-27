@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MaterialApoyo;
 use App\MaterialApoyo;
+use App\Inscripcion;
 use App\AsignarCursoProfesor;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -75,6 +76,18 @@ class MaterialApoyoController extends ApiController
     public function show(MaterialApoyo $material)
     {
         return $this->showOne($material);
+    }
+
+    //obtener material de apoyo por curso
+    public function getByCursoCiclo($inscripcion_id, $curso_grado_nivel_id)
+    {
+        $ciclo_id = Inscripcion::find($inscripcion_id)->ciclo_id;
+
+        $material_apoyo = MaterialApoyo::with('asignar_curso_profesor')->get()
+                                               ->where('asignar_curso_profesor.curso_grad_niv_edu_id',$curso_grado_nivel_id)
+                                               ->where('asignar_curso_profesor.ciclo_id',$ciclo_id)->values();
+
+        return $this->showAll($material_apoyo);
     }
 
     /**

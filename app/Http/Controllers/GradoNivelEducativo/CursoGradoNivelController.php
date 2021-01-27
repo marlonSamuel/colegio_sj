@@ -11,8 +11,8 @@ class CursoGradoNivelController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:niveleducativo')->except(['index']);
+        //parent::__construct();
+        //$this->middleware('scope:niveleducativo')->except(['index']);
     }
 
     public function index()
@@ -41,9 +41,10 @@ class CursoGradoNivelController extends ApiController
 
     /**
      */
-    public function show(Curso $curso)
+    public function show(CursoGradNivEd $gradoNivelEducativosCurso)
     {
-        
+        $curso = CursoGradNivEd::find($gradoNivelEducativosCurso->id)->with('curso')->first();
+        return $this->showOne($curso);
     }
 
     /**

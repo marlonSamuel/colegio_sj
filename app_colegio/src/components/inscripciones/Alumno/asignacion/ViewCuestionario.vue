@@ -282,10 +282,9 @@ export default {
   computed: {
       itemsB(){
         let self = this
-        let rol = self.$store.state.usuario.rol
-        console.log(rol)
-        if(rol !== undefined & self.asignacion !== null){
-            if(rol.rol == "profesor"){
+        let user = self.$store.state.usuario
+        if(!_.isEmpty(user)  & self.asignacion !== null){
+            if(user.rol.rol == "profesor"){
                 return [
                         { text: "CURSOS",disabled: false, href: "#/cursos_index"},
                         { text: "ASIGNACIONES",disabled: false, href: "#/asignacion_index/"+self.curso_id},
@@ -294,9 +293,9 @@ export default {
                 ]
             }
             return [
-                { text: "CURSOS",disabled: false, href: "#/"},
-                { text: "ASIGNACIONES",disabled: false, href: "#/"},
-                {text: "RESULTADO",disabled: true,href: "#"}
+                {text: "GRADO Y CURSOS",disabled: false,href: "#/cursos_alumnos_index/"+user.user_info.id},
+                {text: "ASIGNACIONES",disabled: false, href: "#/info_cursos_alumnos/"+self.asignacion.inscripcion_id+'/curso/'+self.asignacion.asignacion.asignar_curso_profesor.curso_grad_niv_edu_id},
+                {text: "ENTREGA ASIGNACION",disabled: true, href: "#/"}
             ]
         }
     },

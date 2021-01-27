@@ -75,8 +75,7 @@ export default {
         items: [],
         itemsAlumno: [
             { title: 'Inicio',icon:"home",path:"/" },
-            { title: 'Mis notas',icon:"file_copy",path:"/historial_academico/" },
-            { title: 'Mis asignaciones',icon:"check_circle_outline",path:"/historial_academico/" },
+            { title: 'Mis grados y cursos',icon:"check_circle_outline",path:"/cursos_alumnos_index/" },
             { title: 'Historial de pagos',icon:"attach_money", path:"/historial_pagos/" },
             { title: 'Historial academico',icon:"file_copy", path:"/historial_academico/" }
         ],

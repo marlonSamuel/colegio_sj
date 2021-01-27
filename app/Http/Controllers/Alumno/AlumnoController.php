@@ -284,7 +284,7 @@ class AlumnoController extends ApiController
             return $this->errorResponse('alumno no encontrado',404);
         }
 
-        $inscripciones = $alumno->inscripciones()->with('ciclo','grado_nivel_educativo.grado','grado_nivel_educativo.nivelEducativo')->get();
+        $inscripciones = $alumno->inscripciones()->with('ciclo','grado_nivel_educativo.grado','grado_nivel_educativo.nivelEducativo','grado_nivel_educativo.cursos.curso')->get();
         $pagos = $alumno->inscripciones()->with('pagos.serie','pagos.pagos_parciales', 'pagos.pagos_meses','pagos.cuota.concepto_pago','pagos.cuota.ciclo')->get()->pluck('pagos')->collapse()->values();
 
         return response()->json([

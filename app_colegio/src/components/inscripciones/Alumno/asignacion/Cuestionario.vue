@@ -1,7 +1,7 @@
 <template>
     <v-layout justify-center  v-loading="loading">
-        <v-flex xs12 sm12 md12>
-            <v-dialog v-if="asignacion !== null" v-model="dialog" max-width="1200px" persistent>
+        <v-flex xs12 sm12 md12 v-if="asignacion !== null">
+            <v-dialog v-model="dialog" max-width="1200px" persistent>
                 <v-card>
                     <v-card-title
                         class="headline grey lighten-2"
@@ -572,10 +572,14 @@ export default {
   computed: {
       itemsB(){
         let self = this
-        return [
-            { text: "ASIGNACIONES", disabled: false, href: "#/"},
-            {text: "RESPONDER", disabled: true,href: "#"}
-      ]
+        var user = self.$store.state.usuario
+        if(!_.isEmpty(user) && self.asignacion !== null){
+                return [
+                    {text: "GRADO Y CURSOS",disabled: false,href: "#/cursos_alumnos_index/"+user.user_info.id},
+                    {text: "ASIGNACIONES",disabled: false, href: "#/info_cursos_alumnos/"+self.asignacion.inscripcion_id+'/curso/'+self.asignacion.asignacion.asignar_curso_profesor.curso_grad_niv_edu_id},
+                    {text: "RESPONDER",disabled: true, href: "#/"}
+            ]
+        }
     }
   },
 };
