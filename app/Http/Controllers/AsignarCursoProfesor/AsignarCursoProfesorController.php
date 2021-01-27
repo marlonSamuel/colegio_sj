@@ -108,7 +108,8 @@ class AsignarCursoProfesorController extends ApiController
         foreach ($curso_niveles as $key => $value) {
             $info = collect([
                 'id' => $value->id,
-                'nombre' => $value->grado_nivel_educativo->nivelEducativo->nombre . '/' . $value->grado_nivel_educativo->grado->nombre . '/' . $value->curso->nombre
+                'nombre' => $value->grado_nivel_educativo->nivelEducativo->nombre . '/' . $value->grado_nivel_educativo->grado->nombre . '/' . $value->curso->nombre,
+                'grado_nivel_educativo_id'=>$value->grado_nivel_educativo->id
             ]);
             $data->push($info);
         }

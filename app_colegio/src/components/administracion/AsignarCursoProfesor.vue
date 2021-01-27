@@ -30,6 +30,8 @@
                       :items="info"
                       item-text="nombre"
                       item-value="id"
+                      return-object
+                      @change="getSeccion()"
                       data-vv-name="curso-grado"
                       :error-messages="errors.collect('curso-grado')"
                     >
@@ -49,7 +51,7 @@
                       required
                     ></v-select>
                   </v-flex>
-                  <v-flex xs12 md6>
+                  <v-flex xs12 md6 v-if="secciones.length > 0">
                     <span class="headline">Asignar Secciones</span>
                     <v-layout row wrap>
                       <v-flex
@@ -59,8 +61,8 @@
                       >
                         <v-checkbox
                           light
-                          :label="seccion.seccion"
-                          :value="seccion.id"
+                          :label="seccion.seccion.seccion"
+                          :value="seccion.seccion_id"
                           v-model="form.secciones"
                         >
                         </v-checkbox>
@@ -225,7 +227,7 @@ export default {
   created() {
     let self = this;
     self.getProfesores();
-    self.getSeccion();
+    //self.getSeccion();
   },
 
   methods: {
@@ -237,6 +239,7 @@ export default {
         .then((r) => {
           self.loading = false;
           self.niv_grad_curso = r.data;
+          console.log(r.data);
           self.getInfo();
         })
         .catch((r) => {});
@@ -249,19 +252,17 @@ export default {
         .then((r) => {
           self.loading = false;
           self.asignaciones = r.data;
+          
         })
         .catch((r) => {});
     },
     RemoveAsignados(arr) {
       let self = this;
-      console.log(self.niv_grad_curso.length);
       if (self.niv_grad_curso.length < 1) {
         self.info = arr;
       } else {
         self.niv_grad_curso.forEach(function (element) {
           arr.forEach(function (item) {
-            console.log(element.curso_grad_niv_edu_id);
-            console.log(item.id);
             if (element.curso_grad_niv_edu_id === item.id) {
               arr.splice(arr.indexOf(item), 1);
             }
@@ -269,6 +270,7 @@ export default {
         });
         self.info = arr;
       }
+      
     },
     getProfesores() {
       let self = this;
@@ -303,12 +305,15 @@ export default {
     },
     getSeccion() {
       let self = this;
+      let gradoNivel = self.info.find(x=>x.curso_grad_niv_edu_id = self.form.curso_grad_niv_edu_id);
+      console.log(gradoNivel);
       self.loading = true;
-      self.$store.state.services.seccionService
-        .getAll()
+      self.$store.state.services.gradoNivelEducativoService
+        .getSeccionesById(gradoNivel.grado_nivel_educativo_id)
         .then((r) => {
           self.loading = false;
           self.secciones = r.data;
+          
         })
         .catch((r) => {});
     },
