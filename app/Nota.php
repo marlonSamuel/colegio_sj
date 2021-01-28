@@ -21,9 +21,11 @@ class Nota extends Model
     {
     	return $this->belongsTo(Inscripcion::class,'inscripcion_id');
     }
+
     public function periodo_academico(){
         return $this->belongsTo(CicloPeriodoAcademico::class,'ciclo_periodo_academico_id');
     }
+    
     public function asignar_curso_profesor(){
         return $this->belongsTo(AsignarCursoProfesor::class,'asignar_curso_profesor_id');
     }

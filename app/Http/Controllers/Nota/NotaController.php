@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Nota;
 use App\Asignacion;
 use App\Nota;
 use App\CicloPeriodoAcademico;
+use App\GradoNivelEducativo;
 use App\AsignarCursoProfesor;
 use App\Inscripcion;
+use App\Ciclo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
@@ -35,6 +37,7 @@ class NotaController extends ApiController
         //$notas = Nota::where([['asignar_curso_profesor_id',$idAsignacionCurso],['ciclo_periodo_academico_id',$idBimestre]])->get();
         return $this->showQuery($data);
     }
+
     public function getPeriodoAcademico($idCiclo){
         $periodos = CicloPeriodoAcademico::where('ciclo_id',$idCiclo)->with('periodo_academico')->get();
         return $this->showAll($periodos);
@@ -158,5 +161,163 @@ class NotaController extends ApiController
         $nota->delete();
 
         return $this->showOne($nota);
+    }
+
+      //boletas
+    public function transormedData(Inscripcion $inscripcion)
+    {
+        $cursos = $inscripcion->grado_nivel_educativo()->with('cursos.curso')->get()->pluck('cursos')->collapse();
+
+        $notas = Nota::where('inscripcion_id',$inscripcion->id)
+                            ->with('periodo_academico.periodo_academico','asignar_curso_profesor.curso_grado_nivel.curso')
+                            ->get();
+
+        $group_by_bimestre = $notas->groupBy('periodo_academico.periodo_academico.nombre');
+
+        //guardar todas las calificaciones
+        $data = collect();
+
+        $primer_bimestre_prom = null;
+        $segundo_bimestre_prom = null;
+        $tercer_bimestre_prom = null;
+        $cuarto_bimestre_prom = null;
+        $c_p = 0;
+        $c_s = 0;
+        $c_t = 0;
+        $c_c = 0;
+
+        $no = 1;
+        foreach ($cursos as $curso) {
+            $div_prom = 0;
+
+            $cal = ([
+                'no' => $no,
+                'curso' => $curso->curso->nombre,
+                'primer_bimestre' => null,
+                'segundo_bimestre' => null,
+                'tercer_bimestre' => null,
+                'cuarto_bimestre' => null,
+                'promedio' => null
+            ]);
+
+            foreach ($group_by_bimestre as $cal_key => $bim) {
+                $bim_low = str_replace(' ','_',strtolower($cal_key));
+
+                $nota_curso = $bim->where('asignar_curso_profesor.curso_grado_nivel.curso.nombre',$cal['curso'])->first();
+
+                if(!is_null($nota_curso)){
+                    $cal[$bim_low] = $nota_curso->nota;
+
+                    if($bim_low == "primer_bimestre"){
+                        $primer_bimestre_prom += $nota_curso->nota;
+                        $c_p++;
+                    }else if($bim_low == "segundo_bimestre"){
+                        $segundo_bimestre_prom += $nota_curso->nota;
+                        $c_s++;
+                    }else if($bim_low == "tercer_bimestre"){
+                        $tercer_bimestre_prom += $nota_curso->nota;
+                        $c_t++;
+                    }else{
+                        $cuarto_bimestre_prom += $nota_curso->nota;
+                        $c_c++;
+                    }
+
+                    $div_prom++;
+                }
+            }
+
+            if ($div_prom > 0) {
+                $cal['promedio'] = ($cal['primer_bimestre'] + $cal['segundo_bimestre'] + $cal['tercer_bimestre'] +$cal['cuarto_bimestre']) / $div_prom;
+            }
+
+            $data->push($cal);
+            $no++;
+        }
+
+        if($c_p > 0)$primer_bimestre_prom = round($primer_bimestre_prom/$c_p,2);
+        if($c_s > 0)$segundo_bimestre_prom = round($segundo_bimestre_prom/$c_s,2);
+        if($c_t > 0)$tercer_bimestre_prom = round($tercer_bimestre_prom/$c_t,2);
+        if($c_c > 0)$cuarto_bimestre_prom = round($cuarto_bimestre_prom/$c_c,2);
+
+        $alumno = $inscripcion->alumno;
+        $alumno->inscripcion_id = $inscripcion->id;
+        $alumno->notas = $data;
+        $alumno->primer_bimestre =  $primer_bimestre_prom;
+        $alumno->segundo_bimestre = $segundo_bimestre_prom;
+        $alumno->tercer_bimestre = $tercer_bimestre_prom;
+        $alumno->cuarto_bimestre = $cuarto_bimestre_prom;
+
+        return $alumno;
+    }
+
+
+    //obtener para enviar
+
+    public function getOneNota($inscripcion_id)
+    {
+        $inscripcion = Inscripcion::find($inscripcion_id);
+        $data = $this->transormedData($inscripcion);
+
+        return $this->showQuery($data);
+    }
+
+    public function getAllNotas($ciclo_id, $grado_nivel_educativo_id)
+    {
+        $inscripciones = Inscripcion::where([['grado_nivel_educativo_id',$grado_nivel_educativo_id],['ciclo_id',$ciclo_id]])->get();
+        $all_data = collect();
+
+        foreach ($inscripciones as $inscripcion) {
+            $data = $this->transormedData($inscripcion);
+            $all_data->push($data);
+        } 
+
+        return $this->showQuery($all_data);
+    }
+
+
+    //obtener boleta de calificación
+    public function boleta($inscripcion_id)
+    {
+        $inscripcion = Inscripcion::find($inscripcion_id);
+        $data = $this->transormedData($inscripcion);
+        $ciclo = Ciclo::find($inscripcion->ciclo_id);
+        $grado = GradoNivelEducativo::where('id',$inscripcion->grado_nivel_educativo_id)->with('grado','nivelEducativo')->first();
+
+        $all_data = collect([$data]);
+
+        $pdf = \PDF::loadView('pdfs.boleta',['ciclo'=>$ciclo,'grado'=>$grado,'data'=>$all_data]);
+
+        //$pdf->setPaper('legal', 'portrait');
+
+        return $pdf->download('boleta.pdf');
+
+
+        return $this->showQuery($data);
+    }
+
+        //obtener boleta de calificación
+    public function boletas($ciclo_id, $grado_nivel_educativo_id)
+    {
+        $ciclo = Ciclo::find($ciclo_id);
+        $grado = GradoNivelEducativo::where('id',$grado_nivel_educativo_id)->with('grado','nivelEducativo')->first();
+
+        $inscripciones = Inscripcion::where([['grado_nivel_educativo_id',$grado_nivel_educativo_id],['ciclo_id',$ciclo_id]])->get();
+
+        $all_data = collect();
+        foreach ($inscripciones as $inscripcion) {
+            $data = $this->transormedData($inscripcion);
+            $all_data->push($data);
+        }   
+
+        //return $this->showQuery($all_data);
+
+        $pdf = \PDF::loadView('pdfs.boleta',['ciclo'=>$ciclo,'grado'=>$grado,'data'=>$all_data]);
+
+        $pdf->setPaper('legal', 'portrait');
+
+        return $pdf->download('boleta.pdf');
+
+
+        return $this->showQuery($data);
     }
 }

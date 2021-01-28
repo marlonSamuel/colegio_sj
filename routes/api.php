@@ -138,3 +138,7 @@ Route::name('notas_get_all')->get('notas_get_all/{idAsignCursoProf}/{idPeriodoAc
 
 Route::resource('serie_respuesta_alumnos', 'Serie\SerieRespuestaAlumnoController', ['except' => ['create', 'edit']]);
 
+Route::name('notas_boleta')->get('notas_boleta/{inscripcion_id}', 'Nota\NotaController@boleta');
+Route::name('notas_boletas')->get('notas_boletas/{ciclo_id}/{grado_nivel_educativo_id}', 'Nota\NotaController@boletas');
+Route::name('notas_get_one_nota')->get('notas_get_one_nota/{inscripcion_id}', 'Nota\NotaController@getOneNota');
+Route::name('notas_get_all_notas')->get('notas_get_all_notas/{ciclo_id}/{grado_nivel_educativo_id}', 'Nota\NotaController@getAllNotas');
