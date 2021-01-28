@@ -31,10 +31,10 @@ class NotaController extends ApiController
 
         $asignaciones = Asignacion::where([['asignar_curso_profesor_id',$idAsignacionCurso],['ciclo_periodo_academico_id',$idBimestre]])
             ->with('alumnos')->get();
-            $asignaciones->groupBy('alumnos.asignacion_alumnos.inscripcion_id');
+ 
         $alumnos = $this->getAlumnos($idAsignacionCurso);
-        $data = $this->prepareData($alumnos,$asignaciones);
-        //$notas = Nota::where([['asignar_curso_profesor_id',$idAsignacionCurso],['ciclo_periodo_academico_id',$idBimestre]])->get();
+        $data = $this->prepareData($alumnos,$asignaciones,$idAsignacionCurso,$idBimestre);
+
         return $this->showQuery($data);
     }
 
@@ -63,14 +63,12 @@ class NotaController extends ApiController
         return $inscripciones_filter;
     }
 
-    public function prepareData($alumnos,$asignaciones){
+    public function prepareData($alumnos,$asignaciones,$asignar_curso_profesor_id,$ciclo_periodo_academico_id){
         $data = collect();
-        if (count($asignaciones) > 0) {
+        
             foreach ($alumnos as $key => $value) {
             $total_cuestionario = 0;
             $total_tareas = 0;
-            $asignar_curso_profesor_id = $asignaciones[0]->asignar_curso_profesor_id;
-            $ciclo_periodo_academico_id = $asignaciones[0]->ciclo_periodo_academico_id;
             $cuestionarios = $asignaciones->where('cuestionario',true);
             $tareas = $asignaciones->where('cuestionario',false);
             foreach ($cuestionarios as $key2=>$value2) {
@@ -94,9 +92,7 @@ class NotaController extends ApiController
             );
             $data->push($info);          
         }
-        }
-            
-        
+                    
         return $data;
     }
     /**

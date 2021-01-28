@@ -138,6 +138,7 @@ export default {
       dialog: false,
       search: "",
       bimestre: [],
+      periodo_actual: null,
       notas: [],
       alumnos: [{ inscripcion_id: null }, { nombre: "" }, { nota: "" }],
       headers: [
@@ -201,12 +202,24 @@ export default {
             return;
           }
           self.bimestre = r.data;
+          self.periodo_actual = r.data.find(x=>x.actual)
+
+                if(self.periodo_actual == null || self.periodo_actual == undefined){
+                    let now = moment()
+                    self.periodo_actual = r.data.find(x=>moment(now).isBetween(moment(x.inicio), moment(x.fin), undefined,'[]'))
+                }
+          
         })
         .catch((e) => {});
     },
     getAll(id) {
       let self = this;
       self.loading = true;
+      if (id != self.periodo_actual.id) {
+        self.loading = false;
+        this.$toastr.error("Periodo no esta activo para ingresar notas", "error");
+        return false;
+      }
       self.$store.state.services.notaService
         .getAll(self.curso_id, id)
         .then((r) => {
@@ -216,7 +229,7 @@ export default {
           }
           self.notas = r.data.data;
           if (self.notas.length === 0) {
-            this.$toastr.error("Bimestre no habilitado para ingreso de notas", "error");
+            this.$toastr.error("No hay alumnos Inscritos", "error");
           }
         })
         .catch((e) => {});
