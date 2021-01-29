@@ -31,7 +31,7 @@
                       item-text="nombre"
                       item-value="id"
                       return-object
-                      @change="getSeccion()"
+                      @input="getSeccion"
                       data-vv-name="curso-grado"
                       :error-messages="errors.collect('curso-grado')"
                     >
@@ -226,6 +226,7 @@ export default {
 
   created() {
     let self = this;
+    self.ciclo_id = this.$store.state.ciclo.id;
     self.getProfesores();
     //self.getSeccion();
   },
@@ -239,7 +240,6 @@ export default {
         .then((r) => {
           self.loading = false;
           self.niv_grad_curso = r.data;
-          console.log(r.data);
           self.getInfo();
         })
         .catch((r) => {});
@@ -299,21 +299,20 @@ export default {
         .then((r) => {
           self.loading = false;
           self.info = r.data.data;
-          self.RemoveAsignados(r.data.data);
+          self.RemoveAsignados(self.info);
         })
         .catch((r) => {});
     },
-    getSeccion() {
+    getSeccion(id) {
+      let idgrado_nivel = id.id;
       let self = this;
-      let gradoNivel = self.info.find(x=>x.curso_grad_niv_edu_id = self.form.curso_grad_niv_edu_id);
-      console.log(gradoNivel);
+      let gradoNivel = self.info.find(x => x.grado_nivel_educativo_id === id.grado_nivel_educativo_id);
       self.loading = true;
       self.$store.state.services.gradoNivelEducativoService
         .getSeccionesById(gradoNivel.grado_nivel_educativo_id)
         .then((r) => {
           self.loading = false;
-          self.secciones = r.data;
-          
+          self.secciones = r.data;          
         })
         .catch((r) => {});
     },
@@ -323,12 +322,14 @@ export default {
       let self = this;
       self.loading = true;
       let data = self.form;
+      data.curso_grad_niv_edu_id = self.form.curso_grad_niv_edu_id.id;
+      data.empleado_id = self.profesor_id;
+      data.ciclo_id = self.ciclo_id;
       if (data.secciones.length === 0) {
         self.loading = false;
         this.$toastr.error("Debe Seleccionar al menos una sección", "error");
         return;
       }
-      console.log(data);
       self.$store.state.services.asignacionProfesorService
         .create(data)
         .then((r) => {
@@ -339,26 +340,6 @@ export default {
           this.$toastr.success("registro agregado con éxito", "éxito");
           self.getAll(self.profesor_id, this.$store.state.ciclo.id);
           self.clearData();
-        })
-        .catch((r) => {});
-    },
-
-    //funcion para actualizar registro
-    update() {
-      let self = this;
-      self.loading = true;
-      let data = self.form;
-
-      self.$store.state.services.empleadoService
-        .update(data)
-        .then((r) => {
-          self.loading = false;
-          if (self.$store.state.global.captureError(r)) {
-            return;
-          }
-          self.getAll();
-          this.$toastr.success("registro actualizado con éxito", "éxito");
-          self.close();
         })
         .catch((r) => {});
     },
@@ -396,6 +377,7 @@ export default {
         else if (typeof self.form[key] === "number") self.form[key] = null;
       });
       self.form.secciones = [];
+      self.secciones = [];
       //self.niv_grad_curso = [];
       self.$validator.reset();
     },
@@ -408,7 +390,7 @@ export default {
 
       self.profesor_id = data.id;
       self.form.empleado_id = data.id;
-      self.form.ciclo_id = this.$store.state.ciclo.id;
+      self.form.ciclo_id = self.ciclo_id;
       //self.mapData(data);
     },
     //editar
@@ -418,14 +400,14 @@ export default {
       self.get(data.id, this.$store.state.ciclo.id);
       self.profesor_id = data.id;
       self.form.empleado_id = data.id;
-      self.form.ciclo_id = this.$store.state.ciclo.id;
+      self.form.ciclo_id = self.ciclo_id;
     },
     //mapear datos a formulario
     mapData(data) {
       let self = this;
       self.form.id = null;
       self.form.empleado_id = data.id;
-      self.form.ciclo_id = this.$store.state.ciclo.id;
+      self.form.ciclo_id = self.ciclo_id;
     },
 
     //funcion, validar si se guarda o actualiza
@@ -433,7 +415,7 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           if (self.form.id > 0 && self.form.id !== null) {
-            self.update();
+            
           } else {
             self.create();
           }
@@ -452,23 +434,6 @@ export default {
       self.dialog = false;
       self.dialog2 = false;
       self.clearData();
-      self.setCodigo();
-    },
-
-    setCodigo() {
-      let self = this;
-      let codigo = "";
-      let sort_items = self.items.sort(
-        (a, b) => parseFloat(a.id) - parseFloat(b.id)
-      );
-      if (sort_items.length > 0) {
-        codigo =
-          "2-" +
-          moment().year() +
-          "-" +
-          (sort_items[sort_items.length - 1].id + 1);
-      }
-      self.form.codigo = codigo;
     },
   },
 
