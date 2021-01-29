@@ -51,13 +51,6 @@
                                                 <el-divider></el-divider>
                                                  <salon-clase></salon-clase>
                                         </el-tab-pane>
-                                        <el-tab-pane label="3">
-                                            <span slot="label"> <v-icon small color="blue">note</v-icon> Notas</span>
-                                                <b> Notas</b>
-                                                <el-divider></el-divider>
-                                                <boleta></boleta>
-
-                                        </el-tab-pane>
                                     </el-tabs>
                                 </v-flex>
                             </v-layout>
@@ -75,13 +68,11 @@
 import moment from 'moment'
 import Asignacion from './detalle/Asignacion'
 import SalonClase from './detalle/SalonClase'
-import Boleta from './detalle/Nota'
 export default {
   name: "AlumnoCursos",
   components: {
       Asignacion,
-      SalonClase,
-      Boleta
+      SalonClase
   },
   props: {
       source: String
@@ -94,16 +85,22 @@ export default {
       loading: false,
       current_date: moment(),
       inscripciones: [],
+      asignaciones: [],
       pagos: [],
       periodos:[],
+      materiales: [],
       periodo: null,
       periodo_id: null,
-      curso: null
+      curso: null,
+      inscripcion_id: null,
+      curso_grado_nivel_id: null,
     }
   },
 
   created() {
     let self = this
+    self.inscripcion_id = self.$route.params.inscripcion_id
+    self.curso_grado_nivel_id = self.$route.params.curso_grado_nivel_id
     self.getCurso(self.$route.params.curso_grado_nivel_id)
     self.get(self.$route.params.inscripcion_id)
   },
@@ -147,6 +144,41 @@ export default {
         }).catch(r => {});
     },
 
+    
+    //obtener asignaciones para curso
+    getAsignaciones(id){
+        let self = this
+        self.loading = true
+        self.$store.state.services.asignacionAlumnoService
+        .getAsignacionByCurso(self.inscripcion_id, self.curso_grado_nivel_id)
+        .then(r => {
+            self.loading = false
+            self.asignaciones = r.data
+            this.$nextTick(() => {  
+                events.$emit('asignaciones_alumno',self.asignaciones.filter(x=>x.asignacion.ciclo_periodo_academico_id == self.periodo_id))
+            })
+        }).catch(e => {
+
+        })
+      },
+
+    //obtener material de apoyo para curso
+    getApoyo(id){
+        let self = this
+        self.loading = true
+        self.$store.state.services.materialService
+        .getByCicloCurso(self.inscripcion_id, self.curso_grado_nivel_id)
+        .then(r => {
+            self.loading = false
+            self.materiales = r.data
+            this.$nextTick(() => {  
+                events.$emit('material_apoyo_alumno',self.materiales.filter(x=>x.ciclo_periodo_academico_id == self.periodo_id))
+            })
+        }).catch(e => {
+
+        })
+      },
+
     //obtener bimestre actual
     getPeriodos(id){
         let self = this
@@ -165,11 +197,16 @@ export default {
                 self.periodo = r.data.find(x=>moment(now).isBetween(moment(x.inicio), moment(x.fin), undefined,'[]'))
             }
             self.periodo_id = self.periodo.id
+            self.getAsignaciones()
+            self.getApoyo()
 
         }).catch(e => {
 
         })
     },
+
+    
+    
 
     getName(data, tercer_nombre = false){
         let self = this
@@ -183,7 +220,13 @@ export default {
     },
     selectPeriodo(id){
         let self = this
-        self.periodo = self.periodos.find(x=>x.id == id)
+        self.periodo_id = id
+        let data_a = self.asignaciones.filter(x=>x.asignacion.ciclo_periodo_academico_id == id)
+        let data_m = self.materiales.filter(x=>x.ciclo_periodo_academico_id == id)
+        this.$nextTick(() => {  
+            events.$emit('asignaciones_alumno',data_a)
+            events.$emit('material_apoyo_alumno',data_m)
+        })
     },
   },
 

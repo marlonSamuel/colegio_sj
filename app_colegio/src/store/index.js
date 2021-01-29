@@ -22,9 +22,9 @@ const state = {
     is_login: false,
     token_expired: null,
     client_id: 2,
-    base_url: 'https://167.172.158.187/colegio-san-pablo/',
-    //base_url: 'http://www.san-pablo.com/',
-    client_secret: 'RG7bH4V6s5s8DCQkkXfkobGLTJCamsN782HkqSxK'
+    //base_url: 'https://167.172.158.187/colegio-san-pablo/',
+    base_url: 'http://www.san-pablo.com/',
+    client_secret: 'lGwARJ8Qwc4TyH8C0tyiPaEmfLXRm0mh9YpsRooK'
 }
 
 const mutations = {
@@ -80,16 +80,19 @@ const actions = {
     guardarToken({ commit }, data_user) {
         Axios.defaults.headers.common.Authorization = `Bearer ${data_user.access_token}`
         commit("setToken", data_user.access_token)
+        localStorage.setItem('token_data', JSON.stringify(data_user))
         $cookies.set('token_data', data_user)
     },
 
     logout({ commit }) {
+        localStorage.clear()
         $cookies.remove('token_data')
         commit("logout")
     },
 
     autoLogin({ commit }) {
-        let token = $cookies.get('token_data')
+        //let token = $cookies.get('token_data')
+        let token = JSON.parse(localStorage.getItem('token_data'))
         if (token) {
             commit('setToken', token)
             auth.getUser()

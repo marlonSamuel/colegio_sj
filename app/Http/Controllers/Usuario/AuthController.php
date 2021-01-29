@@ -32,6 +32,8 @@ class AuthController extends Controller
 
         if(!is_null($user)){
             $scopes = $this->getAllScopes($user);
+        }else{
+            return response()->json(['error' => "usuario incorrecto", 'code' => 401], 401);
         }
 
         $http = new Client(

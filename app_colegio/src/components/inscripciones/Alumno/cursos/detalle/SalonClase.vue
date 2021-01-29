@@ -60,34 +60,22 @@ export default {
     let self = this
     self.inscripcion_id = self.$route.params.inscripcion_id
     self.curso_grado_nivel_id = self.$route.params.curso_grado_nivel_id
-    self.get()
-    events.$on('asignaciones_alumno',self.onEventAsignacion)
+    events.$on('material_apoyo_alumno',self.onEventAsignacion)
 
   },
 
   beforeDestroy(){
       let self = this
-      events.$off('asignaciones_alumno',self.onEventAsignacion)
+      events.$off('material_apoyo_alumno',self.onEventAsignacion)
   },
 
   methods: {
-    onEventAsignacion(){
+    onEventAsignacion(data){
         let self = this 
+        self.items = data
     },
 
-    //obtener asignaciones para curso
-    get(id){
-        let self = this
-        self.loading = true
-        self.$store.state.services.materialService
-        .getByCicloCurso(self.inscripcion_id, self.curso_grado_nivel_id)
-        .then(r => {
-            self.loading = false
-            self.items = r.data
-        }).catch(e => {
 
-        })
-      },
 
     verAdjunto(adjunto){
       let self = this

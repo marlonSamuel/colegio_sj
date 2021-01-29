@@ -114,7 +114,6 @@
                     class="elevation-1"
                     hide-actions
                     :headers="headers"
-                    :hide-headers="true"
                     >
                     <template v-slot:items="props">
                         <tr>
@@ -251,7 +250,6 @@ export default {
     let self = this
     self.inscripcion_id = self.$route.params.inscripcion_id
     self.curso_grado_nivel_id = self.$route.params.curso_grado_nivel_id
-    self.get()
     events.$on('asignaciones_alumno',self.onEventAsignacion)
   },
 
@@ -261,25 +259,15 @@ export default {
   },
 
   methods: {
-    onEventAsignacion(){
+    onEventAsignacion(data){
         let self = this
-        
+        self.setData(data)
     },
 
-    //obtener asignaciones para curso
-    get(id){
+      setData(data){
         let self = this
-        self.loading = true
-        self.$store.state.services.asignacionAlumnoService
-        .getAsignacionByCurso(self.inscripcion_id, self.curso_grado_nivel_id)
-        .then(r => {
-            self.loading = false
-            self.tareas = r.data.filter(x=>!x.asignacion.cuestionario)
-            self.cuestionarios = r.data.filter(x=>x.asignacion.cuestionario)
-           
-        }).catch(e => {
-
-        })
+        self.tareas = data.filter(x=>!x.asignacion.cuestionario)
+        self.cuestionarios = data.filter(x=>x.asignacion.cuestionario)
       },
 
        //obtener valor para pago al credito
@@ -318,7 +306,7 @@ export default {
         if(!data.asignacion.flag_tiempo){
             self.$router.push('/entrega_asignacion/'+data.id)
         }else{
-            if(!data.entregado){
+            if(!data.entregado && moment(data.asignacion.fecha_entrega) >= moment()){
                 self.$router.push('/cuestionario/curso/'+data.asignacion.asignar_curso_profesor_id+'/asignacion_alumno/'+data.id)
             }else{
                 self.$router.push('/view_cuestionario/curso/'+data.asignacion.asignar_curso_profesor_id+'/asignacion_alumno/'+data.id)
@@ -328,11 +316,11 @@ export default {
 
     isValid(data){
         let self = this
-        let now = moment()
+        let now = moment().format('YYYY-MM-DD')
         if(data.calificado){
             return false
         }
-        if(!data.asignacion.entrega_tarde & now > moment(data.asignacion.fecha_entrega)){
+        if(!data.asignacion.entrega_tarde && (now > moment(data.asignacion.fecha_entrega).format('YYYY-MM-DD'))){
             return false
         }
         return true
