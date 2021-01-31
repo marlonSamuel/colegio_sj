@@ -60,6 +60,14 @@ class MenuImport implements ToCollection
                         $insert_menu_rol->save();
                     }
 
+                    if(!is_null($value[10]))
+                    {
+                        $insert_menu_rol = new MenuRol();
+                        $insert_menu_rol->rol_id = $value[10];
+                        $insert_menu_rol->menu_id = $insert->id;
+                        $insert_menu_rol->save();
+                    }
+
                      if(!is_null($value[11]))
                     {
                         $insert_menu_rol = new MenuRol();
