@@ -95,6 +95,36 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-dialog v-model="dialog2" max-width="800px" persistent>
+          <v-card>
+            <v-card-title>
+              <span class="headline">Reestablecer contraseña a {{setTitle}}</span>
+            </v-card-title>
+  
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                    <v-flex xs12 sm8 md8>
+                    <v-text-field v-model="form.password" 
+                        ref="password"
+                        label="Reestablecer Contraseña"
+                        v-validate="'required|min:6'"
+                        type="password"
+                        data-vv-name="contraseña"
+                        :error-messages="errors.collect('contraseña')">
+                    </v-text-field>
+                    </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+  
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="red darken-1" flat @click="close">Volver</v-btn>
+              <v-btn color="blue darken-1" flat @click="reset">Guardar</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-toolbar>
       <v-data-table
         :headers="headers"
@@ -119,6 +149,12 @@
           <td class="text-xs-left">{{ props.item.email }}</td>
           <td class="text-xs-left">{{ props.item.rol.rol }}</td>
           <td class="text-xs-left">
+             <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                  <v-icon v-on="on" color="success" fab dark @click="restore(props.item)">lock_open</v-icon>
+              </template>
+              <span>Reestablecer Clave</span>
+            </v-tooltip>
             <v-tooltip top v-if="props.item.empleado !== null">
               <template v-slot:activator="{ on }">
                   <v-icon v-on="on" color="warning" fab dark @click="edit(props.item)">edit</v-icon>
@@ -150,6 +186,7 @@ export default {
   data() {
     return {
       dialog: false,
+      dialog2 :false,
       search: '',
       loading: false,
       items: [],
@@ -270,6 +307,36 @@ export default {
         })
         .catch(r => {});
     },
+        //funcion para actualizar registro
+    reset(){
+      let self = this
+      self.loading = true
+      let data = self.form
+      if (data.password === '' || data.password === null) {
+        self.loading = false;
+        self.$toastr.error('Ingrese una contraseña por favor','error');
+        
+        return
+      }
+      if (data.password.length < 6) {
+        self.loading = false;
+        self.$toastr.error('Contraseña debe contener 6 caracteres','error');
+        return
+      }
+      self.$store.state.services.usuarioService
+        .resetPassword(data)
+        .then(r => {
+          self.loading = false
+          if(r.response){
+            this.$toastr.error(r.response.data.error, 'error')
+            return
+          }
+          self.getAll()
+          this.$toastr.success('Contraseña restaurada con éxito', 'éxito')
+          self.close()
+        })
+        .catch(r => {});
+    },
 
     //funcion para eliminar registro
     destroy(data){
@@ -313,13 +380,24 @@ export default {
         this.dialog = true
         self.mapData(data)   
     },
-
+    //editar registro
+    restore(data){
+        let self = this
+        this.dialog2 = true
+        self.mapUser(data)   
+    },
     //mapear datos a formulario
     mapData(data){
         let self = this
         self.form.id = data.id
         self.form.rol_id =data.rol_id
         self.form.empleado_id = data.empleado.empleado_id
+    },
+    mapUser(data){
+        let self = this
+        self.form.id = data.id
+        self.form.rol_id =data.rol_id
+        self.form.nombre = data.email;
     },
 
     //funcion, validar si se guarda o actualiza
@@ -345,6 +423,7 @@ export default {
     close () {
         let self = this
         self.dialog = false
+        self.dialog2 = false
         self.clearData()
     },
   },

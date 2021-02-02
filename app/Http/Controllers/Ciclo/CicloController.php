@@ -51,15 +51,17 @@ class CicloController extends ApiController
             }
 
             $ciclo = Ciclo::create($data);
+            $cont = 1;
             foreach ($request->periodos_academicos as $key => $value) {
                 $periodos = CicloPeriodoAcademico::create([
                     'ciclo_id'=> $ciclo->id,
                     'periodo_academico_id'=>$value['periodo_academico_id'],
                     'inicio'=>$value['inicio'],
                     'fin'=> $value['fin'],
-                    'actual'=> $value['periodo_academico_id'] == 1 ? true : false,
-                    'nota'=> $value['nota']
+                    'actual'=> $cont == 1 ? true : false,
+                    'nota'=> 100
                 ]);
+                $cont++;
             }
         DB::commit();
 
@@ -101,14 +103,15 @@ class CicloController extends ApiController
                 $activo->save();
             }
         }
+        $cont = 1;
         foreach ($periodos_academicos as $key => $value) {
             
             if ($value['id'] != null) {
                 $periodo = CicloPeriodoAcademico::where('id',$value['id'])->firstOrFail();
                 $periodo->inicio = $value['inicio'];
                 $periodo->fin = $value['fin'];
-                $periodo->actual = $value['actual'];
-                $periodo->nota = $value['nota'];
+                $periodo->actual = $cont == 1 ? true : false;
+                //$periodo->nota = $value['nota'];
                 //$periodo->periodo_academico_id = $value->periodo_academico_id;
                 //$periodo->ciclo_id = $value->ciclo_id;
                 $periodo->save();
@@ -118,10 +121,11 @@ class CicloController extends ApiController
                     'periodo_academico_id'=>$value['periodo_academico_id'],
                     'inicio'=>$value['inicio'],
                     'fin'=> $value['fin'],
-                    'actual'=> $value['periodo_academico_id'] == 1 ? true : false,
-                    'nota'=> $value['nota']
+                    'actual'=> $cont == 1 ? true : false,
+                    'nota'=> 100
                 ]);
             }
+            $cont++;
             
         }
         

@@ -19,6 +19,10 @@ class CuotaService {
         let self = this;
         return self.axios.post(`${self.baseUrl}`, data);
     }
+    startCuotas(data) {
+        let self = this;
+        return self.axios.post(`${self.baseUrl}_start_ciclo`, data);
+    }
 
     update(data) {
         let self = this;

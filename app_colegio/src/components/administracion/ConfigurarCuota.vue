@@ -10,7 +10,7 @@
           </v-breadcrumbs>
         </div>
       </v-layout>
-      <v-toolbar-title>Configurar cuotas para ciclo escolar {{ciclo.ciclo}}</v-toolbar-title>
+      <v-toolbar-title>Configurar cuotas para ciclo escolar {{ciclo.ciclo}}  <v-btn color="primary" @click="startCuota"><v-icon>add</v-icon> Cuotas ciclo anterior</v-btn></v-toolbar-title>
       <v-data-table :headers="headers" :items="items" :search="search" class="elevation-1">
         <template v-slot:items="props">
           <td class="text-xs-left">{{ props.item.grado.nombre+' '+props.item.nivel_educativo.nombre }}</td>
@@ -143,7 +143,24 @@ export default {
         .catch(r => {});
     },
     
-
+    startCuota(){
+      let self = this;
+      self.loading = true;
+      let data = {
+        'ciclo_id': self.ciclo.id,
+      }
+      self.$store.state.services.cuotaService
+        .startCuotas(data)
+        .then(r => {
+          self.loading = false;
+          if (self.$store.state.global.captureError(r)) {
+            return;
+          }
+          this.$toastr.success("Cuotas agregadas con éxito", "éxito");
+          self.dialog = false;
+        })
+        .catch(r => {});
+    },
     create() {
       let self = this;
       self.loading = true;
