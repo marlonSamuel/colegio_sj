@@ -54,7 +54,7 @@ Axios.interceptors.response.use(response => {
     return response
 }, error => {
     if (error.response.status === 401) {
-        var token_data = $cookies.get('token_data')
+        var token_data = JSON.parse(localStorage.getItem('token_data'))
         if (isNullOrUndefined(token_data)) { return error }
         var original_request = error.config
         return refreshToken().then(res => {
