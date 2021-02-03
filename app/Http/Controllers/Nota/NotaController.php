@@ -17,8 +17,8 @@ class NotaController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
-        
+        parent::__construct();
+        $this->middleware('scope:nota')->only(['store','update','destroy']);
     }
 
     public function index()

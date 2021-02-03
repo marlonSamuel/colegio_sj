@@ -323,6 +323,9 @@ export default {
         if(!data.asignacion.entrega_tarde && (now > moment(data.asignacion.fecha_entrega).format('YYYY-MM-DD'))){
             return false
         }
+        if(data.asignacion.cuestionario && data.entregado){
+            return false
+        }
         return true
     },
 

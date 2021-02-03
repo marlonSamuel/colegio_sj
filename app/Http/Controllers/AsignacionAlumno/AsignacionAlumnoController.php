@@ -20,8 +20,9 @@ class AsignacionAlumnoController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
-        //$this->middleware('scope:niveleducativo')->except(['index']);
+        parent::__construct();
+        $this->middleware('scope:asignacionalumno')->except(['asignarNota','cuestionario','updateData']);
+        $this->middleware('scope:asignarnota')->only(['asignarNota','cuestionario','updateData']);
     }
 
     public function index()
@@ -36,7 +37,7 @@ class AsignacionAlumnoController extends ApiController
                         ->with('asignacion',
                         'asignacion.asignar_curso_profesor.curso_grado_nivel.curso',
                         'inscripcion')->get();
-        $asignaciones = $asignaciones->where('inscripcion.ciclo_id',$ciclo_id);
+        $asignaciones = $asignaciones->where('inscripcion.ciclo_id',$ciclo_id)->values();
 
         return $this->showAll($asignaciones);
     }
@@ -48,7 +49,7 @@ class AsignacionAlumnoController extends ApiController
         $asignaciones = AsignacionAlumno::where([['inscripcion_id', $inscripcion_id]])
                         ->with('asignacion',
                         'asignacion.asignar_curso_profesor.curso_grado_nivel')->get();
-        $asignaciones = $asignaciones->where('asignacion.asignar_curso_profesor.curso_grad_niv_edu_id',$curso_grado_nivel_id);
+        $asignaciones = $asignaciones->where('asignacion.asignar_curso_profesor.curso_grad_niv_edu_id',$curso_grado_nivel_id)->values();
 
         return $this->showAll($asignaciones);
     }
@@ -259,7 +260,7 @@ class AsignacionAlumnoController extends ApiController
         $asignar_nota->observaciones = $request->observaciones;
         $asignar_nota->calificado = true;
 
-        if($request->exists("serie")){
+        if($request->exists("serie") && $request->serie != null){
             $serie = AlumnoSerie::find($request->serie['id']);
             $serie->nota = $request->serie['nota'];
             $serie->save();

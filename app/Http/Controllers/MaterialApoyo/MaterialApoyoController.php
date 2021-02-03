@@ -13,7 +13,8 @@ class MaterialApoyoController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
+        parent::__construct();
+        $this->middleware('scope:materialapoyo')->except(['getByCursoCiclo']);
     }
 
     /**

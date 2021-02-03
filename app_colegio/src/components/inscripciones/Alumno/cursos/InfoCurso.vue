@@ -154,6 +154,7 @@ export default {
         .then(r => {
             self.loading = false
             self.asignaciones = r.data
+            console.log(self.asignaciones)
             this.$nextTick(() => {  
                 events.$emit('asignaciones_alumno',self.asignaciones.filter(x=>x.asignacion.ciclo_periodo_academico_id == self.periodo_id))
             })

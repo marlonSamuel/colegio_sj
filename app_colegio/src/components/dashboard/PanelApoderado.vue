@@ -50,7 +50,7 @@
                             <v-tooltip top>
                                 <template v-slot:activator="{ on }">
                                     <v-btn small flat color="blue" v-on="on" @click="$router.push(`/historial_academico/`+card.id)">
-                                        <v-icon>file_copy</v-icon> Historial
+                                        <v-icon>file_copy</v-icon> Historial Academico
                                     </v-btn>
                                 </template>
                                 <span>Ir historial academico</span>

@@ -15,8 +15,8 @@ class AsignarCursoProfesorController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
-        //$this->middleware('scope:niveleducativo')->except(['index']);
+        parent::__construct();
+        $this->middleware('scope:asignarprofesores')->except(['index','getInfoProfesor','getAlumnos','cursoGradoNivel','show','getOne','getAll']);
     }
 
     public function index()
@@ -57,6 +57,10 @@ class AsignarCursoProfesorController extends ApiController
                                              ['ciclo_id',$profesor_curso->ciclo_id]])
                                             ->with('seccion','alumno')
                                             ->get();
+
+        if($profesor_curso->jornada !== "A"){
+            $inscripciones = $inscripciones->where('jornada',$profesor_curso->jornada)->values();
+        }
 
         $inscripciones_filter = $inscripciones->filter(function ($inscripcion) use($secciones) {
             foreach ($secciones as $s) {

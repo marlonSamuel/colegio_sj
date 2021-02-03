@@ -64,7 +64,7 @@ const isLoggedOut = (to, from, next) => {
 //proteger rutas de los sistema, verificar si tiene acceso
 const permissionValidations = (to, from, next) => {
     var permisos = store.state.permisos //obtener permisos del usuario
-    name = to.name
+    let name = to.name
     var permiso = _.includes(permisos, name) //verificar si permiso existe
     return permiso ? next() : next('/')
 }
@@ -109,8 +109,8 @@ const routes = [
     { path: '/entrega_asignacion/:id', name: 'EntregaAsignacion', component: EntregaAsignacion, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/asignacion_nota/:curso_id/asignacion/:id', name: 'AsignarNota', component: AsignarNota, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/cursos_index', name: 'CursosIndex', component: CursosIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
-    { path: '/materiales_index/:id', name: 'Material', component: MaterialApoyo, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
-    { path: '/notas_index/:id', name: 'Notas', component:Nota, beforeEnter: multiguard([isLoggedIn, permissionValidations])},
+    { path: '/materiales_index/:id', name: 'MaterialApoyo', component: MaterialApoyo, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
+    { path: '/notas_index/:id', name: 'Nota', component:Nota, beforeEnter: multiguard([isLoggedIn, permissionValidations])},
     { path: '/cuestionario/curso/:curso_id/asignacion_alumno/:asignacion_alumno_id', name: 'Cuestionario', component: Cuestionario, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/view_cuestionario/curso/:curso_id/asignacion_alumno/:id', name: 'ViewCuestionario', component: ViewCuestionario, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },
     { path: '/cursos_alumnos_index/:id', name: 'CursoAlumnoIndex', component: CursoAlumnoIndex, beforeEnter: multiguard([isLoggedIn, permissionValidations]) },

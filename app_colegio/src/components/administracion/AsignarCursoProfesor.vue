@@ -298,7 +298,7 @@ export default {
         .getInfo()
         .then((r) => {
           self.loading = false;
-          self.info = r.data.data;
+          self.info = r.data;
           self.RemoveAsignados(self.info);
         })
         .catch((r) => {});

@@ -230,6 +230,7 @@ export default {
     //obtener serie
     getNoteValue(data){
         let self = this
+        console.log(data)
         data.preguntas.forEach(p=>{
             p.nota = p.respuestas[0].nota
         })
@@ -244,7 +245,9 @@ export default {
               let serie_pd = self.series.find(x=>x.serie.tipo_serie == "PD")
               self.form.id = self.asignacion_id
               self.form.nota = self.nota()
-              self.form.serie = self.getNoteValue(serie_pd)
+              if(serie_pd !== undefined){
+                self.form.serie = self.getNoteValue(serie_pd)
+              }
               
               self.update()
            }

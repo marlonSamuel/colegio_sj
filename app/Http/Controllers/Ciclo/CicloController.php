@@ -15,8 +15,8 @@ class CicloController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
-        //$this->middleware('scope:ciclo')->except(['index']);
+        parent::__construct();
+        $this->middleware('scope:ciclo')->except(['index','show','getCicloActual','getDataCiclo']);
     }
     public function index()
     {
@@ -170,9 +170,15 @@ class CicloController extends ApiController
         return $this->showOne($ciclo);
     }
 
-    public function getDataCiclo($id=0)
+    public function getDataCiclo($id=0, Request $request)
     {
         $id == 0 ? $ciclo = Ciclo::where('actual',true)->first() : $ciclo = Ciclo::find($id); 
+
+        if($request->user()->rol->rol !== 'admin'){
+            return response()->json([
+                'ciclo' => $ciclo
+            ]);
+        }
         
         $total_alumnos = Alumno::all()->count();
         $total_inscripciones = count($ciclo->inscripciones);

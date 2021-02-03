@@ -17,8 +17,8 @@ class InscripcionController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
-        //$this->middleware('scope:inscripcion')->except(['index']);
+        parent::__construct();
+        $this->middleware('scope:inscripcion')->except(['index','show']);
     }
 
     public function index()
