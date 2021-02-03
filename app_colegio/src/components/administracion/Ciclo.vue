@@ -105,7 +105,7 @@
                     >
                     </v-text-field>
                   </v-flex>
-                  <v-flex xs12 sm3 md3>
+                  <v-flex xs12 sm3 md3  v-if="f.nota ===1000">
                     <v-text-field
                       v-model="f.nota"
                       label="Nota"
@@ -275,10 +275,6 @@ export default {
       let data = self.form;
       if (self.items.some((x) => x.ciclo == data.ciclo)) {
         this.$toastr.error("ciclo ya fue agregado", "error");
-        return;
-      }
-      if (self.validSumNotas(self.form.periodos_academicos)) {
-        this.$toastr.error("Configure correctamente las notas por bimestres no suma 100 puntos", "error");
         return;
       }
 

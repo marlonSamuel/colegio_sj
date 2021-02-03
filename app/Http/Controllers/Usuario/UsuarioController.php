@@ -129,4 +129,16 @@ class UsuarioController extends ApiController
 
         return $this->showOne($user,'201','update');
     }
+
+    public function resetPassword(Request $request){
+        $reglas = [
+            'id' => 'required|integer',
+            'password' => 'required'
+        ];
+        $this->validate($request, $reglas);
+        $user = User::find($request->id);
+        $user->password = bcrypt($request->password);
+        $user->save();
+        return $this->showOne($user,'201','update');
+    }
 }

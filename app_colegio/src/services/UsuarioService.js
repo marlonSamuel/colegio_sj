@@ -36,6 +36,10 @@ class UsuarioService {
         let self = this;
         return self.axios.post(`${self.baseUrl}_change_password`, model);
     }
+    resetPassword(model) {
+        let self = this;
+        return self.axios.post(`${self.baseUrl}_reset_password`, model);
+    }
 }
 
 export default UsuarioService

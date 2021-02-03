@@ -142,3 +142,5 @@ Route::name('notas_boleta')->get('notas_boleta/{inscripcion_id}', 'Nota\NotaCont
 Route::name('notas_boletas')->get('notas_boletas/{ciclo_id}/{grado_nivel_educativo_id}', 'Nota\NotaController@boletas');
 Route::name('notas_get_one_nota')->get('notas_get_one_nota/{inscripcion_id}', 'Nota\NotaController@getOneNota');
 Route::name('notas_get_all_notas')->get('notas_get_all_notas/{ciclo_id}/{grado_nivel_educativo_id}', 'Nota\NotaController@getAllNotas');
+Route::name('reset_contraseña')->post('usuarios_reset_password', 'Usuario\UsuarioController@resetPassword');
+Route::name('cuotas_start_ciclo')->post('cuotas_start_ciclo', 'Cuota\CuotaController@startCuotaCiclo');
