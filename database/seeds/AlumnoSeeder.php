@@ -5,6 +5,7 @@ use App\Apoderado;
 use App\TelefonoApoderado;
 use App\ApoderadoAlumno;
 use Illuminate\Database\Seeder;
+use App\Imports\AlumnoImport;
 
 class AlumnoSeeder extends Seeder
 {
@@ -16,7 +17,8 @@ class AlumnoSeeder extends Seeder
     public function run()
     {
 
-        $data_p = new Apoderado();
+        $datas = Excel::import(new AlumnoImport, 'database/seeds/Alumnos.xlsx', null, \Maatwebsite\Excel\Excel::XLSX);
+      /*  $data_p = new Apoderado();
         $data_p->cui = "5568978987999";
         $data_p->primer_nombre = "Faustino";
         $data_p->segundo_nombre = "";
@@ -78,6 +80,6 @@ class AlumnoSeeder extends Seeder
             'alumno_id' => $data->id,
             'responsable' => true,
             'tipo_apoderado' => 'P'
-        ]);
+        ]);*/
     }
 }
