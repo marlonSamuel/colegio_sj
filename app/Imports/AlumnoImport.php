@@ -44,7 +44,7 @@ class AlumnoImport implements ToCollection
             echo "alumno ".$c." creado\n";
 
             $user= new User;
-            $password_a = strtoupper($alumno->primer_apellido);
+            $password_a = strtoupper($alumno->primer_apellido).'2020';
 	        $user->email = $alumno->email;
 	        $user->password = bcrypt($password_a);
 	        $user->codigo = $alumno->codigo;
@@ -85,7 +85,7 @@ class AlumnoImport implements ToCollection
 		        //$user_apoderado->email = $apoderado->email;
 		        $user_apoderado->password = bcrypt($apoderado->cui);
 		        $user_apoderado->codigo = $apoderado->cui;
-		        $user_apoderado->rol_id = 6;
+		        $user_apoderado->rol_id = 7;
 		        $user_apoderado->save();
 
 		        $data_representante = new UsuarioRepresentante;

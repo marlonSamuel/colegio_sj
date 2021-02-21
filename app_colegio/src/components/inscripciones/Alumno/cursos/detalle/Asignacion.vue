@@ -326,6 +326,11 @@ export default {
         if(data.asignacion.cuestionario && data.entregado){
             return false
         }
+
+        let rol = self.$store.state.usuario.rol
+        if(rol !== undefined && rol.rol !== 'alumno'){
+            return false
+        }
         return true
     },
 

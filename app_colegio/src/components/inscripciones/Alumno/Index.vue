@@ -53,7 +53,13 @@
           <td class="text-xs-left">
             <v-tooltip top>
                 <template v-slot:activator="{ on }">
-                    <v-icon v-on="on" color="success" fab dark @click="$router.push(`/historial_pagos/`+props.item.id)"> how_to_reg</v-icon>
+                    <v-icon v-on="on" color="success" fab dark @click="$router.push(`/historial_pagos/`+props.item.id)"> payment</v-icon>
+                </template>
+                <span>ver historial de pagos</span>
+            </v-tooltip>
+            <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                    <v-icon v-on="on" color="success" fab dark @click="$router.push(`/historial_academico/`+props.item.id)"> how_to_reg</v-icon>
                 </template>
                 <span>ver historial academico</span>
             </v-tooltip>
