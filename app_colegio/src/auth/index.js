@@ -14,7 +14,7 @@ export default {
 
     permisos: [],
     getRefreshToken() {
-        var token_data = $cookies.get('token_data')
+        var token_data = JSON.parse(localStorage.getItem('token_data'))
         this.data_refresh_token.refresh_token = token_data.refresh_token
         this.data_refresh_token.client_id = store.state.client_id,
             this.data_refresh_token.client_secret = store.state.client_secret
