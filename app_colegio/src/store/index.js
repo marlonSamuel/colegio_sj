@@ -22,9 +22,9 @@ const state = {
     is_login: false,
     token_expired: null,
     client_id: 2,
-    //base_url: 'https://167.172.158.187/colegio-san-pablo/',
+    base_url: 'https://167.172.158.187/colegio-san-pablo/',
     //base_url: 'http://www.san-pablo.com/',
-    client_secret: 'UR556qAO2DZ3VUUk7a9hfILLCFbsHxWwe6l4BgS2'
+    client_secret: 'FakC0YvMuurzUrdkoQvJpuAnoCv0E02ZLjmt1kuq'
 }
 
 const mutations = {
