@@ -219,6 +219,7 @@ class AlumnoController extends ApiController
         $alumno->direccion = $request->direccion;
         $alumno->enfermedades = $request->enfermedades;
         $alumno->alergias = $request->alergias;
+        $alumno->fecha_nac = $request->fecha_nac;
 
         if($request->foto != null || $request->foto != ''){
             $imagePath = '';
