@@ -17,9 +17,9 @@
           ></v-text-field>
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="800px">
-          <template v-slot:activator="{ on }">
+         <!-- <template v-slot:activator="{ on }">
             <v-btn color="primary" small dark class="mb-2" v-on="on"><v-icon>add</v-icon> Nuevo</v-btn>
-          </template>
+          </template>-->
           <v-card>
             <v-card-title>
               <span class="headline">{{setTitle}}</span>
@@ -58,7 +58,7 @@
       >
         <template v-slot:items="props">
           <td class="text-xs-left">{{ props.item.nombre }}</td>
-          <td class="text-xs-left">
+         <!-- <td class="text-xs-left">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                     <v-icon v-on="on"  color="warning" fab dark @click="edit(props.item)"> edit</v-icon>
@@ -71,7 +71,7 @@
                 </template>
                 <span>Eliminar</span>
             </v-tooltip>
-          </td>
+          </td>-->
         </template>
         <template v-slot:no-data>
           <v-btn color="primary" @click="getAll">Reset</v-btn>
@@ -95,7 +95,7 @@ export default {
       items: [],
       headers: [
         { text: 'Nombre', value: 'nombre' },
-        { text: 'Acciones', value: '', sortable: false }
+        //{ text: 'Acciones', value: '', sortable: false }
       ],
       pagination: {
         sortBy: 'id'
