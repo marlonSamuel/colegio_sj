@@ -45,8 +45,8 @@ class AsignacionAlumnoController extends ApiController
         }else{
             $ciclo_id = $ciclo->id;
         }
-
-        $asignaciones = AsignacionAlumno::where([['inscripcion_id', $idAlumno]])
+        $inscricion = Inscripcion::where([['alumno_id', $idAlumno],['ciclo_id',$ciclo_id]])->first();
+        $asignaciones = AsignacionAlumno::where([['inscripcion_id', $inscricion->id]])
                         ->with('asignacion',
                         'asignacion.asignar_curso_profesor.curso_grado_nivel.curso',
                         'inscripcion')->get();
@@ -79,8 +79,7 @@ class AsignacionAlumnoController extends ApiController
         }else{
             $ciclo_id = $ciclo->id;
         }
-
-        $curso_niveles = Inscripcion::where([['id', $idAlumno],['ciclo_id',$ciclo_id]])
+        $curso_niveles = Inscripcion::where([['alumno_id', $idAlumno],['ciclo_id',$ciclo_id]])
                         ->with('grado_nivel_educativo',
                         'grado_nivel_educativo.cursos',
                         'grado_nivel_educativo.cursos.curso',

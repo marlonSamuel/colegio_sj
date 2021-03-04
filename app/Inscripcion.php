@@ -28,12 +28,12 @@ class Inscripcion extends Model implements Auditable
 
     public function alumno()
     {
-    	return $this->belongsTo(Alumno::class);
+    	return $this->belongsTo(Alumno::class,'alumno_id');
     }
 
     public function ciclo()
     {
-    	return $this->belongsTo(Ciclo::class);
+    	return $this->belongsTo(Ciclo::class,'ciclo_id');
     }
 
     public function grado_nivel_educativo()
