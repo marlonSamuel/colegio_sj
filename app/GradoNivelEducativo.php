@@ -9,9 +9,11 @@ use App\GradSecNivEd;
 use App\CursoGradNivEd;
 use App\NivelEducativo;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class GradoNivelEducativo extends Model
+class GradoNivelEducativo extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'grados_niveles_educativos';
 

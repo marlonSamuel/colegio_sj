@@ -3,7 +3,7 @@
     <v-flex xs12 sm12 md12 v-if="event">
       <v-container fluid grid-list-md v-loading="loading">
         <v-layout row wrap>
-          <v-flex sm6 md6 xs12 lg6>
+          <v-flex sm12 md12 xs12 lg12>
             <h2>Grados Cursos actuales</h2>
             <v-data-table
               :items="items"
@@ -90,7 +90,7 @@
               </template>
             </v-data-table>
           </v-flex>
-          <v-flex sm6 md6 xs12 lg6>
+        <!--  <v-flex sm6 md6 xs12 lg6>
             <h2>Tareas asignadas</h2>
             <v-data-table
               :items="items"
@@ -100,7 +100,7 @@
             >
               <template v-slot:items="props"> </template>
             </v-data-table>
-          </v-flex>
+          </v-flex>-->
         </v-layout>
       </v-container>
     </v-flex>

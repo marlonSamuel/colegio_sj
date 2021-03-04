@@ -5,9 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\AsignarCursoProfesor;
 use App\CicloPeriodoAcademico;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class MaterialApoyo extends Model
+class MaterialApoyo extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $table = "material_apoyos";
 
     protected $fillable = [

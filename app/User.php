@@ -10,10 +10,11 @@ use App\Rol;
 use App\UsuarioAlumno;
 use App\UsuarioEmpleado;
 use App\UsuarioRepresentante;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'codigo', 'email', 'password','rol_id', 'activo'

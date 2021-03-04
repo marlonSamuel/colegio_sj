@@ -4,10 +4,11 @@ namespace App;
 
 use App\Pago;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class PagoParcial extends Model
+class PagoParcial extends Model implements Auditable
 {
-
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'pagos_parciales';
     protected $fillable= [
     	'pago_id',

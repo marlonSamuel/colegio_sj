@@ -5,10 +5,11 @@ namespace App;
 use App\Seccion;
 use App\GradoNivelEducativo;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class GradSecNivEd extends Model
+class GradSecNivEd extends Model implements Auditable
 {
-
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'grado_sec_niv_edu';
     protected $fillable= [
     	'seccion_id',

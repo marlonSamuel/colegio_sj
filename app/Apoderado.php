@@ -6,9 +6,11 @@ use App\Municipio;
 use App\TelefonoApoderado;
 use App\ApoderadoAlumno;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Apoderado extends Model
+class Apoderado extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'apoderados';
     
     protected $fillable = [

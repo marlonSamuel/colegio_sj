@@ -8,9 +8,11 @@ use App\CursoGradNivEd;
 use App\AsignarCursoProfSec;
 use App\Empleado;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class AsignarCursoProfesor extends Model
+class AsignarCursoProfesor extends Model implements Auditable
 {
+	use \OwenIt\Auditing\Auditable;
 	protected $table = 'asignar_curso_profesor';
 
     protected $fillable = [

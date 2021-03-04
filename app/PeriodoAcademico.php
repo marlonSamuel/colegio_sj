@@ -4,9 +4,11 @@ namespace App;
 
 use App\TipoPeriodo;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class PeriodoAcademico extends Model
+class PeriodoAcademico extends Model implements Auditable
 {
+	use \OwenIt\Auditing\Auditable;
     protected $table = 'periodos_academicos';
     
     protected $fillable = [

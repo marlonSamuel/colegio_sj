@@ -4,9 +4,11 @@ namespace App;
 use App\Empleado;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class UsuarioEmpleado extends Model
+class UsuarioEmpleado extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'usuario_empleados';
     protected $fillable= [
     	'empleado_id',

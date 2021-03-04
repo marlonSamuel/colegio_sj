@@ -5,9 +5,11 @@ namespace App;
 use App\Seccion;
 use App\Inscripcion;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class AsignacionSeccion extends Model
+class AsignacionSeccion extends Model implements Auditable
 {
+	use \OwenIt\Auditing\Auditable;
 	protected $table = 'asignacion_seccions';
 
     protected $fillable = [

@@ -4,10 +4,11 @@ namespace App;
 use App\Curso;
 use App\GradoNivelEducativo;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class CursoGradNivEd extends Model
+class CursoGradNivEd extends Model implements Auditable
 {
-
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'curso_grad_niv_edu';
     protected $fillable= [
     	'curso_id',

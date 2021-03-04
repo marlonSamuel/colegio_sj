@@ -3,9 +3,11 @@
 namespace App;
 use App\Cuota;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ConceptoPago extends Model
+class ConceptoPago extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'concepto_pagos';
     protected $fillable = [
         'nombre',

@@ -8,10 +8,12 @@ use App\Alumno;
 use App\GradoNivelEducativo;
 use App\AsignacionSeccion;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Inscripcion extends Model
+class Inscripcion extends Model implements Auditable
 {
-
+    
+    use \OwenIt\Auditing\Auditable;
     protected $table = 'inscripciones';
 
     protected $fillable= [
