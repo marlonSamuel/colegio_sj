@@ -298,7 +298,8 @@ export default {
         .getInfo()
         .then((r) => {
           self.loading = false;
-          self.info = r.data.data;
+          self.info = r.data;
+          console.log(self.info);
           self.RemoveAsignados(self.info);
         })
         .catch((r) => {});
