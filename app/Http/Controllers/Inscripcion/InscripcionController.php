@@ -69,7 +69,7 @@ class InscripcionController extends ApiController
                                                     ->get()
                                                     ->where('inscripcion.ciclo_id',$ciclo_id);
 
-               if(count($inscripciones) < 20){
+               if(count($inscripciones) < 30){
                  $seccion = $s;
                  break;
                }                                  

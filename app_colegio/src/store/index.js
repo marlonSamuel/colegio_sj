@@ -96,7 +96,7 @@ const actions = {
         if (token) {
             commit('setToken', token)
             auth.getUser()
-            auth.getCicloActual()
+            //auth.getCicloActual()
         } else {
             commit('setState')
         }

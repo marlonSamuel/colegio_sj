@@ -42,6 +42,7 @@ export default {
                 if(r.data.user.rol.rol == 'apoderado'){
                     self.getAlumnos(r.data.user.user_info.id)
                 }
+                self.getCicloActual()
             }).catch(e => {
 
             })

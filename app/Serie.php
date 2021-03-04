@@ -5,11 +5,14 @@ namespace App;
 use App\Asignacion;
 use App\Pregunta;
 use App\AlumnoSerie;
+use OwenIt\Auditing\Contracts\Auditable;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Serie extends Model
+class Serie extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+    
     protected $table = 'series';
 
     protected $fillable= [

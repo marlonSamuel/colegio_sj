@@ -15,8 +15,8 @@ class AsignarCursoProfesorController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
-        $this->middleware('scope:asignarprofesores')->except(['index','getInfoProfesor','getAlumnos','cursoGradoNivel','show','getOne','getAll']);
+        /*parent::__construct();
+        $this->middleware('scope:asignarprofesores')->except(['index','getInfoProfesor','getAlumnos','cursoGradoNivel','show','getOne','getAll']);*/
     }
 
     public function index()
@@ -64,7 +64,7 @@ class AsignarCursoProfesorController extends ApiController
 
         $inscripciones_filter = $inscripciones->filter(function ($inscripcion) use($secciones) {
             foreach ($secciones as $s) {
-                if($s->seccion_id == $inscripcion->seccion->seccion_id){
+                if($inscripcion->seccion != null && $s->seccion_id == $inscripcion->seccion->seccion_id){
                     return $inscripcion;
                 }
             }
@@ -93,10 +93,12 @@ class AsignarCursoProfesorController extends ApiController
             ]);
             $secciones_col = collect();
             foreach ($value->secciones as $key2 => $value2) {
+
                 $seccion = collect([
                     'id' => $value2->id,
                     'seccion' => $value2->seccion->seccion
                 ]);
+
                 $secciones_col->push($seccion);
             }
             $info['secciones'] = $secciones_col;

@@ -174,7 +174,7 @@ export default {
             self.inscripciones = r.data.inscripciones
             self.pagos = r.data.pagos
             self.$nextTick(() => {  
-                events.$emit('historial_academico_inscripciones',self.inscripciones,self.alumno)
+                events.$emit('historial_academico_pagos',self.pagos,1)
                 events.$emit('historial_academico_pagos_atrasados',self.pagos,self.inscripciones)
             });
         }).catch(r => {});
