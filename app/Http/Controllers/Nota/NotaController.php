@@ -17,8 +17,8 @@ class NotaController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
-        
+        parent::__construct();
+        $this->middleware('scope:nota')->only(['store','update','destroy']);
     }
 
     public function index()
@@ -54,7 +54,7 @@ class NotaController extends ApiController
 
         $inscripciones_filter = $inscripciones->filter(function ($inscripcion) use($secciones) {
             foreach ($secciones as $s) {
-                if($s->seccion_id == $inscripcion->seccion->seccion_id){
+                if($inscripcion->seccion != null && $s->seccion_id == $inscripcion->seccion->seccion_id){
                     return $inscripcion;
                 }
             }

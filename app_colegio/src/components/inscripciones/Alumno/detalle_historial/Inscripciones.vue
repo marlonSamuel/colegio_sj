@@ -221,6 +221,9 @@ export default {
     //exapende
     expanded(data,prop){
       let self = this
+      if(data.expanded == true && prop == true){
+        return
+      }
       data.expanded = prop
       if(data.expanded){
         self.getNotas(data.id)

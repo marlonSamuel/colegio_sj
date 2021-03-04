@@ -27,7 +27,7 @@
         
                     <v-card-actions>
                     <v-spacer></v-spacer>
-                        <v-btn color="red darken-1" flat @click="$router.push('/info_cursos_alumnos/'+asignacion.inscripcion_id+'/curso/'+self.asignacion.asignacion.asignar_curso_profesor.curso_grad_niv_edu_id)">Volver</v-btn>
+                        <v-btn color="red darken-1" flat @click="$router.push('/info_cursos_alumnos/'+asignacion.inscripcion_id+'/curso/'+asignacion.asignacion.asignar_curso_profesor.curso_grad_niv_edu_id)">Volver</v-btn>
                         <v-btn color="blue darken-1" flat @click="iniciar">Iniciar</v-btn>
                     </v-card-actions>
                 </v-card>

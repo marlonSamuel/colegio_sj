@@ -13,8 +13,8 @@ class CuotaController extends ApiController
 {
     public function __construct()
     {
-       // parent::__construct();
-        //$this->middleware('scope:asignarcuota')->except(['index']);
+       parent::__construct();
+       $this->middleware('scope:asignarcuota')->except(['index']);
     }
 
     public function index(ConceptoPago $concepto_pago){
@@ -66,7 +66,7 @@ class CuotaController extends ApiController
             } 
             return $this->showOne($cuota,201);         
         }elseif(count($cuotas_actual) > 0){
-            return $this->errorResponse('Ciclo ya tiene cuotas configuras', 422);
+            return $this->errorResponse('Ciclo ya tiene cuotas configuradas', 422);
 
         }else{
             return $this->errorResponse('No existe cuotas en ciclo anterior', 422);

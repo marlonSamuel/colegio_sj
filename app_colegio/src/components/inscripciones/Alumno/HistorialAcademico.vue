@@ -48,7 +48,7 @@
                                             <b>Grado:</b>
                                             {{getGrado(inscripciones)}}
                                         </div>
-                                        <div class="text item">
+                                        <div class="text item" v-if="alumno.responsable !== null && alumno.responsable != ''">
                                             <b>Responsable (cui - nombre):</b>
                                             {{alumno.responsable.apoderado.cui}} - {{getName(alumno.responsable.apoderado)}}
                                         </div>
@@ -144,7 +144,7 @@ export default {
             self.pagos = r.data.pagos
             self.$nextTick(() => {  
                 events.$emit('historial_academico_inscripciones',self.inscripciones,self.alumno)
-                events.$emit('historial_academico_pagos_atrasados',self.pagos,self.inscripciones)
+                //events.$emit('historial_academico_pagos_atrasados',self.pagos,self.inscripciones)
             });
         }).catch(r => {});
     },

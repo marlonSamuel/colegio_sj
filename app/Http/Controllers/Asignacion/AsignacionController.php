@@ -15,7 +15,8 @@ class AsignacionController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
+        parent::__construct();
+        $this->middleware('scope:asignacionindex');
     }
 
     /**
@@ -69,9 +70,13 @@ class AsignacionController extends ApiController
                                             ->with('seccion')
                                             ->get();
 
+        if($profesor_curso->jornada !== "A"){
+            $inscripciones = $inscripciones->where('jornada',$profesor_curso->jornada);
+        }
+
         $inscripciones_filter = $inscripciones->filter(function ($inscripcion) use($secciones) {
             foreach ($secciones as $s) {
-                if($s->seccion_id == $inscripcion->seccion->seccion_id){
+                if($inscripcion->seccion != null && $s->seccion_id == $inscripcion->seccion->seccion_id){
                     return $inscripcion;
                 }
             }

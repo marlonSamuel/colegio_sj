@@ -90,19 +90,15 @@ export default {
       ],
       asignaciones: [],
       cursos: [],
+      idCiclo: null,
+      idAlumno:null
     };
   },
 
   created() {
     let self = this;
-    self.getAsignaciones(
-      this.$store.state.usuario.user_info.id,
-      this.$store.state.ciclo.id
-    );
-    self.getCursos(
-      this.$store.state.usuario.user_info.id,
-      this.$store.state.ciclo.id
-    );
+    self.idAlumno = this.$store.state.usuario.user_info.id
+    self.getCicloActual();   
   },
 
   methods: {
@@ -114,6 +110,20 @@ export default {
         .then((r) => {
           self.loading = false;
           self.asignaciones = r.data;
+        })
+        .catch((r) => {});
+    },
+    getCicloActual() {
+      let self = this;
+      self.loading = true;
+      self.$store.state.services.cicloService
+        .actual()
+        .then((r) => {
+          self.loading = false;
+          self.idCiclo = r.data.id;
+          self.getCursos(self.idAlumno,self.idCiclo)
+          self.getAsignaciones(self.idAlumno,self.idCiclo)
+          
         })
         .catch((r) => {});
     },
@@ -143,6 +153,8 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    
+  },
 };
 </script>

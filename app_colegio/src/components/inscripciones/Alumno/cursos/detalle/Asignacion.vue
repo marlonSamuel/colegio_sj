@@ -266,6 +266,7 @@ export default {
 
       setData(data){
         let self = this
+        data = data.filter(x=>moment(x.asignacion.fecha_habilitacion).format('YYYY-MM-DD') <= moment().format('YYYY-MM-DD'))
         self.tareas = data.filter(x=>!x.asignacion.cuestionario)
         self.cuestionarios = data.filter(x=>x.asignacion.cuestionario)
       },
@@ -321,6 +322,14 @@ export default {
             return false
         }
         if(!data.asignacion.entrega_tarde && (now > moment(data.asignacion.fecha_entrega).format('YYYY-MM-DD'))){
+            return false
+        }
+        if(data.asignacion.cuestionario && data.entregado){
+            return false
+        }
+
+        let rol = self.$store.state.usuario.rol
+        if(rol !== undefined && rol.rol !== 'alumno'){
             return false
         }
         return true

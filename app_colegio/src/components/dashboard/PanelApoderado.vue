@@ -31,14 +31,14 @@
                         </v-layout>
                         <v-divider light></v-divider>
                         <v-card-actions class="pa-2">
-                            <v-tooltip top>
+                          <!--  <v-tooltip top>
                                 <template v-slot:activator="{ on }">
                                     <v-btn small flat color="blue" v-on="on" @click="$router.push(`/historial_pagos/`+card.id)">
                                         <v-icon>file_copy</v-icon> Notas
                                     </v-btn>
                                 </template>
                                 <span>Ir notas</span>
-                            </v-tooltip>
+                            </v-tooltip>-->
                             <v-tooltip top>
                                 <template v-slot:activator="{ on }">
                                     <v-btn small flat color="blue" v-on="on" @click="$router.push(`/historial_pagos/`+card.id)">
@@ -50,10 +50,10 @@
                             <v-tooltip top>
                                 <template v-slot:activator="{ on }">
                                     <v-btn small flat color="blue" v-on="on" @click="$router.push(`/historial_academico/`+card.id)">
-                                        <v-icon>file_copy</v-icon> Historial
+                                        <v-icon>file_copy</v-icon> Historial Academico
                                     </v-btn>
                                 </template>
-                                <span>Ir historial academico</span>
+                                <span>Ir historial academico, visualizar historial de inscripciones y notas de alumnos</span>
                             </v-tooltip>
                         </v-card-actions>
                         </v-card>

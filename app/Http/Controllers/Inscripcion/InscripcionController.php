@@ -17,8 +17,8 @@ class InscripcionController extends ApiController
 {
     public function __construct()
     {
-        //parent::__construct();
-        //$this->middleware('scope:inscripcion')->except(['index']);
+        parent::__construct();
+        $this->middleware('scope:inscripcion')->except(['index','show']);
     }
 
     public function index()
@@ -69,7 +69,7 @@ class InscripcionController extends ApiController
                                                     ->get()
                                                     ->where('inscripcion.ciclo_id',$ciclo_id);
 
-               if(count($inscripciones) < 20){
+               if(count($inscripciones) < 30){
                  $seccion = $s;
                  break;
                }                                  

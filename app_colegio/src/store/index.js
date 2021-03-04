@@ -24,7 +24,7 @@ const state = {
     client_id: 2,
     //base_url: 'https://167.172.158.187/colegio-san-pablo/',
     base_url: 'http://www.san-pablo.com/',
-    client_secret: 'RX8CjLKZoAfkIOzW0FEOn58vpFCH8bfVzRj4ISR9'
+    client_secret: 'FakC0YvMuurzUrdkoQvJpuAnoCv0E02ZLjmt1kuq'
 }
 
 const mutations = {
@@ -96,7 +96,7 @@ const actions = {
         if (token) {
             commit('setToken', token)
             auth.getUser()
-            auth.getCicloActual()
+            //auth.getCicloActual()
         } else {
             commit('setState')
         }

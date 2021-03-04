@@ -12,6 +12,7 @@ class AlumnoInscripcionController extends ApiController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:alumnoinscripciones');
     }
    
     public function index(Alumno $alumno)

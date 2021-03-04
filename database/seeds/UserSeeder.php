@@ -85,7 +85,7 @@ class UserSeeder extends Seeder
         $data_empleado->save();
 
 
-        //usuario alumno
+    /*    //usuario alumno
         $data = new User();
         $data->email = "marlon@gmail.com";
         $data->password = bcrypt("secret");
@@ -122,7 +122,7 @@ class UserSeeder extends Seeder
         $data_representante = new UsuarioRepresentante;
         $data_representante->user_id = $data->id;
         $data_representante->apoderado_id = 1;
-        $data_representante->save();
+        $data_representante->save(); */
 
     }
 }

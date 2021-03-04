@@ -11,7 +11,7 @@ class CargoController extends ApiController
     public function __construct()
     {
         parent::__construct();
-        #$this->middleware('scope:empleado')->except(['index']);
+        $this->middleware('scope:empleado')->except(['index']);
     }
 
     public function index()

@@ -25,7 +25,7 @@
                     prepend-icon="person" 
                     name="email" 
                     label="Correo electronico" type="text"
-                    v-validate="'required|email'"
+                    v-validate="'required'"
                     :error-messages="errors.collect('email')"
                     data-vv-name="email"
                     data-vv-as="correo electronico"
@@ -86,7 +86,7 @@ import auth from '../../auth'
                 self.$store.dispatch('guardarToken',r.data)
                 self.$router.push('/home')
                 auth.getUser()
-                auth.getCicloActual()
+                //auth.getCicloActual()
             }).catch(e => {
 
             })

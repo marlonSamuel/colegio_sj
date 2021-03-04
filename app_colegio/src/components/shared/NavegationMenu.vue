@@ -130,7 +130,7 @@
       </v-menu>
 
       
-        <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
+      <!--  <v-menu offset-y origin="center center" :nudge-bottom="10" transition="scale-transition">
             <v-btn icon large flat slot="activator">
               <v-avatar size="30px">
                 <v-btn icon>
@@ -156,7 +156,7 @@
                 </v-list-tile-content>
               </v-list-tile>
             </v-list>
-          </v-menu>
+          </v-menu> -->
     </v-toolbar>
 </div>
 </template>
