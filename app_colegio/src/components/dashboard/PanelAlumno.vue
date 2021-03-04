@@ -143,6 +143,8 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    
+  },
 };
 </script>

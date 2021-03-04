@@ -266,6 +266,7 @@ export default {
 
       setData(data){
         let self = this
+        data = data.filter(x=>moment(x.asignacion.fecha_habilitacion).format('YYYY-MM-DD') <= moment().format('YYYY-MM-DD'))
         self.tareas = data.filter(x=>!x.asignacion.cuestionario)
         self.cuestionarios = data.filter(x=>x.asignacion.cuestionario)
       },

@@ -10,6 +10,7 @@ use App\AsignacionAlumno;
 use App\AlumnoSerie;
 use App\AlumnoPregunta;
 use App\AlumnoRespuesta;
+use App\Ciclo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
@@ -20,10 +21,11 @@ class AsignacionAlumnoController extends ApiController
 {
     public function __construct()
     {
-        parent::__construct();
+      /*  parent::__construct();
         $this->middleware('scope:asignacionalumno')->except(['asignarNota','cuestionario','updateData']);
-        $this->middleware('scope:asignarnota')->only(['asignarNota','cuestionario','updateData']);
+        $this->middleware('scope:asignarnota')->only(['asignarNota','cuestionario','updateData']);*/
     }
+
 
     public function index()
     {
@@ -33,6 +35,17 @@ class AsignacionAlumnoController extends ApiController
     //tareas o examenes pendientes de resolver
     public function getAsignaciones($idAlumno,$ciclo_id)
     {
+        $ciclo = null;
+        if($ciclo_id == "undefined"){
+            $ciclo = Ciclo::where('actual',1)->first();
+        }
+
+        if(is_null($ciclo)){
+            $this->errorResponse("no existe ciclo actual, por favor ingrese o asigne ciclo actual",421);
+        }else{
+            $ciclo_id = $ciclo->id;
+        }
+
         $asignaciones = AsignacionAlumno::where([['inscripcion_id', $idAlumno]])
                         ->with('asignacion',
                         'asignacion.asignar_curso_profesor.curso_grado_nivel.curso',
@@ -56,11 +69,23 @@ class AsignacionAlumnoController extends ApiController
 
     public function getCursos($idAlumno,$ciclo_id)
     {
+        $ciclo = null;
+        if($ciclo_id == "undefined"){
+            $ciclo = Ciclo::where('actual',1)->first();
+        }
+
+        if(is_null($ciclo)){
+            $this->errorResponse("no existe ciclo actual, por favor ingrese o asigne ciclo actual",421);
+        }else{
+            $ciclo_id = $ciclo->id;
+        }
+
         $curso_niveles = Inscripcion::where([['id', $idAlumno],['ciclo_id',$ciclo_id]])
                         ->with('grado_nivel_educativo',
                         'grado_nivel_educativo.cursos',
                         'grado_nivel_educativo.cursos.curso',
                         'ciclo')->get();
+                        
         $curso_niveles = $this->prepareData($curso_niveles);
         return $this->showAll($curso_niveles);
     }
