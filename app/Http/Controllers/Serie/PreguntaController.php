@@ -172,8 +172,8 @@ class PreguntaController extends ApiController
         foreach ($request->respuestas as $res) {
             $respuesta = Respuesta::create([
                             "pregunta_id" => $pregunta->id,
-                            "respuesta" => $res['respuesta'],
-                            "correcta" => $res['correcta']
+                            "respuesta" => $res->respuesta,
+                            "correcta" => $res->correcta
                         ]);
 
             $alumno_preguntas = $pregunta->alumno_preguntas;

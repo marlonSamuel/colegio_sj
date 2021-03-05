@@ -499,6 +499,8 @@ export default {
         self.form.fecha_entrega = data.fecha_entrega
         self.form.cuestionario = data.cuestionario
         self.form.file_name = data.adjunto
+        self.form.flag_tiempo = data.flag_tiempo
+        self.form.tiempo = data.tiempo
     },
 
     //limpiar data de formulario

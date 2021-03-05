@@ -307,7 +307,7 @@ export default {
         if(!data.asignacion.flag_tiempo){
             self.$router.push('/entrega_asignacion/'+data.id)
         }else{
-            if(!data.entregado && moment(data.asignacion.fecha_entrega) >= moment()){
+            if(!data.entregado && moment(data.asignacion.fecha_entrega).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')){
                 self.$router.push('/cuestionario/curso/'+data.asignacion.asignar_curso_profesor_id+'/asignacion_alumno/'+data.id)
             }else{
                 self.$router.push('/view_cuestionario/curso/'+data.asignacion.asignar_curso_profesor_id+'/asignacion_alumno/'+data.id)

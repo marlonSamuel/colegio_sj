@@ -297,8 +297,7 @@ export default {
                   self.e1 = index+2
               }
           })
-
-          if(moment(self.asignacion.asignacion.fecha_entrega) < moment()){
+          if(moment(self.asignacion.asignacion.fecha_entrega).format('YYYY-MM-DD') < moment().format('YYYY-MM-DD')){
               self.date_expire = true
           }
           

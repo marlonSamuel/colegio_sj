@@ -466,7 +466,7 @@ export default {
         if(self.serie.tipo_serie == "FV"){
             self.valueFV = data.respuestas.find(x=>x.correcta).respuesta
         }
-        if(self.serie.tipo_serie == "RM"){
+        else if(self.serie.tipo_serie == "RM"){
             self.form.respuestas = data.respuestas
         }else{
             self.form.valuePD = self.form.respuesta[0].respuesta
@@ -602,7 +602,7 @@ export default {
   computed: {
     setTitle(){
       let self = this
-      return self.form.id !== null ? 'Editar serie' : 'Nuevo Registro'
+      return self.form.id !== null ? 'Editar pregunta' : 'Nuevo Registro'
     },
 
     itemsB(){
