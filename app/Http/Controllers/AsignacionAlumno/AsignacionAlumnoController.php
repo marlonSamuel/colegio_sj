@@ -23,7 +23,7 @@ class AsignacionAlumnoController extends ApiController
     {
         parent::__construct();
         $this->middleware('scope:asignacionalumno')->except(['asignarNota','cuestionario','updateData']);
-        $this->middleware('scope:asignarnota')->only(['asignarNota','updateData']);
+        $this->middleware('scope:asignarnota')->only(['asignarNota']);
     }
 
 

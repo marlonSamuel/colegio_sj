@@ -182,7 +182,6 @@ export default {
       self.prepareData();
       let id = self.form.id;
       let data = self.getFormData(self.form);
-      console.log(data);
       self.$store.state.services.asignacionAlumnoService
         .updateData(id, data)
         .then((r) => {
@@ -190,9 +189,8 @@ export default {
           if (self.$store.state.global.captureError(r)) {
             return;
           }
-          self.getAll(self.$route.params.id);
           this.$toastr.success("Tarea entregada con éxito", "éxito");
-          self.close();
+          self.$router.push('/info_cursos_alumnos/'+self.asignacion.inscripcion_id+'/curso/'+self.asignacion.asignacion.asignar_curso_profesor.curso_grad_niv_edu_id)
         })
         .catch((r) => {});
     },

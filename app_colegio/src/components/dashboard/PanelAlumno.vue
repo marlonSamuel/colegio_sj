@@ -45,7 +45,7 @@
                   {{ props.item.asignacion.fecha_entrega }}
                 </td>
                 <td>
-                  <v-tooltip top>
+                  <v-tooltip top v-if="!props.item.calificado">
                     <template v-slot:activator="{ on }">
                       <v-btn
                         flat
@@ -154,7 +154,7 @@ export default {
   },
 
   computed: {
-    
+
   },
 };
 </script>
