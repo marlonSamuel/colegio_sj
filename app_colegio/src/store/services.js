@@ -39,8 +39,8 @@ import MaterialService from '../services/MaterialService'
 import NotaService from '../services/NotaService'
 import AlumnoSerieService from '../services/AlumnoSerieService'
 
-let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
-//let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
+//let baseUrl = 'https://167.172.158.187/colegio-san-pablo/'
+let baseUrl = 'http://www.san-pablo.com/' //base url desarrollo
 let token_data = JSON.parse(localStorage.getItem('token_data'))
 
 // Axios Configuration
