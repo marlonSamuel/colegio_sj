@@ -37,12 +37,15 @@ class AlumnoController extends ApiController
     {
         $queryModel = Alumno::query();
 
-        $columns = ['codigo',DB::raw("concat(primer_nombre, ' ', IFNULL(segundo_nombre,''),' ',IFNULL(tercer_nombre,''),' ',IFNULL(primer_apellido,''),' ',IFNULL(segundo_apellido,''))")];
+        $columns = ['codigo',
+            DB::raw("replace(concat(primer_nombre, ' ', IFNULL(segundo_nombre,''),' ',IFNULL(tercer_nombre,''),' ',primer_apellido,' ',IFNULL(segundo_apellido,'')),'  ',' ')"),
+            DB::raw("replace(concat(primer_nombre, ' ',primer_apellido,' ',IFNULL(segundo_apellido,'')),'  ',' ')"),
+            DB::raw("replace(concat(primer_nombre, ' ',IFNULL(segundo_apellido,'')),'  ',' ')"),
+            DB::raw("replace(concat(IFNULL(segundo_nombre,''),' ',IFNULL(segundo_apellido,'')),'  ',' ')")];
 
         foreach ($columns as $column) {
            $queryModel->orWhere($column, 'LIKE', '%'.$search.'%');
         }
-
 
         $alumnos = $queryModel->get();
 

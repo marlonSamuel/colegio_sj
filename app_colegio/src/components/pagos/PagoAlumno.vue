@@ -46,7 +46,7 @@
                                     <b>Grado:</b>
                                     {{getGrado(alumno.inscripciones)}}
                                 </div>
-                                <div class="text item">
+                                <div class="text item" v-if="alumno.responsable != null">
                                     <b>Responsable (cui - nombre):</b>
                                     {{alumno.responsable.apoderado.cui}} - 
                                     {{alumno.responsable.apoderado.primer_nombre}}
@@ -200,6 +200,10 @@ export default {
         .then(r => {
             self.loading = false
             self.alumno = r.data
+            if(self.alumno.responsable == null){
+                self.$toastr.error("alumno no tiene responsable, no se pueden generar pagos sin un responsable","error")
+                return self.$router.push('/alumno_index')
+            }
             self.inscripciones = self.alumno.inscripciones
             self.inscripcion = self.getInscripcionActual(self.alumno.inscripciones)
             self.inscripcion_id = self.inscripcion.id

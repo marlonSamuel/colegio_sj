@@ -32,7 +32,8 @@
                         <div>
                           <h3 class="headline mb-0">{{item.primer_nombre}} {{item.segundo_nombre}} 
                                                     {{item.primer_apellido}} {{item.segundo_apellido}}</h3>
-                          <div>Direccion: {{ item.direccion }} </div>
+                          <div><b>Codigo:</b> {{ item.codigo }} </div>
+                          <div><b>Direccion:</b> {{ item.direccion }} </div>
                         </div>
                       </v-card-title>
 

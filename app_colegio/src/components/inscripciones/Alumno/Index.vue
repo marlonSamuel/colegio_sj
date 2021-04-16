@@ -53,6 +53,12 @@
           <td class="text-xs-left">
             <v-tooltip top>
                 <template v-slot:activator="{ on }">
+                    <v-icon v-on="on" color="success" fab dark @click="$router.push(`/pago_alumno/`+props.item.id)"> attach_money</v-icon>
+                </template>
+                <span>pagar</span>
+            </v-tooltip>
+            <v-tooltip top>
+                <template v-slot:activator="{ on }">
                     <v-icon v-on="on" color="success" fab dark @click="$router.push(`/historial_pagos/`+props.item.id)"> payment</v-icon>
                 </template>
                 <span>ver historial de pagos</span>

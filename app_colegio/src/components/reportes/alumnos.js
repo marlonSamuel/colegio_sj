@@ -20,7 +20,7 @@ export default {
     },
 
     getApoderado(data) {
-        if (data !== null) {
+        if (data !== null && data !== "") {
             Object.keys(data.apoderado).forEach(function(key) {
                 if (data.apoderado[key] === null) {
                     data.apoderado[key] = '';
@@ -105,7 +105,7 @@ export default {
                             alignment: 'center'
                         },
                         {
-                            text: 'TOTAL INSCRIPCIONES: ' + alumnos.length,
+                            text: 'TOTAL ALUMNOS: ' + alumnos.length,
                             alignment: 'justify',
                             bold: true,
                             width: 'auto'
@@ -117,7 +117,7 @@ export default {
                 {
                     style: 'tableStyle',
                     table: {
-                        widths: [50, '*', 50, '*', '*'],
+                        widths: [65, '*', 35, '*', '*'],
                         // keepWithHeaderRows: 1,
                         body: body
                     },
