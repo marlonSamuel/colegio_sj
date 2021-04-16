@@ -107,6 +107,7 @@
                     class="input-file hidden"
                     type="file"
                     accept="application/pdf"
+                    v-validate="'required'"
                   />
                 </div>
               </v-flex>
@@ -182,6 +183,11 @@ export default {
       self.prepareData();
       let id = self.form.id;
       let data = self.getFormData(self.form);
+      if (self.form.file == null) {
+        self.loading = false;
+        this.$toastr.error("Debe adjuntar su tarea","error");
+        return;
+      }
       self.$store.state.services.asignacionAlumnoService
         .updateData(id, data)
         .then((r) => {

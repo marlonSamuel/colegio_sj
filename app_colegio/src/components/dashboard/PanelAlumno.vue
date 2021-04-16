@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "PanelAlumno",
   props: {
@@ -102,6 +103,9 @@ export default {
   },
 
   methods: {
+    validDate(){
+
+    },
     getAsignaciones(idAlumno, idCiclo) {
       let self = this;
       self.loading = true;
@@ -109,7 +113,17 @@ export default {
         .getAsignacion(idAlumno, idCiclo)
         .then((r) => {
           self.loading = false;
-          self.asignaciones = r.data;
+          r.data.forEach(element => {
+            if (moment(element.asignacion.fecha_habilitacion).format('YYYY-MM-DD') <= moment().format('YYYY-MM-DD')) {
+              if (element.asignacion.entrega_tarde) {
+                  self.asignaciones.push(element);
+              }else{
+                if (moment(element.asignacion.fecha_entrega).format('YYYY-MM-DD') >= moment().format('YYYY-MM-DD')) {
+                    self.asignaciones.push(element);
+                }
+              }
+            }
+          });
         })
         .catch((r) => {});
     },
