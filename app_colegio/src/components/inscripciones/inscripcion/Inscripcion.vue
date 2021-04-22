@@ -30,7 +30,7 @@
         <v-spacer></v-spacer>
         <v-dialog persistent v-model="dialog" max-width="800px">
           <template v-slot:activator="{ on }" >
-            <v-btn v-if="show_nuevo" color="primary" small dark class="mb-2" v-on="on"><v-icon>add</v-icon> Inscribir ciclo {{ciclo_actual.ciclo}}</v-btn>
+            <v-btn v-if="showNuevo" color="primary" small dark class="mb-2" v-on="on"><v-icon>add</v-icon> Inscribir ciclo {{ciclo_actual.ciclo}}</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -570,6 +570,12 @@ export default {
     dateFormatted(){
         let self = this
         return moment(self.form.fecha !== '' ? self.form.fecha : moment()).format('DD/MM/YYYY')
+    },
+
+    showNuevo(){
+      let self = this
+      var e = self.items.filter(i=>i.ciclo_id === self.ciclo_actual.id)
+      return e.length > 0 ? false : true
     }
   },
 };

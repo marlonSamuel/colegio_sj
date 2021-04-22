@@ -67,7 +67,8 @@ class InscripcionController extends ApiController
                 $inscripciones = AsignacionSeccion::where('seccion_id',$s->id)
                                                     ->with('inscripcion')
                                                     ->get()
-                                                    ->where('inscripcion.ciclo_id',$ciclo_id);
+                                                    ->where('inscripcion.ciclo_id',$ciclo_id)
+                                                    ->where('inscripcion.grado_nivel_educativo_id',$grado_nivel_educativo_id);
 
                if(count($inscripciones) < 30){
                  $seccion = $s;
@@ -76,7 +77,6 @@ class InscripcionController extends ApiController
             }
 
         }
-
         return $seccion;
     }
 
@@ -227,6 +227,13 @@ class InscripcionController extends ApiController
     function getCorrelativo($ciclo_id){
         $ciclo = Ciclo::find($ciclo_id);
         $inscripciones = $ciclo->inscripciones;
-        return $ciclo->ciclo.'-'.(count($inscripciones)+1);
+        $insc = Inscripcion::where('ciclo_id',$ciclo->id)->latest()->first();
+        $numero = 1;
+        if(!is_null($insc))
+        {
+            $number_i = explode("-", $insc->numero);
+            $numero = $number_i[1] + 1;
+        }
+        return $ciclo->ciclo.'-'.($numero);
     }
 }
