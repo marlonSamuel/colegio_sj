@@ -28,7 +28,7 @@
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
-                  <v-flex xs12 sm4 md4>
+                <!--  <v-flex xs12 sm4 md4>
                     <v-text-field v-model="form.codigo" 
                         label="Codigo"
                         v-validate="'required'"
@@ -37,7 +37,7 @@
                         readonly
                         :error-messages="errors.collect('codigo')">
                     </v-text-field>
-                  </v-flex>
+                  </v-flex> -->
                   <v-flex xs12 sm4 md4>
                     <v-text-field v-model="form.cui" 
                         label="Cui"
@@ -236,7 +236,7 @@ export default {
         .then(r => {
           self.loading = false
           self.items = r.data
-          self.setCodigo()
+          //self.setCodigo()
         })
         .catch(r => {});
     },
@@ -268,7 +268,10 @@ export default {
           if (self.$store.state.global.captureError(r)) {
             return;
           }
-          this.$toastr.success('registro agregado con éxito', 'éxito')
+          self.$alert( 'empleado registrado correctamente, codigo generado '+r.data.codigo, 
+            'éxito', {
+            confirmButtonText: 'OK'
+          });
           self.getAll()
           self.clearData()
 
@@ -383,17 +386,12 @@ export default {
         let self = this
         self.dialog = false
         self.clearData()
-        self.setCodigo()
+        //self.setCodigo()
     },
 
     setCodigo(){
         let self = this
-        let codigo = ''
-        let sort_items = self.items.sort((a, b) => parseFloat(a.id) - parseFloat(b.id))
-        if(sort_items.length > 0){
-            codigo = '2-'+moment().year()+'-'+(sort_items[sort_items.length - 1].id +1) 
-        }
-        self.form.codigo = codigo
+        return '';
     }
   },
 

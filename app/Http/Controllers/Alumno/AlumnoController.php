@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class AlumnoController extends ApiController
 {
@@ -62,7 +63,6 @@ class AlumnoController extends ApiController
     public function store(Request $request)
     {
         $reglas = [
-            'codigo' => 'required|string:unique',
             'primer_nombre' => 'required|string',
             'primer_apellido' => 'required|string',
             'fecha_nac' => 'required',
@@ -75,6 +75,8 @@ class AlumnoController extends ApiController
 
         DB::beginTransaction();
             $alumno_exists = Alumno::where('codigo',$request->codigo)->first();     
+
+
             
             if(!is_null($alumno_exists)) return $this->errorResponse('codigo de alumno ya fue asignado',422);
 
@@ -92,6 +94,7 @@ class AlumnoController extends ApiController
                 $data['foto'] = 'img/alumnos/'.$imagePath;
             }
 
+            $data['codigo'] = $this->getCorrelativo();
             $alumno = Alumno::create($data);
 
             //crear usuario apoderado
@@ -301,5 +304,12 @@ class AlumnoController extends ApiController
     public function lastRow(){
         $alumno = Alumno::latest()->first();
         return $this->showOne($alumno);
+    }
+
+    function getCorrelativo(){
+        $year = Carbon::now()->year;
+        $alumno = Alumno::latest()->first();
+        $codigo = '1-'.$year.'-'.($alumno->id+1);
+        return $codigo;
     }
 }

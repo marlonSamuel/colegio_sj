@@ -57,7 +57,7 @@
                                   </v-flex>
                         <v-flex d-flex xs12 sm6 md8>
                                   <v-layout row wrap>
-                                      <v-flex xs12 md6>
+                                    <!--  <v-flex xs12 md6>
                                       <v-text-field
                                           placeholder="ingrese codigo alumno"
                                           v-model="form.codigo"
@@ -69,7 +69,7 @@
                                           prepend-icon="code"
                                           readonly
                                       ></v-text-field>
-                                  </v-flex>
+                                  </v-flex>-->
                                   <v-flex xs12 md6>
                                   <v-text-field
                                       placeholder="ingrese primer nombre"
@@ -116,7 +116,7 @@
                                   ></v-text-field>
                                   </v-flex>
 
-                                  <v-flex xs12 md6>
+                                  <v-flex xs12 md12>
                                   <v-text-field
                                       placeholder="ingrese segundo apellido"
                                       prepend-icon="add"
@@ -609,7 +609,7 @@ export default {
   created() {
     let self = this
     self.getMunicipios()
-    self.getLastRow()
+    //self.getLastRow()
   },
 
   methods: {
@@ -625,7 +625,11 @@ export default {
           if (self.$store.state.global.captureError(r)) {
             return;
           }
-          this.$toastr.success('registro agregado con éxito', 'éxito')
+
+          self.$alert( 'alumno registrado correctamente, codigo generado '+r.data.codigo, 
+            'éxito', {
+            confirmButtonText: 'OK'
+          });
           self.$router.push('/alumno_index')
           self.clearData()
 
@@ -648,7 +652,7 @@ export default {
             }).catch(e=>{})
     },
 
-    //get last row
+    //get last row (unused)
     getLastRow(cui){
         let self= this
         self.loading = true
@@ -659,7 +663,7 @@ export default {
             if (self.$store.state.global.captureError(r)) {
                 return;
             }
-            self.setCodigo(r.data)
+            //self.setCodigo(r.data)
         }).catch(e=>{})
     },
 
@@ -742,9 +746,7 @@ export default {
 
     setCodigo(last_a){
         let self = this
-        let codigo = ''
-        codigo = '1-'+moment().year()+'-'+last_a.id +1
-        self.form.codigo = codigo
+        return ''
     }
   },
 

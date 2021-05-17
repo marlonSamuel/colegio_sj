@@ -93,6 +93,11 @@ class InscripcionController extends ApiController
         DB::beginTransaction();
         $this->validate($request, $reglas);
         $data = $request->all();
+
+        $insc = Inscripcion::where('ciclo_id',$ciclo->id)->where('alumno_id',$request->alumno_id)->first();
+
+        if(!is_null($insc)) return $this->errorResponse('alumno ya fue inscrito al ciclo escolar que intenta ingresar',421);
+
         $data['numero'] = $this->getCorrelativo($request->ciclo_id);
 
         $inscripcion = Inscripcion::create($data);

@@ -10,6 +10,7 @@ use App\UsuarioEmpleado;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use Carbon\Carbon;
 
 class EmpleadoController extends ApiController
 {
@@ -38,7 +39,6 @@ class EmpleadoController extends ApiController
             'cui' => 'required|:unique',
             'primer_nombre' => 'required|string',
             'primer_apellido' => 'required|string',
-            'codigo' => 'required|string|:unique',
             'telefono' => 'required',
             'direccion' => 'required',
             'cargo_id' => 'required|integer'
@@ -49,6 +49,7 @@ class EmpleadoController extends ApiController
         DB::beginTransaction();
 
         $data = $request->all();
+        $data['codigo'] = $this->getCorrelativo();
         $empleado = Empleado::create($data);
 
         $cargo = Cargo::find($empleado->cargo_id);
@@ -145,5 +146,13 @@ class EmpleadoController extends ApiController
     public function getCursos(Request $request)
     {
         
+    }
+
+
+    function getCorrelativo(){
+        $year = Carbon::now()->year;
+        $empleado = Empleado::latest()->first();
+        $codigo = '1-'.$year.'-'.($empleado->id +1);
+        return $codigo;
     }
 }
