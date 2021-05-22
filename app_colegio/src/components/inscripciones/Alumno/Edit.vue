@@ -65,6 +65,7 @@
                                           v-validate="'required'"
                                           type="text"
                                           data-vv-name="codigo"
+                                          readonly
                                           :error-messages="errors.collect('codigo')"
                                           prepend-icon="code"
                                       ></v-text-field>

@@ -27,7 +27,7 @@ class AlumnoImport implements ToCollection
     	DB::beginTransaction();
         foreach ($collection as $row) {
             $alumno = new Alumno;
-            $alumno->codigo = $c.'-2020-1';
+            $alumno->codigo = '1-'.'2021-'.$c;
             $alumno->primer_nombre = $row[1];
             $alumno->segundo_nombre = $row[2];
             $alumno->tercer_nombre = $row[3];
@@ -39,12 +39,32 @@ class AlumnoImport implements ToCollection
             $alumno->email = $row[9];
             $alumno->direccion = $row[10];
 
+
+            $exists_alumno = Alumno::where('primer_nombre',$row[1])->where('primer_apellido',$row[4])->first();
+
+            if(!is_null($exists_alumno)){
+                $exists_alumno->codigo = $alumno->codigo;
+                $exists_alumno->save();
+
+                $user = UsuarioAlumno::where('alumno_id',$exists_alumno->id)->with('user')->first();
+
+                $password_a = strtoupper($alumno->primer_apellido).'2021';
+                $user->user->codigo = $alumno->codigo;
+                $user->user->password = bcrypt($password_a);
+                $user->user->save();
+
+                echo "alumno ".$alumno->codigo." actualizado\n";
+                $c++;
+                continue;
+            }
+
+
             $alumno->save();
 
             echo "alumno ".$c." creado\n";
 
             $user= new User;
-            $password_a = strtoupper($alumno->primer_apellido).'2020';
+            $password_a = strtoupper($alumno->primer_apellido).'2021';
 	        $user->email = $alumno->email;
 	        $user->password = bcrypt($password_a);
 	        $user->codigo = $alumno->codigo;
