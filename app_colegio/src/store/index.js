@@ -22,8 +22,9 @@ const state = {
     is_login: false,
     token_expired: null,
     client_id: 2,
-    base_url: 'https://167.172.158.187/colegio-san-pablo/',
+    //base_url: 'https://167.172.158.187/colegio-san-pablo/',
     //base_url: 'http://www.san-pablo.com/',
+    base_url: 'https://143.244.151.1/colegio-san-pablo/', 
     client_secret: 'FakC0YvMuurzUrdkoQvJpuAnoCv0E02ZLjmt1kuq'
 }
 
