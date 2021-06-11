@@ -13,6 +13,6 @@
 <body class="hold-transition skin-blue sidebar-mini">
     <div style="height: 100%" id="app"></div>
     <!-- built files will be auto injected -->
-<script type="text/javascript" src="bundle/js/manifest.6aa67b56925988dfee92.js"></script><script type="text/javascript" src="bundle/js/app.698d39e3c3533966c65d.js"></script></body>
+<script type="text/javascript" src="bundle/js/manifest.6aa67b56925988dfee92.js"></script><script type="text/javascript" src="bundle/js/app.c247048618fab41be57f.js"></script></body>
 
 </html>
