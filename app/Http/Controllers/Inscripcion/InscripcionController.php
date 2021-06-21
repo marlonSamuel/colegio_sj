@@ -94,7 +94,7 @@ class InscripcionController extends ApiController
         $this->validate($request, $reglas);
         $data = $request->all();
 
-        $insc = Inscripcion::where('ciclo_id',$ciclo->id)->where('alumno_id',$request->alumno_id)->first();
+        $insc = Inscripcion::where('ciclo_id',$request->ciclo_id)->where('alumno_id',$request->alumno_id)->first();
 
         if(!is_null($insc)) return $this->errorResponse('alumno ya fue inscrito al ciclo escolar que intenta ingresar',421);
 
